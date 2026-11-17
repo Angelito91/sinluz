@@ -10,7 +10,8 @@
   "scripts": {
     "sync": "bun run scripts/sync-data.ts",
     "dev": "bun run sync && cd web && bunx vite",
-    "build": "bun run sync && cd web && bunx tsc --noEmit && bunx vite build",
+    "typecheck": "cd worker && bunx tsc -p tsconfig.json --noEmit && bunx tsc -p tsconfig.scripts.json --noEmit && cd ../web && bunx tsc --noEmit",
+    "build": "bun run sync && bun run typecheck && cd web && bunx vite build",
     "preview": "bun run sync && cd web && bunx vite preview",
     "test": "bun test worker/test",
     "data:check": "bun run worker/scripts/build-data.ts",

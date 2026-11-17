@@ -93,7 +93,7 @@ printf 'INGEST_TOKEN=dev\nADMIN_TOKEN=dev\n' > .dev.vars
 bunx wrangler dev
 
 # 2. Frontend (puerto 5173, proxy /api → 8787)
-bun run dev
+cd .. && bun run dev
 ```
 
 Primera ingesta de datos reales, sin esperar al cron:
@@ -110,7 +110,8 @@ curl http://127.0.0.1:8787/api/health
 
 ```bash
 bun test                 # 30 tests: parser, máquina de estados, corpus real
-bun run build            # typecheck + build de la PWA
+bun run typecheck        # worker, scripts y web (tsc --noEmit)
+bun run build            # sync + typecheck + build de la PWA
 bun run preview          # sirve el build en 4173 (con proxy /api → 8787)
 
 bun run data:check       # circuits.csv → circuits.json (valida el catálogo)
