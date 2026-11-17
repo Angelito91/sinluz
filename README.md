@@ -21,7 +21,18 @@ segundo y funcionamiento sin conexión. Coste de infraestructura: 0 €.
 | Tests (`bun test`) | 30 pass |
 | Worker + D1 + cron | listo · probado en local con datos en vivo |
 | Frontend (mapa + lista + favoritos + offline) | listo |
-| Deploy | pendiente de credenciales de Cloudflare |
+| Deploy (Worker + Pages) | **en producción** |
+| Dominio propio | pendiente (hoy usa `workers.dev` + `pages.dev`) |
+
+**En vivo**
+
+- PWA: <https://sinluz-988.pages.dev>
+- API: <https://sinluz-api.portuondoangel.workers.dev>
+
+> Los dominios `*.workers.dev` y `*.pages.dev` están bloqueados o
+> intermitentes en algunas redes de Cuba. Si la app no carga ahí, el problema es
+> la red, no el despliegue: se resuelve apuntando un dominio propio a Cloudflare
+> y sirviendo las dos piezas desde él.
 
 ---
 
@@ -65,7 +76,8 @@ Guardas, todas con test:
    los más críticos.
 
 Detalle completo en [`docs/mvp.md`](docs/mvp.md). Guía para quien mantiene los
-datos en [`docs/guia-datos.md`](docs/guia-datos.md).
+datos en [`docs/guia-datos.md`](docs/guia-datos.md). Cómo probar lo desplegado
+en [`docs/probar.md`](docs/probar.md).
 
 ---
 
@@ -153,21 +165,43 @@ Frescura en la UI: `≤ 90 min` normal · `90–360 min` aviso ámbar · `> 360 
 
 ## Deploy
 
-```bash
-bunx wrangler d1 create sinluz                      # copia el id a wrangler.toml
-cd worker && bunx wrangler d1 execute sinluz --remote --file=schema.sql
-bunx wrangler secret put INGEST_TOKEN
-bunx wrangler secret put ADMIN_TOKEN
-bunx wrangler secret put ALERT_BOT_TOKEN            # opcional
-bunx wrangler secret put ALERT_CHAT_ID              # opcional
-bunx wrangler deploy
+Ya está desplegado. Para reproducirlo o actualizarlo:
 
-cd .. && VITE_API_BASE=https://sinluz-api.<subdominio>.workers.dev bun run build
-cd web && bunx wrangler pages deploy dist --project-name sinluz
+```bash
+bun run deploy            # Worker + build con la URL de la API + Pages
 ```
 
-Sin `VITE_API_BASE` el frontend llama a `/api/...` en su propio origen, que es
-lo que conviene si se sirve detrás del mismo dominio.
+Los pasos sueltos, la primera vez:
+
+```bash
+cd worker
+bunx wrangler d1 create sinluz                       # copia el id a wrangler.toml
+bunx wrangler d1 execute sinluz --remote --file=schema.sql
+bunx wrangler secret put INGEST_TOKEN
+bunx wrangler secret put ADMIN_TOKEN
+bunx wrangler secret put ALERT_BOT_TOKEN             # opcional
+bunx wrangler secret put ALERT_CHAT_ID               # opcional
+cd .. && bun run deploy:api
+
+bunx wrangler pages project create sinluz --production-branch main
+bun run deploy:web
+```
+
+La web se construye con `web/.env.production`, que contiene la URL del Worker.
+Si cambias de dominio, edita ese archivo y vuelve a desplegar.
+
+**Tokens en producción:** están en `worker/.secrets.local` (ignorado por git).
+No se publican en el repo.
+
+**Comprobar el estado del servicio:**
+
+```bash
+curl https://sinluz-api.portuondoangel.workers.dev/api/health
+curl https://sinluz-api.portuondoangel.workers.dev/api/v1/status
+```
+
+El cron corre cada 5 min. La primera ingesta puede tardar hasta 5 minutos en
+aparecer; para forzarla, `POST /api/v1/refresh` con el token.
 
 ---
 

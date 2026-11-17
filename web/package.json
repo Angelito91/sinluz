@@ -25,6 +25,7 @@
     "tailwindcss": "^4",
     "typescript": "^5",
     "vite": "^7",
-    "vite-plugin-pwa": "^1"
+    "vite-plugin-pwa": "^1",
+    "wrangler": "^4.164.0"
   }
 }

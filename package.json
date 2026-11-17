@@ -21,8 +21,9 @@
     "fixtures": "bun run worker/scripts/fetch-fixtures.ts",
     "geojson": "bun run worker/scripts/build-geojson.ts",
     "replay": "bun run worker/scripts/replay.ts",
-    "deploy": "cd worker && bunx wrangler deploy",
-    "deploy:web": "bun run build && cd web && bunx wrangler pages deploy dist --project-name sinluz"
+    "deploy": "bun run deploy:api && bun run deploy:web",
+    "deploy:api": "cd worker && bunx wrangler deploy",
+    "deploy:web": "bun run build && cd web && bunx wrangler pages deploy dist --project-name sinluz --branch main --commit-dirty=true"
   },
   "devDependencies": {
     "@types/bun": "^1.4.4"
