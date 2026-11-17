@@ -1,0 +1,52 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --color-ink: #0b0d0f;
+  --color-paper: #f7f7f5;
+  --color-out: #d64545;
+  --color-ok: #3f7d5c;
+  --color-warn: #b78119;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  overscroll-behavior: none;
+}
+
+/* Leaflet: sin marca de agua, controles discretos */
+.leaflet-container {
+  background: var(--color-paper);
+  font-family: var(--font-sans);
+}
+.leaflet-control-attribution {
+  font-size: 9px;
+  background: rgb(255 255 255 / 0.7) !important;
+}
+.leaflet-control-zoom {
+  border: none !important;
+  box-shadow: 0 1px 2px rgb(0 0 0 / 0.08) !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Barra de desplazamiento discreta en la lista. */
+.overflow-y-auto {
+  scrollbar-width: thin;
+  scrollbar-color: rgb(0 0 0 / 0.14) transparent;
+}

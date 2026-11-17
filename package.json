@@ -1,0 +1,29 @@
+{
+  "name": "sinluz",
+  "private": true,
+  "type": "module",
+  "workspaces": [
+    "shared",
+    "worker",
+    "web"
+  ],
+  "scripts": {
+    "sync": "bun run scripts/sync-data.ts",
+    "dev": "bun run sync && cd web && bunx vite",
+    "build": "bun run sync && cd web && bunx tsc --noEmit && bunx vite build",
+    "preview": "bun run sync && cd web && bunx vite preview",
+    "test": "bun test worker/test",
+    "data:check": "bun run worker/scripts/build-data.ts",
+    "data:report": "bun run worker/scripts/report.ts",
+    "data:review": "bun run worker/scripts/review.ts",
+    "data:score": "bun run worker/scripts/score.ts",
+    "fixtures": "bun run worker/scripts/fetch-fixtures.ts",
+    "geojson": "bun run worker/scripts/build-geojson.ts",
+    "replay": "bun run worker/scripts/replay.ts",
+    "deploy": "cd worker && bunx wrangler deploy",
+    "deploy:web": "bun run build && cd web && bunx wrangler pages deploy dist --project-name sinluz"
+  },
+  "devDependencies": {
+    "@types/bun": "^1.4.4"
+  }
+}

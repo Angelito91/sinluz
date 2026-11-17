@@ -1,0 +1,17 @@
+name = "sinluz-api"
+main = "src/index.ts"
+compatibility_date = "2026-01-01"
+
+# Reemplazar por el id real de `wrangler d1 create sinluz`
+[[d1_databases]]
+binding = "DB"
+database_name = "sinluz"
+database_id = "00000000-0000-0000-0000-000000000000"
+
+[triggers]
+crons = ["*/5 * * * *"]
+
+[vars]
+INGEST_URL = "https://tg.i-c-a.su/json/electricastgo"
+INGEST_LIMIT = "30"
+LLM_ENABLED = "false"
