@@ -2,6 +2,7 @@ node_modules/
 dist/
 .env
 .dev.vars
+.secrets.local
 .wrangler/
 worker/.wrangler/
 *.log

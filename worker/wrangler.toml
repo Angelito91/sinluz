@@ -6,7 +6,7 @@ compatibility_date = "2026-01-01"
 [[d1_databases]]
 binding = "DB"
 database_name = "sinluz"
-database_id = "00000000-0000-0000-0000-000000000000"
+database_id = "a8166ab2-3947-45fa-9731-58b5a5ede486"
 
 [triggers]
 crons = ["*/5 * * * *"]
