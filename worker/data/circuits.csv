@@ -1,49 +1,46 @@
 id,kind,name,municipio,aliases,radius_m,lat,lon,notes
-sc-01,circuito,Circuito 1,Santiago de Cuba,Circuito 1|1|Cto 1|Circuito 1 de Santiago,1400,,,
-sc-02,circuito,Circuito 2,Santiago de Cuba,Circuito 2|2|Cto 2|Circuito 2 de Santiago,1400,,,
-sc-03,circuito,Circuito 3,Santiago de Cuba,Circuito 3|3|Cto 3|Circuito 3 de Santiago,1400,,,
-sc-04,circuito,Circuito 4,Santiago de Cuba,Circuito 4|4|Cto 4|Circuito 4 de Santiago,1400,,,
-sc-05,circuito,Circuito 5,Santiago de Cuba,Circuito 5|5|Cto 5|Circuito 5 de Santiago,1400,,,
-sc-06,circuito,Circuito 6,Santiago de Cuba,Circuito 6|6|Cto 6|Circuito 6 de Santiago,1400,,,
-sc-07,circuito,Circuito 7,Santiago de Cuba,Circuito 7|7|Cto 7|Circuito 7 SD 3030|7 seccionalizado|Circuito 7 seccionalizado,1400,,,SD 3030 es el seccionalizado asociado
-sc-08,circuito,Circuito 8,Santiago de Cuba,Circuito 8|8|Cto 8|Circuito 8 de Santiago,1400,,,
-sc-09,circuito,Circuito 9,Santiago de Cuba,Circuito 9|9|Cto 9|Circuito 9 SI 4074|9 SI 4074,1400,,,SI 4074 es el seccionalizado asociado
-sc-10,circuito,Circuito 10,Santiago de Cuba,Circuito 10|10|Cto 10,1400,,,
-sc-11,circuito,Circuito 11,Santiago de Cuba,Circuito 11|11|Cto 11,1400,,,
-sc-12,circuito,Circuito 12,Santiago de Cuba,Circuito 12|12|Cto 12,1400,,,
-sc-13,circuito,Circuito 13,Santiago de Cuba,Circuito 13|13|Cto 13,1400,,,
-sc-14,circuito,Circuito 14,Santiago de Cuba,Circuito 14|14|Cto 14|Circuito 14 SI 3010|14 SI 3010,1400,,,SI 3010 es el seccionalizado asociado
-sc-15,circuito,Circuito 15,Santiago de Cuba,Circuito 15|15|Cto 15,1400,,,
-sc-16,circuito,Circuito 16,Santiago de Cuba,Circuito 16|16|Cto 16,1400,,,
-sc-17,circuito,Circuito 17,Santiago de Cuba,Circuito 17|17|Cto 17,1400,,,
-sc-18,circuito,Circuito 18,Santiago de Cuba,Circuito 18|18|Cto 18,1400,,,Sin menciones en el corpus; existe por numeración
-sc-19,circuito,Circuito 19,Santiago de Cuba,Circuito 19|19|Cto 19,1400,,,
-sc-20,circuito,Circuito 20,Santiago de Cuba,Circuito 20|20|Cto 20,1400,,,
-sc-21,circuito,Circuito 21,Santiago de Cuba,Circuito 21|21|Cto 21,1400,,,
-sc-22,circuito,Circuito 22,Santiago de Cuba,Circuito 22|22|Cto 22,1400,,,
-sc-23,circuito,Circuito 23,Santiago de Cuba,Circuito 23|23|Cto 23,1400,,,
-sc-24,circuito,Circuito 24,Santiago de Cuba,Circuito 24|24|Cto 24,1400,,,
-sc-25,circuito,Circuito 25,Santiago de Cuba,Circuito 25|25|Cto 25,1400,,,
-sc-26,circuito,Circuito 26,Santiago de Cuba,Circuito 26|26|Cto 26,1400,,,
-pal-01,circuito,Circuito 1 de Palma,Palma Soriano,Circuito 1 de Palma|1 de Palma|Circuito Palma 1|Circuito 1 Palma|1 Palma,2200,,,
-pal-02,circuito,Circuito 2 de Palma,Palma Soriano,Circuito 2 de Palma|2 de Palma|Circuito 2 Palma|2 Palma,2200,,,
-pal-04,circuito,Circuito 4 de Palma,Palma Soriano,Circuito 4 de Palma|4 de Palma|Circuito Palma 4|Circuito 4 Palma|4 Palma,2200,,,
-cta-01,circuito,Circuito 1 de Contramaestre,Contramaestre,Circuito 1 de Contramaestre|1 de Contramaestre|Circuito 1 Contramaestre|1 Contramaestre,2200,,,
-cta-02,circuito,Circuito 2 de Contramaestre,Contramaestre,Circuito 2 de Contramaestre|2 de Contramaestre|Circuito 2 Contramaestre|2 Contramaestre,2200,,,Forma parte de "1 y 2 Contramaestre" y "3+2"
-cta-03,circuito,Circuito 3 de Contramaestre,Contramaestre,Circuito 3 de Contramaestre|3 de Contramaestre|Circuito 3 Contramaestre|3 Contramaestre,2200,,,Forma parte de "3+2"
-cta-hosp,circuito,Circuito Hospital de Contramaestre,Contramaestre,Circuito Hospital de Contramaestre|Hospital de Contramaestre|Hospital Contramaestre,1800,,,
-slm-song,circuito,Circuito Songo,Songo - La Maya,Circuito Songo|Songo|Ramal Songo|Circuito Ramal Songo,2500,,,
-sf-ii,linea,Línea II Frente,Segundo Frente,Línea II Frente|II Frente|ll Frente|Línea ll Frente,4500,,,
-tf-iii,linea,Línea III Frente,Tercer Frente,Línea III Frente|III Frente|lll Frente|Baire III Frente|Baire lll Frente|Contramaestre III Frente,4500,,,
-line-4385,linea,Línea 4385-Contramaestre,Contramaestre,Línea 4385 Contramaestre|4385 Contramaestre|4385,4500,,,
-line-4390,linea,Línea 4390-Contramaestre,Contramaestre,Línea 4390 Contramaestre|4390 Contramaestre|4390,4500,,,
-line-4395,linea,Línea 4395-Contramaestre,Contramaestre,Línea 4395 Contramaestre|4395 Contramaestre|4395|Línea 4395 SD 5175 Contramaestre|4395 5175 Contramaestre,4500,,,SD 5175 es el seccionalizado asociado
-line-4435,linea,Línea 4435-Contramaestre,Contramaestre,Línea 4435 Contramaestre|4435 Contramaestre|4435,4500,,,
-line-5330,linea,Línea 5330-El Cristo,Santiago de Cuba,Línea 5330 El Cristo|5330 El Cristo|Línea 5330 Cristo|5330 Cristo|5330,4500,,,
-line-5335,linea,Línea 5335-Guamá,Guamá,Línea 5335 Guamá|5335 Guamá|5335|Línea 5335 5617 Guamá|5335 5617 Guamá,4500,,,"Aparece como ""5335-Guamá seccionalizada"""
-line-5380,linea,Línea 5380-Mella,Mella,Línea 5380 Mella|5380 Mella|5380,4500,,,
-line-5385,linea,Línea 5385-Palma,Palma Soriano,Línea 5385 Palma|5385 Palma|5385|Línea 5385 San Luis|5385 San Luis,4500,,,"El canal la nombra Palma y San Luis indistintamente"
-line-5390,linea,Línea 5390-La Maya,Songo - La Maya,Línea 5390 La Maya|5390 La Maya|5390|Línea 5390 SD 4260 La Maya|5390 4260 La Maya|Línea 5390 4260|5390 4260,4500,,,SD 4260 es el seccionalizado asociado
-line-5395,linea,Línea 5395-San Luis,San Luis,Línea 5395 San Luis|5395 San Luis|5395|LI 5395 San Luis,4500,,,"El canal escribe a veces ""LI"""
-line-5975,linea,Línea 5975-Baconao,Santiago de Cuba,Línea 5975 Baconao|5975 Baconao|5975|Baconao,4500,,,
-line-5980,linea,Línea 5980-San Juan,Santiago de Cuba,Línea 5980 San Juan|5980 San Juan|5980|San Juan|Línea 5980 Sueros Bombeo|5980 Sueros Bombeo,4500,,,
+sl-5395,linea,Linea 5395,San Luis,Línea 5395|línea 5395|5395|5395-San Luis,1400,,,
+sc-01,circuito,Circuito 1,Santiago de Cuba,circuito 1 de Santiago,1400,,,
+sc-02,circuito,Circuito 2,Santiago de Cuba,circuito 2 de Santiago,1400,,,
+sc-03,circuito,Circuito 3,Santiago de Cuba,circuito 3|circuito 3 de Santiago,1400,,,
+sc-07-sd3030,circuito,Circuito 7-SD3030,Santiago de Cuba,circuito SD3030|circuito SD 3030|circuito 7 SD 3030|circuito 7-sd 3030|7 seccionalizado,1400,,,"Mismo recorrido que 7-SI4630/7-SD3030, identificador repetido en la fuente"
+sc-07-si4630,circuito,Circuito 7-SI4630,Santiago de Cuba,circuito SI 4630|circuito 7 SD 4630,1400,,,"su alias circuito SD 4630 viene del canal, no de la fuente"
+sc-08,circuito,Circuito 8,Santiago de Cuba,circuito 8|circuito 8 de Santiago,1400,,,
+sc-09-si4074,circuito,Circuito 9-SI4074,Santiago de Cuba,circuito 9 - SI 4074|circuito SI 4074|9 si 4074,1400,,,
+sc-09-si4615,circuito,Circuito 9-SI4615,Santiago de Cuba,circuito 9 - SI 4615|circuito SI 4615|9 seccionalizado,1400,,,
+sc-10,circuito,Circuito 10,Santiago de Cuba,circuito 10|circuito 10 de Santiago,1400,,,
+sc-11,circuito,Circuito 11,Santiago de Cuba,circuito 11|circuito 11 de Santiago,1400,,,
+sc-12,circuito,Circuito 12,Santiago de Cuba,circuito 12|circuito 12 de Santiago,1400,,,
+sc-13,circuito,Circuito 13,Santiago de Cuba,circuito 13|circuito 13 de Santiago,1400,,,
+sc-14-si3010,circuito,Circuito 14-SI3010,Santiago de Cuba,circuito 14|circuito 14 de Santiago|14 SI 3010,1400,,,
+sc-15,circuito,Circuito 15,Santiago de Cuba,circuito 15|circuito 15 de Santiago,1400,,,
+sc-16,circuito,Circuito 16,Santiago de Cuba,circuito 16|circuito 16 de Santiago,1400,,,
+sc-17,circuito,Circuito 17,Santiago de Cuba,circuito 17|circuito 17 de Santiago,1400,,,
+sc-18,circuito,Circuito 18,Santiago de Cuba,circuito 18|circuito 18 de Santiago,1400,,,
+sc-19,circuito,Circuito 19,Santiago de Cuba,circuito 19|circuito 19 de Santiago,1400,,,
+sc-20,circuito,Circuito 20,Santiago de Cuba,circuito 20|circuito 20 de Santiago,1400,,,
+sc-21,circuito,Circuito 21,Santiago de Cuba,circuito 21|circuito 21 de Santiago,1400,,,
+sc-22,circuito,Circuito 22,Santiago de Cuba,circuito 22|circuito 22 de Santiago,1400,,,
+sc-23,circuito,Circuito 23,Santiago de Cuba,circuito 23|circuito 23 de Santiago,1400,,,
+sc-24,circuito,Circuito 24,Santiago de Cuba,circuito 24|circuito 24 de Santiago,1400,,,
+sc-25,circuito,Circuito 25,Santiago de Cuba,circuito 25|circuito 25 de Santiago,1400,,,
+sc-26,circuito,Circuito 26,Santiago de Cuba,circuito 26|circuito 26 de Santiago,1400,,,
+sc-5330,linea,Linea 5330,Santiago de Cuba,Línea 5330|línea 5330|5330|5330-Cristo,1400,,,"Nombrado como línea por el canal; en la fuente aparece como circuito de la ciudad."
+sc-5975,linea,Linea 5975,Santiago de Cuba,Línea 5975|línea 5975|5975|5975-Baconao,1400,,,"Nombrado como línea por el canal; en la fuente aparece como circuito de la ciudad."
+sc-5980,linea,Linea 5980,Santiago de Cuba,Línea 5980|línea 5980|5980,1400,,,"Nombrado como línea por el canal; en la fuente aparece como circuito de la ciudad."
+sc-5980-0015,linea,Linea 5980-0015 San Juan-2016,Santiago de Cuba,Línea 5980 San Juan|línea 5980 San Juan|Circuito San Juan,1400,,,
+ct-4385,linea,Linea 4385,Contramaestre,Linea 4385 de Contramaestre|4385 Contramaestre|línea 4385|4385-Contramaestre|4385,2200,,,"Nombrado como línea por el canal; en la fuente aparece como circuito de la ciudad."
+ct-4390,linea,Linea 4390,Contramaestre,Linea 4390 de Contramaestre|4390-Contramaestre|línea 4390|4390,2200,,,
+ct-4435,linea,Linea 4435,Contramaestre,Linea 4435 de Contramaestre|4435-Contramaestre|línea 4435|4435|,2200,,,
+ct-4395-5175,linea,Linea 4395-5175,Contramaestre,Linea 4395 de Contramaestre|4395-Contramaestre|línea 4395|4395|Linea 5175 de Contramaestre|5175-Contramaestre|línea 5175|5175,2200,,,"Recorrido en Granma según la fuente; municipio Contramaestre asignado por cercanía."
+ct-contramaestre-01-02,circuito,Circuito Contramaestre 1 y 2,Contramaestre,1 Contramaestre|1 de Contramaestre|2 Contramaestre|2 de Contramaestre|1 y 2 de Contramaestre|1 y 2 Contramaestre,2200,,,
+ct-hospital-contramaestre,circuito,Circuito Hospital Contramaestre,Contramaestre,Hospital Contramaestre|Hospital de Contramaestre,2200,,,
+pa-5385,linea,Linea 5385,Palma Soriano,Línea 5385|línea 5385|5385|5385-Palma|5385-San Luis|5385-San Luis-Palma|5385-Palma-San Luis,4500,,,
+pa-palma-01,circuito,Circuito Palma 1,Palma Soriano,Circuito 1 de Palma|circuito 1 de Palma|1 de Palma|1 Palma,2200,,,
+pa-palma-02,circuito,Circuito Palma 2,Palma Soriano,Circuito 2 de Palma|circuito 2 de Palma|2 de Palma|2 Palma,2200,,,
+pa-palma-04,circuito,Circuito Palma 4,Palma Soriano,Circuito 4 de Palma|circuito 4 de Palma|4 de Palma|4 Palma,2200,,,
+slm-5380,linea,Linea 5380,San Luis,Línea 5380|línea 5380|5380|5380-Mella|5380-San Luis,4500,,,"contiene tambien a Mella"
+sm-5390-md8005,linea,Linea 5390-MD8005,Songo - La Maya,Línea 5390-MD8005|línea 5390-MD8005|5390-MD8005|Línea 5390 La Maya,4500,,,
+sm-songo,circuito,Circuito Songo,Songo - La Maya,Songo y la Maya|La Maya y Songo|Songo La Maya,4500,,,
+iif-5390-4260,linea,Linea 5390-4260,Segundo Frente,Línea 5390-4260|línea 5390-4260|5390-4260|Línea 5390 Ramal 4260|II Frente,4500,,,
+gu-5335-5618,linea,Linea 5335-5618,Guamá,Línea 5335-5618|línea 5335-5618|5335-5618|Línea 5335|línea 5335|Línea 5618|línea 5618|5618-Guamá|5335-Guamá,4500,,,

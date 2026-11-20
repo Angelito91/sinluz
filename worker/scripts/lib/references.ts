@@ -177,15 +177,17 @@ export function pickRepresentative(
 export function normalizeMappedId(raw: string): { id: string; variant?: string } | null {
   const value = raw.trim().toLowerCase();
 
-  const seccionalizado = /^sc-(\d{1,2})-si(\d+)$/.exec(value);
-  if (seccionalizado) {
-    return { id: `sc-${seccionalizado[1]!.padStart(2, "0")}`, variant: `SI ${seccionalizado[2]}` };
-  }
+  // El catálogo actual tiene los seccionalizados como circuitos independientes.
+  if (/^sc-\d{1,2}-si\d+$/.test(value)) return { id: value };
 
   const city = /^sc-(\d{1,2})$/.exec(value);
-  if (city) return { id: `sc-${city[1]!.padStart(2, "0")}` };
+  if (city) {
+    const n = city[1]!.padStart(2, "0");
+    if (n === "14") return { id: "sc-14-si3010" };
+    return { id: `sc-${n}` };
+  }
 
-  if (/^(pal|cta|line|slm|sf|tf)-[a-z0-9-]+$/.test(value)) return { id: value };
+  if (/^(sc|ct|pa|sl|slm|sm|iif|gu|line)-[a-z0-9-]+$/.test(value)) return { id: value };
 
   return null;
 }

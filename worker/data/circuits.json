@@ -1,14 +1,35 @@
 [
   {
-    "id": "cta-01",
-    "kind": "circuito",
-    "name": "Circuito 1 de Contramaestre",
+    "id": "ct-4385",
+    "kind": "linea",
+    "name": "Linea 4385",
     "municipio": "Contramaestre",
     "aliases": [
-      "Circuito 1 de Contramaestre",
-      "1 de Contramaestre",
-      "Circuito 1 Contramaestre",
-      "1 Contramaestre"
+      "Linea 4385 de Contramaestre",
+      "4385 Contramaestre",
+      "línea 4385",
+      "4385-Contramaestre",
+      "4385"
+    ],
+    "anchor": [
+      20.29049,
+      -76.25318
+    ],
+    "radius_m": 2200,
+    "geo_confidence": "approximate",
+    "geo_source": "elTOQUE",
+    "notes": "Nombrado como línea por el canal; en la fuente aparece como circuito de la ciudad."
+  },
+  {
+    "id": "ct-4390",
+    "kind": "linea",
+    "name": "Linea 4390",
+    "municipio": "Contramaestre",
+    "aliases": [
+      "Linea 4390 de Contramaestre",
+      "4390-Contramaestre",
+      "línea 4390",
+      "4390"
     ],
     "anchor": [
       20.3663,
@@ -19,15 +40,60 @@
     "geo_source": "centroide municipal"
   },
   {
-    "id": "cta-02",
-    "kind": "circuito",
-    "name": "Circuito 2 de Contramaestre",
+    "id": "ct-4395-5175",
+    "kind": "linea",
+    "name": "Linea 4395-5175",
     "municipio": "Contramaestre",
     "aliases": [
-      "Circuito 2 de Contramaestre",
+      "Linea 4395 de Contramaestre",
+      "4395-Contramaestre",
+      "línea 4395",
+      "4395",
+      "Linea 5175 de Contramaestre",
+      "5175-Contramaestre",
+      "línea 5175",
+      "5175"
+    ],
+    "anchor": [
+      20.30049,
+      -76.24774
+    ],
+    "radius_m": 2200,
+    "geo_confidence": "approximate",
+    "geo_source": "elTOQUE",
+    "notes": "Recorrido en Granma según la fuente; municipio Contramaestre asignado por cercanía."
+  },
+  {
+    "id": "ct-4435",
+    "kind": "linea",
+    "name": "Linea 4435",
+    "municipio": "Contramaestre",
+    "aliases": [
+      "Linea 4435 de Contramaestre",
+      "4435-Contramaestre",
+      "línea 4435",
+      "4435"
+    ],
+    "anchor": [
+      20.3002,
+      -76.2394
+    ],
+    "radius_m": 2200,
+    "geo_confidence": "reported",
+    "geo_source": "elTOQUE"
+  },
+  {
+    "id": "ct-contramaestre-01-02",
+    "kind": "circuito",
+    "name": "Circuito Contramaestre 1 y 2",
+    "municipio": "Contramaestre",
+    "aliases": [
+      "1 Contramaestre",
+      "1 de Contramaestre",
+      "2 Contramaestre",
       "2 de Contramaestre",
-      "Circuito 2 Contramaestre",
-      "2 Contramaestre"
+      "1 y 2 de Contramaestre",
+      "1 y 2 Contramaestre"
     ],
     "anchor": [
       20.3707,
@@ -35,19 +101,16 @@
     ],
     "radius_m": 2200,
     "geo_confidence": "centroid",
-    "geo_source": "centroide municipal",
-    "notes": "Forma parte de 1 y 2 Contramaestre y 3+2"
+    "geo_source": "centroide municipal"
   },
   {
-    "id": "cta-03",
+    "id": "ct-hospital-contramaestre",
     "kind": "circuito",
-    "name": "Circuito 3 de Contramaestre",
+    "name": "Circuito Hospital Contramaestre",
     "municipio": "Contramaestre",
     "aliases": [
-      "Circuito 3 de Contramaestre",
-      "3 de Contramaestre",
-      "Circuito 3 Contramaestre",
-      "3 Contramaestre"
+      "Hospital Contramaestre",
+      "Hospital de Contramaestre"
     ],
     "anchor": [
       20.3571,
@@ -55,133 +118,23 @@
     ],
     "radius_m": 2200,
     "geo_confidence": "centroid",
-    "geo_source": "centroide municipal",
-    "notes": "Forma parte de 3+2"
-  },
-  {
-    "id": "cta-hosp",
-    "kind": "circuito",
-    "name": "Circuito Hospital de Contramaestre",
-    "municipio": "Contramaestre",
-    "aliases": [
-      "Circuito Hospital de Contramaestre",
-      "Hospital de Contramaestre",
-      "Hospital Contramaestre"
-    ],
-    "anchor": [
-      20.3752,
-      -76.1925
-    ],
-    "radius_m": 1800,
-    "geo_confidence": "centroid",
     "geo_source": "centroide municipal"
   },
   {
-    "id": "line-4385",
+    "id": "gu-5335-5618",
     "kind": "linea",
-    "name": "Línea 4385-Contramaestre",
-    "municipio": "Contramaestre",
-    "aliases": [
-      "Línea 4385 Contramaestre",
-      "4385 Contramaestre",
-      "4385"
-    ],
-    "anchor": [
-      20.29049,
-      -76.25318
-    ],
-    "radius_m": 4500,
-    "geo_confidence": "approximate",
-    "geo_source": "elTOQUE"
-  },
-  {
-    "id": "line-4390",
-    "kind": "linea",
-    "name": "Línea 4390-Contramaestre",
-    "municipio": "Contramaestre",
-    "aliases": [
-      "Línea 4390 Contramaestre",
-      "4390 Contramaestre",
-      "4390"
-    ],
-    "anchor": [
-      20.364,
-      -76.2122
-    ],
-    "radius_m": 4500,
-    "geo_confidence": "centroid",
-    "geo_source": "centroide municipal"
-  },
-  {
-    "id": "line-4395",
-    "kind": "linea",
-    "name": "Línea 4395-Contramaestre",
-    "municipio": "Contramaestre",
-    "aliases": [
-      "Línea 4395 Contramaestre",
-      "4395 Contramaestre",
-      "4395",
-      "Línea 4395 SD 5175 Contramaestre",
-      "4395 5175 Contramaestre"
-    ],
-    "anchor": [
-      20.30049,
-      -76.24774
-    ],
-    "radius_m": 4500,
-    "geo_confidence": "approximate",
-    "geo_source": "elTOQUE",
-    "notes": "SD 5175 es el seccionalizado asociado"
-  },
-  {
-    "id": "line-4435",
-    "kind": "linea",
-    "name": "Línea 4435-Contramaestre",
-    "municipio": "Contramaestre",
-    "aliases": [
-      "Línea 4435 Contramaestre",
-      "4435 Contramaestre",
-      "4435"
-    ],
-    "anchor": [
-      20.3002,
-      -76.2394
-    ],
-    "radius_m": 4500,
-    "geo_confidence": "reported",
-    "geo_source": "elTOQUE"
-  },
-  {
-    "id": "line-5330",
-    "kind": "linea",
-    "name": "Línea 5330-El Cristo",
-    "municipio": "Santiago de Cuba",
-    "aliases": [
-      "Línea 5330 El Cristo",
-      "5330 El Cristo",
-      "Línea 5330 Cristo",
-      "5330 Cristo",
-      "5330"
-    ],
-    "anchor": [
-      20.12106,
-      -75.74936
-    ],
-    "radius_m": 4500,
-    "geo_confidence": "approximate",
-    "geo_source": "elTOQUE"
-  },
-  {
-    "id": "line-5335",
-    "kind": "linea",
-    "name": "Línea 5335-Guamá",
+    "name": "Linea 5335-5618",
     "municipio": "Guamá",
     "aliases": [
-      "Línea 5335 Guamá",
-      "5335 Guamá",
-      "5335",
-      "Línea 5335 5617 Guamá",
-      "5335 5617 Guamá"
+      "Línea 5335-5618",
+      "línea 5335-5618",
+      "5335-5618",
+      "Línea 5335",
+      "línea 5335",
+      "Línea 5618",
+      "línea 5618",
+      "5618-Guamá",
+      "5335-Guamá"
     ],
     "anchor": [
       19.97312,
@@ -189,38 +142,41 @@
     ],
     "radius_m": 4500,
     "geo_confidence": "approximate",
-    "geo_source": "elTOQUE",
-    "notes": "Aparece como \"5335-Guamá seccionalizada\""
-  },
-  {
-    "id": "line-5380",
-    "kind": "linea",
-    "name": "Línea 5380-Mella",
-    "municipio": "Mella",
-    "aliases": [
-      "Línea 5380 Mella",
-      "5380 Mella",
-      "5380"
-    ],
-    "anchor": [
-      20.4283,
-      -75.92789
-    ],
-    "radius_m": 4500,
-    "geo_confidence": "approximate",
     "geo_source": "elTOQUE"
   },
   {
-    "id": "line-5385",
+    "id": "iif-5390-4260",
     "kind": "linea",
-    "name": "Línea 5385-Palma",
+    "name": "Linea 5390-4260",
+    "municipio": "Segundo Frente",
+    "aliases": [
+      "Línea 5390-4260",
+      "línea 5390-4260",
+      "5390-4260",
+      "Línea 5390 Ramal 4260",
+      "II Frente"
+    ],
+    "anchor": [
+      20.4412,
+      -75.5013
+    ],
+    "radius_m": 4500,
+    "geo_confidence": "centroid",
+    "geo_source": "centroide municipal"
+  },
+  {
+    "id": "pa-5385",
+    "kind": "linea",
+    "name": "Linea 5385",
     "municipio": "Palma Soriano",
     "aliases": [
-      "Línea 5385 Palma",
-      "5385 Palma",
+      "Línea 5385",
+      "línea 5385",
       "5385",
-      "Línea 5385 San Luis",
-      "5385 San Luis"
+      "5385-Palma",
+      "5385-San Luis",
+      "5385-San Luis-Palma",
+      "5385-Palma-San Luis"
     ],
     "anchor": [
       20.2804,
@@ -228,102 +184,17 @@
     ],
     "radius_m": 4500,
     "geo_confidence": "centroid",
-    "geo_source": "centroide municipal",
-    "notes": "El canal la nombra Palma y San Luis indistintamente"
+    "geo_source": "centroide municipal"
   },
   {
-    "id": "line-5390",
-    "kind": "linea",
-    "name": "Línea 5390-La Maya",
-    "municipio": "Songo - La Maya",
-    "aliases": [
-      "Línea 5390 La Maya",
-      "5390 La Maya",
-      "5390",
-      "Línea 5390 SD 4260 La Maya",
-      "5390 4260 La Maya",
-      "Línea 5390 4260",
-      "5390 4260"
-    ],
-    "anchor": [
-      20.24,
-      -75.5
-    ],
-    "radius_m": 4500,
-    "geo_confidence": "approximate",
-    "geo_source": "elTOQUE",
-    "notes": "SD 4260 es el seccionalizado asociado"
-  },
-  {
-    "id": "line-5395",
-    "kind": "linea",
-    "name": "Línea 5395-San Luis",
-    "municipio": "San Luis",
-    "aliases": [
-      "Línea 5395 San Luis",
-      "5395 San Luis",
-      "5395",
-      "LI 5395 San Luis"
-    ],
-    "anchor": [
-      20.33155,
-      -75.70954
-    ],
-    "radius_m": 4500,
-    "geo_confidence": "approximate",
-    "geo_source": "elTOQUE",
-    "notes": "El canal escribe a veces \"LI\""
-  },
-  {
-    "id": "line-5975",
-    "kind": "linea",
-    "name": "Línea 5975-Baconao",
-    "municipio": "Santiago de Cuba",
-    "aliases": [
-      "Línea 5975 Baconao",
-      "5975 Baconao",
-      "5975",
-      "Baconao"
-    ],
-    "anchor": [
-      19.96108,
-      -75.70486
-    ],
-    "radius_m": 4500,
-    "geo_confidence": "reported",
-    "geo_source": "elTOQUE"
-  },
-  {
-    "id": "line-5980",
-    "kind": "linea",
-    "name": "Línea 5980-San Juan",
-    "municipio": "Santiago de Cuba",
-    "aliases": [
-      "Línea 5980 San Juan",
-      "5980 San Juan",
-      "5980",
-      "San Juan",
-      "Línea 5980 Sueros Bombeo",
-      "5980 Sueros Bombeo"
-    ],
-    "anchor": [
-      20.02507,
-      -75.79474
-    ],
-    "radius_m": 4500,
-    "geo_confidence": "reported",
-    "geo_source": "elTOQUE"
-  },
-  {
-    "id": "pal-01",
+    "id": "pa-palma-01",
     "kind": "circuito",
-    "name": "Circuito 1 de Palma",
+    "name": "Circuito Palma 1",
     "municipio": "Palma Soriano",
     "aliases": [
       "Circuito 1 de Palma",
+      "circuito 1 de Palma",
       "1 de Palma",
-      "Circuito Palma 1",
-      "Circuito 1 Palma",
       "1 Palma"
     ],
     "anchor": [
@@ -335,14 +206,14 @@
     "geo_source": "elTOQUE"
   },
   {
-    "id": "pal-02",
+    "id": "pa-palma-02",
     "kind": "circuito",
-    "name": "Circuito 2 de Palma",
+    "name": "Circuito Palma 2",
     "municipio": "Palma Soriano",
     "aliases": [
       "Circuito 2 de Palma",
+      "circuito 2 de Palma",
       "2 de Palma",
-      "Circuito 2 Palma",
       "2 Palma"
     ],
     "anchor": [
@@ -354,15 +225,14 @@
     "geo_source": "elTOQUE"
   },
   {
-    "id": "pal-04",
+    "id": "pa-palma-04",
     "kind": "circuito",
-    "name": "Circuito 4 de Palma",
+    "name": "Circuito Palma 4",
     "municipio": "Palma Soriano",
     "aliases": [
       "Circuito 4 de Palma",
+      "circuito 4 de Palma",
       "4 de Palma",
-      "Circuito Palma 4",
-      "Circuito 4 Palma",
       "4 Palma"
     ],
     "anchor": [
@@ -379,10 +249,7 @@
     "name": "Circuito 1",
     "municipio": "Santiago de Cuba",
     "aliases": [
-      "Circuito 1",
-      "1",
-      "Cto 1",
-      "Circuito 1 de Santiago"
+      "circuito 1 de Santiago"
     ],
     "anchor": [
       20.01476,
@@ -398,10 +265,7 @@
     "name": "Circuito 2",
     "municipio": "Santiago de Cuba",
     "aliases": [
-      "Circuito 2",
-      "2",
-      "Cto 2",
-      "Circuito 2 de Santiago"
+      "circuito 2 de Santiago"
     ],
     "anchor": [
       20.02167,
@@ -417,10 +281,8 @@
     "name": "Circuito 3",
     "municipio": "Santiago de Cuba",
     "aliases": [
-      "Circuito 3",
-      "3",
-      "Cto 3",
-      "Circuito 3 de Santiago"
+      "circuito 3",
+      "circuito 3 de Santiago"
     ],
     "anchor": [
       20.02629,
@@ -431,74 +293,16 @@
     "geo_source": "trazado detallado"
   },
   {
-    "id": "sc-04",
+    "id": "sc-07-sd3030",
     "kind": "circuito",
-    "name": "Circuito 4",
+    "name": "Circuito 7-SD3030",
     "municipio": "Santiago de Cuba",
     "aliases": [
-      "Circuito 4",
-      "4",
-      "Cto 4",
-      "Circuito 4 de Santiago"
-    ],
-    "anchor": [
-      20.0217,
-      -75.8297
-    ],
-    "radius_m": 1400,
-    "geo_confidence": "centroid",
-    "geo_source": "centroide municipal"
-  },
-  {
-    "id": "sc-05",
-    "kind": "circuito",
-    "name": "Circuito 5",
-    "municipio": "Santiago de Cuba",
-    "aliases": [
-      "Circuito 5",
-      "5",
-      "Cto 5",
-      "Circuito 5 de Santiago"
-    ],
-    "anchor": [
-      20.0261,
-      -75.8345
-    ],
-    "radius_m": 1400,
-    "geo_confidence": "centroid",
-    "geo_source": "centroide municipal"
-  },
-  {
-    "id": "sc-06",
-    "kind": "circuito",
-    "name": "Circuito 6",
-    "municipio": "Santiago de Cuba",
-    "aliases": [
-      "Circuito 6",
-      "6",
-      "Cto 6",
-      "Circuito 6 de Santiago"
-    ],
-    "anchor": [
-      20.0125,
-      -75.8289
-    ],
-    "radius_m": 1400,
-    "geo_confidence": "centroid",
-    "geo_source": "centroide municipal"
-  },
-  {
-    "id": "sc-07",
-    "kind": "circuito",
-    "name": "Circuito 7",
-    "municipio": "Santiago de Cuba",
-    "aliases": [
-      "Circuito 7",
-      "7",
-      "Cto 7",
-      "Circuito 7 SD 3030",
-      "7 seccionalizado",
-      "Circuito 7 seccionalizado"
+      "circuito SD3030",
+      "circuito SD 3030",
+      "circuito 7 SD 3030",
+      "circuito 7-sd 3030",
+      "7 seccionalizado"
     ],
     "anchor": [
       20.01917,
@@ -507,7 +311,25 @@
     "radius_m": 1400,
     "geo_confidence": "reported",
     "geo_source": "elTOQUE",
-    "notes": "SD 3030 es el seccionalizado asociado"
+    "notes": "Mismo recorrido que 7-SI4630/7-SD3030, identificador repetido en la fuente"
+  },
+  {
+    "id": "sc-07-si4630",
+    "kind": "circuito",
+    "name": "Circuito 7-SI4630",
+    "municipio": "Santiago de Cuba",
+    "aliases": [
+      "circuito SI 4630",
+      "circuito 7 SD 4630"
+    ],
+    "anchor": [
+      20.0217,
+      -75.8297
+    ],
+    "radius_m": 1400,
+    "geo_confidence": "centroid",
+    "geo_source": "centroide municipal",
+    "notes": "su alias circuito SD 4630 viene del canal, no de la fuente"
   },
   {
     "id": "sc-08",
@@ -515,10 +337,8 @@
     "name": "Circuito 8",
     "municipio": "Santiago de Cuba",
     "aliases": [
-      "Circuito 8",
-      "8",
-      "Cto 8",
-      "Circuito 8 de Santiago"
+      "circuito 8",
+      "circuito 8 de Santiago"
     ],
     "anchor": [
       20.01083,
@@ -529,25 +349,40 @@
     "geo_source": "trazado detallado"
   },
   {
-    "id": "sc-09",
+    "id": "sc-09-si4074",
     "kind": "circuito",
-    "name": "Circuito 9",
+    "name": "Circuito 9-SI4074",
     "municipio": "Santiago de Cuba",
     "aliases": [
-      "Circuito 9",
-      "9",
-      "Cto 9",
-      "Circuito 9 SI 4074",
-      "9 SI 4074"
+      "circuito 9 - SI 4074",
+      "circuito SI 4074",
+      "9 si 4074"
     ],
     "anchor": [
-      19.99842,
-      -75.84837
+      19.9889,
+      -75.8522
     ],
     "radius_m": 1400,
     "geo_confidence": "mapped",
-    "geo_source": "trazado detallado",
-    "notes": "SI 4074 es el seccionalizado asociado"
+    "geo_source": "trazado detallado"
+  },
+  {
+    "id": "sc-09-si4615",
+    "kind": "circuito",
+    "name": "Circuito 9-SI4615",
+    "municipio": "Santiago de Cuba",
+    "aliases": [
+      "circuito 9 - SI 4615",
+      "circuito SI 4615",
+      "9 seccionalizado"
+    ],
+    "anchor": [
+      20.01108,
+      -75.84329
+    ],
+    "radius_m": 1400,
+    "geo_confidence": "mapped",
+    "geo_source": "trazado detallado"
   },
   {
     "id": "sc-10",
@@ -555,9 +390,8 @@
     "name": "Circuito 10",
     "municipio": "Santiago de Cuba",
     "aliases": [
-      "Circuito 10",
-      "10",
-      "Cto 10"
+      "circuito 10",
+      "circuito 10 de Santiago"
     ],
     "anchor": [
       20.03198,
@@ -573,9 +407,8 @@
     "name": "Circuito 11",
     "municipio": "Santiago de Cuba",
     "aliases": [
-      "Circuito 11",
-      "11",
-      "Cto 11"
+      "circuito 11",
+      "circuito 11 de Santiago"
     ],
     "anchor": [
       19.99088,
@@ -591,9 +424,8 @@
     "name": "Circuito 12",
     "municipio": "Santiago de Cuba",
     "aliases": [
-      "Circuito 12",
-      "12",
-      "Cto 12"
+      "circuito 12",
+      "circuito 12 de Santiago"
     ],
     "anchor": [
       20.0247,
@@ -609,9 +441,8 @@
     "name": "Circuito 13",
     "municipio": "Santiago de Cuba",
     "aliases": [
-      "Circuito 13",
-      "13",
-      "Cto 13"
+      "circuito 13",
+      "circuito 13 de Santiago"
     ],
     "anchor": [
       20.02124,
@@ -622,15 +453,13 @@
     "geo_source": "trazado detallado"
   },
   {
-    "id": "sc-14",
+    "id": "sc-14-si3010",
     "kind": "circuito",
-    "name": "Circuito 14",
+    "name": "Circuito 14-SI3010",
     "municipio": "Santiago de Cuba",
     "aliases": [
-      "Circuito 14",
-      "14",
-      "Cto 14",
-      "Circuito 14 SI 3010",
+      "circuito 14",
+      "circuito 14 de Santiago",
       "14 SI 3010"
     ],
     "anchor": [
@@ -639,8 +468,7 @@
     ],
     "radius_m": 1400,
     "geo_confidence": "approximate",
-    "geo_source": "elTOQUE",
-    "notes": "SI 3010 es el seccionalizado asociado"
+    "geo_source": "elTOQUE"
   },
   {
     "id": "sc-15",
@@ -648,9 +476,8 @@
     "name": "Circuito 15",
     "municipio": "Santiago de Cuba",
     "aliases": [
-      "Circuito 15",
-      "15",
-      "Cto 15"
+      "circuito 15",
+      "circuito 15 de Santiago"
     ],
     "anchor": [
       20.03,
@@ -666,9 +493,8 @@
     "name": "Circuito 16",
     "municipio": "Santiago de Cuba",
     "aliases": [
-      "Circuito 16",
-      "16",
-      "Cto 16"
+      "circuito 16",
+      "circuito 16 de Santiago"
     ],
     "anchor": [
       20.02816,
@@ -684,9 +510,8 @@
     "name": "Circuito 17",
     "municipio": "Santiago de Cuba",
     "aliases": [
-      "Circuito 17",
-      "17",
-      "Cto 17"
+      "circuito 17",
+      "circuito 17 de Santiago"
     ],
     "anchor": [
       20.05563,
@@ -702,9 +527,8 @@
     "name": "Circuito 18",
     "municipio": "Santiago de Cuba",
     "aliases": [
-      "Circuito 18",
-      "18",
-      "Cto 18"
+      "circuito 18",
+      "circuito 18 de Santiago"
     ],
     "anchor": [
       20.03298,
@@ -712,8 +536,7 @@
     ],
     "radius_m": 1400,
     "geo_confidence": "reported",
-    "geo_source": "elTOQUE",
-    "notes": "Sin menciones en el corpus; existe por numeración"
+    "geo_source": "elTOQUE"
   },
   {
     "id": "sc-19",
@@ -721,9 +544,8 @@
     "name": "Circuito 19",
     "municipio": "Santiago de Cuba",
     "aliases": [
-      "Circuito 19",
-      "19",
-      "Cto 19"
+      "circuito 19",
+      "circuito 19 de Santiago"
     ],
     "anchor": [
       20.03474,
@@ -739,9 +561,8 @@
     "name": "Circuito 20",
     "municipio": "Santiago de Cuba",
     "aliases": [
-      "Circuito 20",
-      "20",
-      "Cto 20"
+      "circuito 20",
+      "circuito 20 de Santiago"
     ],
     "anchor": [
       20.04921,
@@ -757,9 +578,8 @@
     "name": "Circuito 21",
     "municipio": "Santiago de Cuba",
     "aliases": [
-      "Circuito 21",
-      "21",
-      "Cto 21"
+      "circuito 21",
+      "circuito 21 de Santiago"
     ],
     "anchor": [
       20.07829,
@@ -775,13 +595,12 @@
     "name": "Circuito 22",
     "municipio": "Santiago de Cuba",
     "aliases": [
-      "Circuito 22",
-      "22",
-      "Cto 22"
+      "circuito 22",
+      "circuito 22 de Santiago"
     ],
     "anchor": [
-      20.0306,
-      -75.8228
+      20.0261,
+      -75.8345
     ],
     "radius_m": 1400,
     "geo_confidence": "centroid",
@@ -793,9 +612,8 @@
     "name": "Circuito 23",
     "municipio": "Santiago de Cuba",
     "aliases": [
-      "Circuito 23",
-      "23",
-      "Cto 23"
+      "circuito 23",
+      "circuito 23 de Santiago"
     ],
     "anchor": [
       20.04257,
@@ -811,9 +629,8 @@
     "name": "Circuito 24",
     "municipio": "Santiago de Cuba",
     "aliases": [
-      "Circuito 24",
-      "24",
-      "Cto 24"
+      "circuito 24",
+      "circuito 24 de Santiago"
     ],
     "anchor": [
       20.04229,
@@ -829,9 +646,8 @@
     "name": "Circuito 25",
     "municipio": "Santiago de Cuba",
     "aliases": [
-      "Circuito 25",
-      "25",
-      "Cto 25"
+      "circuito 25",
+      "circuito 25 de Santiago"
     ],
     "anchor": [
       20.03885,
@@ -847,9 +663,8 @@
     "name": "Circuito 26",
     "municipio": "Santiago de Cuba",
     "aliases": [
-      "Circuito 26",
-      "26",
-      "Cto 26"
+      "circuito 26",
+      "circuito 26 de Santiago"
     ],
     "anchor": [
       20.05017,
@@ -860,62 +675,157 @@
     "geo_source": "elTOQUE"
   },
   {
-    "id": "sf-ii",
+    "id": "sc-5330",
     "kind": "linea",
-    "name": "Línea II Frente",
-    "municipio": "Segundo Frente",
+    "name": "Linea 5330",
+    "municipio": "Santiago de Cuba",
     "aliases": [
-      "Línea II Frente",
-      "II Frente",
-      "ll Frente",
-      "Línea ll Frente"
+      "Línea 5330",
+      "línea 5330",
+      "5330",
+      "5330-Cristo"
     ],
     "anchor": [
-      20.4412,
-      -75.5013
+      20.12106,
+      -75.74936
     ],
-    "radius_m": 4500,
-    "geo_confidence": "centroid",
-    "geo_source": "centroide municipal"
+    "radius_m": 1400,
+    "geo_confidence": "approximate",
+    "geo_source": "elTOQUE",
+    "notes": "Nombrado como línea por el canal; en la fuente aparece como circuito de la ciudad."
   },
   {
-    "id": "slm-song",
+    "id": "sc-5975",
+    "kind": "linea",
+    "name": "Linea 5975",
+    "municipio": "Santiago de Cuba",
+    "aliases": [
+      "Línea 5975",
+      "línea 5975",
+      "5975",
+      "5975-Baconao"
+    ],
+    "anchor": [
+      19.96108,
+      -75.70486
+    ],
+    "radius_m": 1400,
+    "geo_confidence": "reported",
+    "geo_source": "elTOQUE",
+    "notes": "Nombrado como línea por el canal; en la fuente aparece como circuito de la ciudad."
+  },
+  {
+    "id": "sc-5980",
+    "kind": "linea",
+    "name": "Linea 5980",
+    "municipio": "Santiago de Cuba",
+    "aliases": [
+      "Línea 5980",
+      "línea 5980",
+      "5980"
+    ],
+    "anchor": [
+      20.02715,
+      -75.80129
+    ],
+    "radius_m": 1400,
+    "geo_confidence": "approximate",
+    "geo_source": "elTOQUE",
+    "notes": "Nombrado como línea por el canal; en la fuente aparece como circuito de la ciudad."
+  },
+  {
+    "id": "sc-5980-0015",
+    "kind": "linea",
+    "name": "Linea 5980-0015 San Juan-2016",
+    "municipio": "Santiago de Cuba",
+    "aliases": [
+      "Línea 5980 San Juan",
+      "línea 5980 San Juan",
+      "Circuito San Juan"
+    ],
+    "anchor": [
+      20.02507,
+      -75.79474
+    ],
+    "radius_m": 1400,
+    "geo_confidence": "reported",
+    "geo_source": "elTOQUE"
+  },
+  {
+    "id": "sl-5395",
+    "kind": "linea",
+    "name": "Linea 5395",
+    "municipio": "San Luis",
+    "aliases": [
+      "Línea 5395",
+      "línea 5395",
+      "5395",
+      "5395-San Luis"
+    ],
+    "anchor": [
+      20.33155,
+      -75.70954
+    ],
+    "radius_m": 1400,
+    "geo_confidence": "approximate",
+    "geo_source": "elTOQUE"
+  },
+  {
+    "id": "slm-5380",
+    "kind": "linea",
+    "name": "Linea 5380",
+    "municipio": "San Luis",
+    "aliases": [
+      "Línea 5380",
+      "línea 5380",
+      "5380",
+      "5380-Mella",
+      "5380-San Luis"
+    ],
+    "anchor": [
+      20.4283,
+      -75.92789
+    ],
+    "radius_m": 4500,
+    "geo_confidence": "approximate",
+    "geo_source": "elTOQUE",
+    "notes": "contiene tambien a Mella"
+  },
+  {
+    "id": "sm-5390-md8005",
+    "kind": "linea",
+    "name": "Linea 5390-MD8005",
+    "municipio": "Songo - La Maya",
+    "aliases": [
+      "Línea 5390-MD8005",
+      "línea 5390-MD8005",
+      "5390-MD8005",
+      "Línea 5390 La Maya"
+    ],
+    "anchor": [
+      20.24,
+      -75.5
+    ],
+    "radius_m": 4500,
+    "geo_confidence": "approximate",
+    "geo_source": "elTOQUE"
+  },
+  {
+    "id": "sm-songo",
     "kind": "circuito",
     "name": "Circuito Songo",
     "municipio": "Songo - La Maya",
     "aliases": [
-      "Circuito Songo",
-      "Songo",
-      "Ramal Songo",
-      "Circuito Ramal Songo"
+      "Songo y la Maya",
+      "La Maya y Songo",
+      "Songo La Maya"
     ],
     "anchor": [
       20.17609,
       -75.71087
     ],
-    "radius_m": 2500,
+    "radius_m": 4500,
     "geo_confidence": "approximate",
     "geo_source": "elTOQUE"
-  },
-  {
-    "id": "tf-iii",
-    "kind": "linea",
-    "name": "Línea III Frente",
-    "municipio": "Tercer Frente",
-    "aliases": [
-      "Línea III Frente",
-      "III Frente",
-      "lll Frente",
-      "Baire III Frente",
-      "Baire lll Frente",
-      "Contramaestre III Frente"
-    ],
-    "anchor": [
-      20.161,
-      -76.3124
-    ],
-    "radius_m": 4500,
-    "geo_confidence": "centroid",
-    "geo_source": "centroide municipal"
   }
 ]

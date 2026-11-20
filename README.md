@@ -19,7 +19,7 @@ Coste de infraestructura: 0 €.
 
 | Pieza | Estado |
 |---|---|
-| Catálogo (48 circuitos, 9 municipios) | listo |
+| Catálogo (45 circuitos, 9 municipios) | listo |
 | Intérprete LLM (Workers AI + Zod) | listo · sin reglas ni alias matching |
 | Tests (`bun test`) | 40 pass |
 | Worker + D1 + cron | listo · probado en local con datos en vivo |
@@ -76,9 +76,10 @@ mensajes y cifras.
 5. **Si el modelo falla, no se toca nada.** No se guarda snapshot ni avanza el
    cursor, y el cron reintenta en la siguiente ejecución.
 
-Detalle completo en [`docs/mvp.md`](docs/mvp.md). Guía para quien mantiene los
-datos en [`docs/guia-datos.md`](docs/guia-datos.md). Cómo probar lo desplegado
-en [`docs/probar.md`](docs/probar.md).
+Detalle completo en [`docs/mvp.md`](docs/mvp.md). Catálogo, cobertura y origen
+de las ubicaciones en [`docs/circuitos.md`](docs/circuitos.md). Guía para quien
+mantiene los datos en [`docs/guia-datos.md`](docs/guia-datos.md). Cómo probar lo
+desplegado en [`docs/probar.md`](docs/probar.md).
 
 ---
 
@@ -125,7 +126,7 @@ curl http://127.0.0.1:8787/api/health
 ## Comandos
 
 ```bash
-bun test                 # 40 tests: contrato del LLM, máquina de estados y D1
+bun test                 # 47 tests: contrato del LLM, máquina de estados y D1
 bun run typecheck        # worker, scripts y web (tsc --noEmit)
 bun run build            # sync + typecheck + build de la PWA
 bun run preview          # sirve el build en 4173 (con proxy /api → 8787)
@@ -222,7 +223,7 @@ sinluz/
 │   ├── data/circuits.csv        ← lo edita la analista
 │   ├── data/municipios.geojson  9 municipios, 21 KB
 │   ├── scripts/                 catálogo, GeoJSON y fixtures
-│   └── test/                    40 tests + corpus real de referencia
+│   └── test/                    47 tests + corpus real de referencia
 ├── web/src/                     App, MapView, CircuitList, hooks
 └── docs/                        MVP y guía de datos
 ```

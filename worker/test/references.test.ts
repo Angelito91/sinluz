@@ -14,7 +14,7 @@ describe("ids del mapa detallado", () => {
   test("normaliza los ids sin cero y los seccionalizados", () => {
     expect(normalizeMappedId("sc-1")).toEqual({ id: "sc-01" });
     expect(normalizeMappedId("sc-08")).toEqual({ id: "sc-08" });
-    expect(normalizeMappedId("sc-09-si4074")).toEqual({ id: "sc-09", variant: "SI 4074" });
+    expect(normalizeMappedId("sc-09-si4074")).toEqual({ id: "sc-09-si4074" });
     expect(normalizeMappedId("sc-11")).toEqual({ id: "sc-11" });
     expect(normalizeMappedId("line-4385")).toEqual({ id: "line-4385" });
     expect(normalizeMappedId("desconocido")).toBeNull();
@@ -109,7 +109,7 @@ describe("mapa detallado", () => {
     expect(parsed.routes).toHaveLength(1);
     expect(parsed.routes[0]!.id).toBe("sc-01");
     expect(parsed.zones).toHaveLength(2);
-    expect(parsed.zones.map((z) => z.variant).sort()).toEqual(["SI 4074", "SI 4615"]);
+    expect(parsed.zones.map((z) => z.id).sort()).toEqual(["sc-09-si4074", "sc-09-si4615"]);
     expect(parsed.zones.map((z) => z.center)).toEqual([
       [-75.84, 20.0],
       [-75.83, 20.01],

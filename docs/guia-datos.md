@@ -15,7 +15,7 @@ Todo tu trabajo ocurre en **un archivo CSV**: `worker/data/circuits.csv`.
 2. **Que los alias cubran las formas en que el canal lo nombra**, sin ambigüedad.
 3. **Que `bun run data:check` pase sin errores.**
 
-El catálogo actual tiene **48 circuitos** (14 líneas y 34 circuitos) en los 9
+El catálogo actual tiene **45 circuitos** (14 líneas y 31 circuitos) en los 9
 municipios de la provincia, construido a partir de 293 mensajes reales.
 
 Lo que **no** tienes que hacer: etiquetar intenciones, calcular coordenadas,
@@ -46,7 +46,7 @@ bun run data:check
 Debe terminar con algo como:
 
 ```
-OK · 48 circuitos (14 líneas) · 12 con trazado, 10 con referencia verificada, 14 aproximados, 12 en centroide · 7 en espiral
+OK · 45 circuitos (14 líneas) · 13 con trazado, 10 con referencia verificada, 15 aproximados, 7 en centroide · 3 en espiral
 ```
 
 Si da error, copia el mensaje completo: casi siempre es una fila con un

@@ -15,7 +15,7 @@ marcado con **†**.
 
 - Ingesta automática cada 5 min desde `https://tg.i-c-a.su/json/electricastgo?limit=30`.
 - Interpretación con Workers AI: el modelo lee estado actual + mensajes nuevos y devuelve los cambios, validados con Zod.
-- Catálogo de **48 circuitos** (14 líneas y 34 circuitos) en 9 municipios, con alias y ubicación aproximada.
+- Catálogo de **45 circuitos** (14 líneas y 31 circuitos) en 9 municipios, con alias y ubicación aproximada.
 - Mapa con teselas de OpenStreetMap, municipios coloreados y circuitos
   ubicados de forma aproximada + lista + buscador + favoritos.
 - Tiempo sin luz al segundo, hora de La Habana.
@@ -371,7 +371,7 @@ la luz por silencio.
 | Fase | Entregable | Estado |
 |---|---|---|
 | **F0** | Corpus real (293 mensajes, fusión de páginas) | ✅ |
-| **F1** | `circuits.json` + `circuits.geojson` + `municipios.geojson` | ✅ 48 circuitos, 9 municipios, 79 features |
+| **F1** | `circuits.json` + `circuits.geojson` + `municipios.geojson` | ✅ 45 circuitos, 9 municipios, 76 features |
 | **F2** | Intérprete LLM + `state` + tests | ✅ 47 pass, sin parser determinista |
 | **F3** | Worker con D1, cron, API, override | ✅ probado en local con datos en vivo |
 | **F4** | Mapa + hoja + lista + buscador | ✅ |
@@ -441,27 +441,7 @@ con 0,2 rpm desde un solo consumidor.
 
 ---
 
-## 14. Skills usadas al implementar
-
-Instaladas con `bunx autoskills` (16 en total). Las que guiaron decisiones
-concretas:
-
-| Momento | Skill |
-|---|---|
-| Worker, D1, cron, bindings | `cloudflare`, `wrangler`, `workers-best-practices` |
-| Rutas y middleware | `hono` |
-| Esquemas y validación | `zod` |
-| Tipo del corpus y de los scripts | `typescript-advanced-types` |
-| Componentes y hooks | `react-best-practices`, `composition-patterns` |
-| Build y PWA | `vite` |
-| Tokens y escalas | `tailwind-css-patterns` |
-| Revisión de accesibilidad y microcopy | `accessibility` |
-| Título, descripción, `lang`, jerarquía | `seo` |
-| Peso del bundle y arranque en 3G | `web-perf`, `frontend-design` |
-
-Regla respetada: cargar la skill **antes** de escribir el componente.
-
-## Mapa por áreas y circuitos
+## 14. Mapa por áreas y circuitos
 
 El mapa colorea los 9 municipios (polígonos reales de geoBoundaries) según sus
 circuitos: rojo si hay afectados (más intenso cuanto mayor la proporción), ámbar
@@ -472,7 +452,7 @@ pide la posición al navegador, resuelve el municipio con un punto-en-polígono
 Encima se dibujan los circuitos. La ubicación sale, en este orden:
 
 1. `lat`/`lon` escritos a mano en `circuits.csv`.
-2. `circuit-mapped.geojson`: recorridos y zonas detalladas para 14 circuitos.
+2. `circuit-mapped.geojson`: recorridos y zonas detalladas para 13 circuitos.
 3. `circuit-references.json`: puntos colaborativos de
    [elTOQUE](https://circuitos.masvoces.net/), agrupados por cercanía y
    ponderados por verificaciones y votos.
