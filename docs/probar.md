@@ -27,7 +27,7 @@ Abre <https://sinluz-988.pages.dev> en el móvil.
 curl -sS https://sinluz-api.portuondoangel.workers.dev/api/health | python3 -m json.tool
 ```
 
-Tiene que verse `"healthy": true` y `"age_min"` por debajo de 90.
+Tiene que verse `"healthy": true` y `"pipeline_age_min"` por debajo de 30.
 El cron ingesta cada 5 minutos; si acabas de desplegar, espera a la siguiente
 ejecución o fuerza una:
 
@@ -59,8 +59,8 @@ curl -X DELETE -H "authorization: Bearer $ADMIN_TOKEN" \
   https://sinluz-api.portuondoangel.workers.dev/api/v1/admin/override/sc-11
 ```
 
-Las correcciones sobreviven a las ingestas: se aplican al final de cada
-reconstrucción.
+Las correcciones se aplican al leer el estado, así que sobreviven a las ingestas
+hasta que las quites.
 
 ## 4. Instalar como app (PWA)
 
@@ -76,7 +76,7 @@ guardada y avisa de su antigüedad.
 |---|---|
 | La página no abre y otras webs sí | Tu red bloquea `*.pages.dev`; prueba otra red o un dominio propio. |
 | Abre, pero la lista está vacía | La API no responde o sigue sin datos: mira `/api/health`. |
-| `age_min` sube sin parar | El bridge o el canal están caídos; la app lo dice en el banner. |
+| `pipeline_age_min` sube sin parar | El bridge, la IA o el canal están caídos; la app lo dice en el banner. |
 | Un circuito sale mal | Usa el override (apartado 3) y anótalo. |
 
 ## 6. Actualizar la app

@@ -1,15 +1,21 @@
 import { Hono } from "hono";
 import { cors } from "hono/cors";
 import { IngestBody, OverrideBody } from "@sinluz/shared";
-import { catalog } from "./catalog";
+import { catalog, catalogIds } from "./catalog";
 import {
   clearCircuitOverride,
+  getSetting,
   getSnapshot,
+  getStoredState,
+  lastIngest,
   listOverrides,
-  rebuild,
+  llmEnabled,
+  saveState,
   setCircuitOverride,
   type Env,
 } from "./store";
+import { DEFAULT_MODEL, decide, type Message } from "./llm";
+import { applyChanges } from "./state";
 import { ingest } from "./ingest";
 
 const app = new Hono<{ Bindings: Env }>();
@@ -30,31 +36,41 @@ app.get("/api/v1/circuits", (c) => {
 });
 
 app.get("/api/health", async (c) => {
-  const [snapshot, count, lastLog] = await Promise.all([
+  const [snapshot, lastLog, lastError] = await Promise.all([
     getSnapshot(c.env),
-    c.env.DB.prepare("SELECT COUNT(*) AS n FROM raw_messages").first<{ n: number }>(),
-    c.env.DB.prepare("SELECT at, source, ok, detail FROM ingest_log ORDER BY id DESC LIMIT 1").first<{
-      at: number;
-      source: string;
-      ok: number;
-      detail: string;
-    }>(),
+    lastIngest(c.env),
+    getSetting(c.env, "last_error"),
   ]);
 
-  const healthy = snapshot.source.age_min < 360 && (lastLog?.ok ?? 0) === 1;
+  // Las antigüedades se calculan ahora, no al guardar: así no se congelan si la ingesta falla.
+  const nowSec = Math.floor(Date.now() / 1000);
+  const pipelineAge = snapshot.generated_at > 0 ? Math.round((nowSec - snapshot.generated_at) / 60) : null;
+  const lastMessageAt = snapshot.source.last_message_at;
+  const channelAge = lastMessageAt ? Math.round((nowSec - lastMessageAt) / 60) : null;
+
+  const healthy =
+    llmEnabled(c.env) &&
+    pipelineAge != null &&
+    pipelineAge < 30 &&
+    (channelAge == null || channelAge < 360) &&
+    (lastLog?.ok ?? 0) === 1;
+
   c.header("cache-control", "no-store");
   return c.json(
     {
       healthy,
+      pipeline_age_min: pipelineAge,
+      channel_age_min: channelAge,
       last_ingest_at: lastLog?.at ?? null,
       last_ingest_source: lastLog?.source ?? null,
       last_ingest_ok: Boolean(lastLog?.ok),
       last_ingest_detail: lastLog?.detail ?? null,
       last_message_id: snapshot.source.last_message_id,
-      age_min: snapshot.source.age_min,
-      raw_messages: count?.n ?? 0,
       affected: snapshot.circuits.filter((x) => x.status === "out").length,
       province: snapshot.province,
+      llm_enabled: llmEnabled(c.env),
+      llm_model: c.env.LLM_MODEL || DEFAULT_MODEL,
+      last_error: lastError || null,
     },
     healthy ? 200 : 503,
   );
@@ -66,27 +82,37 @@ function authorized(c: { req: { header: (k: string) => string | undefined } }, t
   return header === `Bearer ${token}`;
 }
 
-/** Ingesta manual: override de un mensaje real o entrada de emergencia. */
+/** Ingesta manual: interpreta un mensaje real o de emergencia sin tocar el cursor del canal. */
 app.post("/api/v1/ingest", async (c) => {
   if (!authorized(c, c.env.INGEST_TOKEN)) return c.json({ error: "no autorizado" }, 401);
+  if (!llmEnabled(c.env)) return c.json({ error: "IA no disponible" }, 503);
 
   const body = IngestBody.safeParse(await c.req.json().catch(() => null));
   if (!body.success) return c.json({ error: "cuerpo inválido" }, 400);
 
   const now = Math.floor(Date.now() / 1000);
-  const id = body.data.id ?? now;
-  const posted_at = body.data.posted_at ?? now;
+  const msg: Message = {
+    id: body.data.id ?? now,
+    date: body.data.posted_at ?? now,
+    text: body.data.text,
+  };
 
-  await c.env.DB.prepare(
-    `INSERT INTO raw_messages (id, posted_at, text, text_hash, parsed_at)
-     VALUES (?, ?, ?, ?, ?)
-     ON CONFLICT(id) DO UPDATE SET text = excluded.text, text_hash = excluded.text_hash, parsed_at = excluded.parsed_at`,
-  )
-    .bind(id, posted_at, body.data.text, String(id), now)
-    .run();
+  const state = await getStoredState(c.env);
+  const result = await decide(c.env.AI!, c.env.LLM_MODEL || DEFAULT_MODEL, {
+    now,
+    state,
+    messages: [msg],
+  });
+  if (!result.ok) return c.json({ error: result.error }, 502);
 
-  const payload = await rebuild(c.env, "manual");
-  return c.json({ ok: true, affected: payload.circuits.filter((x) => x.status === "out").length });
+  const next = applyChanges(state, [msg], result.result, now, false);
+  await saveState(c.env, next);
+
+  return c.json({
+    ok: true,
+    applied: result.result.cambios.length,
+    affected: next.circuits.filter((x) => x.status === "out").length,
+  });
 });
 
 app.post("/api/v1/admin/override", async (c) => {
@@ -94,6 +120,9 @@ app.post("/api/v1/admin/override", async (c) => {
 
   const body = OverrideBody.safeParse(await c.req.json().catch(() => null));
   if (!body.success) return c.json({ error: "cuerpo inválido", issues: body.error.issues }, 400);
+  if (!catalogIds.has(body.data.circuit_id)) {
+    return c.json({ error: "circuito desconocido" }, 400);
+  }
 
   const payload = await setCircuitOverride(
     c.env,

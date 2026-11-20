@@ -1,0 +1,3280 @@
+{
+  "source": "elTOQUE · Mapa de circuitos (https://circuitos.masvoces.net/), consultado el 2026-11-20",
+  "note": "Referencias colaborativas y oficiales aproximadas. No son el trazado ni el área de servicio del circuito.",
+  "circuits": {
+    "line-4385": [
+      {
+        "lat": 20.01085,
+        "lon": -75.83145,
+        "reference": "Vista hermosa",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 2,
+        "point_id": "10848"
+      },
+      {
+        "lat": 20.07298,
+        "lon": -75.83761,
+        "reference": "Reparto Rajayoga",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 2,
+        "point_id": "10972"
+      },
+      {
+        "lat": 20.02052,
+        "lon": -75.81306,
+        "reference": "Calle 6 esquina C zamorana",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "10835"
+      },
+      {
+        "lat": 20.00779,
+        "lon": -75.83263,
+        "reference": "Carretera del Morro",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "10851"
+      },
+      {
+        "lat": 20.02281,
+        "lon": -75.83016,
+        "reference": "Reparto San Pedrito",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "10883"
+      },
+      {
+        "lat": 20.02281,
+        "lon": -75.83016,
+        "reference": "Reparto San Pedrito",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "10884"
+      },
+      {
+        "lat": 20.02281,
+        "lon": -75.83016,
+        "reference": "Reparto San Pedrito",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "10885"
+      },
+      {
+        "lat": 20.01255,
+        "lon": -75.82446,
+        "reference": "3ra entre 4 y 6 reparto dessy",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "10936"
+      },
+      {
+        "lat": 20.07298,
+        "lon": -75.83761,
+        "reference": "Calle 3ra #126 e/ 8 y 6 reparto dessy chicharrones",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "11151"
+      },
+      {
+        "lat": 20.00814,
+        "lon": -75.83764,
+        "reference": "Calle las cruces",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "11198"
+      },
+      {
+        "lat": 20.04839,
+        "lon": -75.84226,
+        "reference": "Distrito",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "11208"
+      },
+      {
+        "lat": 20.29049,
+        "lon": -76.25318,
+        "reference": "Calle 45 Reparto 30 de diciembre",
+        "municipality": "Contramaestre",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "11754"
+      },
+      {
+        "lat": 20.29049,
+        "lon": -76.25318,
+        "reference": "Calle 45 Reparto 30 de diciembre",
+        "municipality": "Contramaestre",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "11755"
+      },
+      {
+        "lat": 20.01967,
+        "lon": -75.81241,
+        "reference": "Zamorana",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "11832"
+      }
+    ],
+    "line-4395": [
+      {
+        "lat": 20.30049,
+        "lon": -76.24774,
+        "reference": "Casa",
+        "municipality": "Contramaestre",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "10280"
+      },
+      {
+        "lat": 20.29777,
+        "lon": -76.26148,
+        "reference": "Cruce de Macario circuito hospital",
+        "municipality": "Contramaestre",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "10600"
+      }
+    ],
+    "line-4435": [
+      {
+        "lat": 20.3002,
+        "lon": -76.2394,
+        "reference": "Calle 1ra, Contramaestre",
+        "municipality": "Contramaestre",
+        "layer": "colaborativa",
+        "state": "verificado",
+        "votes": 5,
+        "point_id": "9403"
+      },
+      {
+        "lat": 20.28031,
+        "lon": -76.25998,
+        "reference": "Blanquizal",
+        "municipality": "Contramaestre",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "10689"
+      }
+    ],
+    "line-5330": [
+      {
+        "lat": 20.12106,
+        "lon": -75.74936,
+        "reference": "Poblado El Cristo",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 2,
+        "point_id": "10465"
+      },
+      {
+        "lat": 20.11245,
+        "lon": -75.74813,
+        "reference": "Calle Manduley entre garzón y Moncada el Cristo",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 2,
+        "point_id": "11162"
+      },
+      {
+        "lat": 20.06265,
+        "lon": -75.86609,
+        "reference": "Mells",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "10933"
+      }
+    ],
+    "line-5335": [
+      {
+        "lat": 19.97312,
+        "lon": -76.41059,
+        "reference": "Caserío",
+        "municipality": "Guama",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "10863"
+      }
+    ],
+    "line-5380": [
+      {
+        "lat": 20.36683,
+        "lon": -75.91118,
+        "reference": "Línea 5380",
+        "municipality": "Mella",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "9292"
+      },
+      {
+        "lat": 20.4283,
+        "lon": -75.92789,
+        "reference": "Reparto 13 de marzo",
+        "municipality": "Mella",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "10917"
+      },
+      {
+        "lat": 20.11421,
+        "lon": -76.2561,
+        "reference": "Mella",
+        "municipality": "Tercer Frente",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "10931"
+      }
+    ],
+    "line-5390": [
+      {
+        "lat": 20.018,
+        "lon": -75.77,
+        "reference": "Belleza",
+        "municipality": "Santiago de Cuba",
+        "layer": "oficial",
+        "state": "por_verificar",
+        "votes": 2,
+        "point_id": "2255"
+      },
+      {
+        "lat": 20.24,
+        "lon": -75.5,
+        "reference": "Ii Frente",
+        "municipality": "Songo-La Maya",
+        "layer": "oficial",
+        "state": "por_verificar",
+        "votes": 0,
+        "point_id": "2260"
+      },
+      {
+        "lat": 20.00779,
+        "lon": -75.83263,
+        "reference": "Songo",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "10967"
+      }
+    ],
+    "line-5395": [
+      {
+        "lat": 20.27,
+        "lon": -76.23,
+        "reference": "Baire",
+        "municipality": "Contramaestre",
+        "layer": "oficial",
+        "state": "por_verificar",
+        "votes": 0,
+        "point_id": "2254"
+      },
+      {
+        "lat": 20.33155,
+        "lon": -75.70954,
+        "reference": "Barrio Florida Blanca",
+        "municipality": "San Luis",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "9723"
+      },
+      {
+        "lat": 20.29291,
+        "lon": -76.24995,
+        "reference": "30 de diciembre",
+        "municipality": "Contramaestre",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "9820"
+      },
+      {
+        "lat": 20.28078,
+        "lon": -75.8568,
+        "reference": "Martí Alta",
+        "municipality": "San Luis",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "10805"
+      }
+    ],
+    "line-5975": [
+      {
+        "lat": 19.96108,
+        "lon": -75.70486,
+        "reference": "Playa Siboney",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "verificado",
+        "votes": 3,
+        "point_id": "10946"
+      },
+      {
+        "lat": 19.95,
+        "lon": -75.5,
+        "reference": "Baconao",
+        "municipality": "Santiago de Cuba",
+        "layer": "oficial",
+        "state": "por_verificar",
+        "votes": 0,
+        "point_id": "2253"
+      },
+      {
+        "lat": 19.96,
+        "lon": -75.48,
+        "reference": "Berraco",
+        "municipality": "Santiago de Cuba",
+        "layer": "oficial",
+        "state": "por_verificar",
+        "votes": 0,
+        "point_id": "2256"
+      },
+      {
+        "lat": 20.01376,
+        "lon": -75.82362,
+        "reference": "Calle 1era de villalon",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 2,
+        "point_id": "10862"
+      },
+      {
+        "lat": 20.00281,
+        "lon": -75.84384,
+        "reference": "Carretera de punta gorda 664 reparto Altamira",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 2,
+        "point_id": "10875"
+      },
+      {
+        "lat": 20.03653,
+        "lon": -75.84492,
+        "reference": "Caserío",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 2,
+        "point_id": "10949"
+      },
+      {
+        "lat": 20.03361,
+        "lon": -75.82519,
+        "reference": "Mártires de Virginia",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 2,
+        "point_id": "11276"
+      },
+      {
+        "lat": 20.00524,
+        "lon": -75.84164,
+        "reference": "Calle varadero 401d reparto van van la posita",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "10893"
+      },
+      {
+        "lat": 19.98871,
+        "lon": -75.84196,
+        "reference": "Un caserío",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "10952"
+      },
+      {
+        "lat": 20.01568,
+        "lon": -75.8232,
+        "reference": "Un pueblo",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "10973"
+      },
+      {
+        "lat": 20.07907,
+        "lon": -75.8551,
+        "reference": "Caserio",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "11068"
+      },
+      {
+        "lat": 20.01142,
+        "lon": -75.75691,
+        "reference": "Una esquina",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "11158"
+      },
+      {
+        "lat": 20.01873,
+        "lon": -75.82318,
+        "reference": "Portuondo",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "11187"
+      },
+      {
+        "lat": 20.06666,
+        "lon": -75.80025,
+        "reference": "Reparto Quintero",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "11294"
+      }
+    ],
+    "line-5980": [
+      {
+        "lat": 20.02507,
+        "lon": -75.79474,
+        "reference": "Zonas de San Juan, Parque de los Sueños (zoológico y parque de diversiones), rpto Rajayoga y Vista Alegre (parte sur)",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "verificado",
+        "votes": 4,
+        "point_id": "10018"
+      },
+      {
+        "lat": 20.015,
+        "lon": -75.815,
+        "reference": "San Juan",
+        "municipality": "Santiago de Cuba",
+        "layer": "oficial",
+        "state": "por_verificar",
+        "votes": 0,
+        "point_id": "1849"
+      },
+      {
+        "lat": 20.03,
+        "lon": -75.83,
+        "reference": "Bombeo de Santa Rosa",
+        "municipality": "Santiago de Cuba",
+        "layer": "oficial",
+        "state": "por_verificar",
+        "votes": 0,
+        "point_id": "2257"
+      },
+      {
+        "lat": 20.02715,
+        "lon": -75.80129,
+        "reference": "Club Santiago",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 2,
+        "point_id": "10908"
+      },
+      {
+        "lat": 20.02402,
+        "lon": -75.79996,
+        "reference": "Calle 12 entre 13 y 15",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "10910"
+      }
+    ],
+    "pal-01": [
+      {
+        "lat": 20.21508,
+        "lon": -76.001,
+        "reference": "Una casa de dos pisos",
+        "municipality": "Palma Soriano",
+        "layer": "colaborativa",
+        "state": "verificado",
+        "votes": 4,
+        "point_id": "9701"
+      },
+      {
+        "lat": 20.20926,
+        "lon": -75.99526,
+        "reference": "Palma Soriano",
+        "municipality": "Palma Soriano",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "10694"
+      }
+    ],
+    "pal-02": [
+      {
+        "lat": 20.22717,
+        "lon": -76.00417,
+        "reference": "Edificio 4",
+        "municipality": "Palma Soriano",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "11420"
+      }
+    ],
+    "pal-04": [
+      {
+        "lat": 20.20553,
+        "lon": -75.987,
+        "reference": "Amelia",
+        "municipality": "Palma Soriano",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 2,
+        "point_id": "9095"
+      },
+      {
+        "lat": 20.1987,
+        "lon": -75.98604,
+        "reference": "Reparto Nito Ortega",
+        "municipality": "Palma Soriano",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "9077"
+      },
+      {
+        "lat": 20.20123,
+        "lon": -75.98255,
+        "reference": "Calle 7",
+        "municipality": "Palma Soriano",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "11839"
+      }
+    ],
+    "sc-01": [
+      {
+        "lat": 20.0136,
+        "lon": -75.83533,
+        "reference": "Calle 8 entre 7 y Gasometro",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "verificado",
+        "votes": 3,
+        "point_id": "9187"
+      },
+      {
+        "lat": 20.02274,
+        "lon": -75.82526,
+        "reference": "Reloj entre Enramada y Bayamo",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "verificado",
+        "votes": 3,
+        "point_id": "10858"
+      },
+      {
+        "lat": 20.02,
+        "lon": -75.825,
+        "reference": "Sueño",
+        "municipality": "Santiago de Cuba",
+        "layer": "oficial",
+        "state": "por_verificar",
+        "votes": 2,
+        "point_id": "5148"
+      },
+      {
+        "lat": 20.01531,
+        "lon": -75.83513,
+        "reference": "Trocha entre 8 y 10. Mariana de la Torre",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 2,
+        "point_id": "10834"
+      },
+      {
+        "lat": 20.01377,
+        "lon": -75.83333,
+        "reference": "Gasómetro",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 2,
+        "point_id": "10838"
+      },
+      {
+        "lat": 20.01894,
+        "lon": -75.81845,
+        "reference": "Carlos Roloff",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 2,
+        "point_id": "10924"
+      },
+      {
+        "lat": 20.01776,
+        "lon": -75.82705,
+        "reference": "Calvario esquina Santa Rosa",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 2,
+        "point_id": "11095"
+      },
+      {
+        "lat": 20.01875,
+        "lon": -75.82646,
+        "reference": "Restaurante Gracia Latina",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 2,
+        "point_id": "11178"
+      },
+      {
+        "lat": 20.02274,
+        "lon": -75.82317,
+        "reference": "Casa",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "9746"
+      },
+      {
+        "lat": 20.01895,
+        "lon": -75.82359,
+        "reference": "Casa",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "10839"
+      },
+      {
+        "lat": 20.01994,
+        "lon": -75.82422,
+        "reference": "Santa Lucía entre San Agustín y clarin",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "10930"
+      },
+      {
+        "lat": 20.09699,
+        "lon": -75.89355,
+        "reference": "Rpto. Mariana de la torre",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "10945"
+      },
+      {
+        "lat": 20.00904,
+        "lon": -75.66476,
+        "reference": "Gasometro 301½ entre 2 y 4.Mariana de la Torre",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "11013"
+      },
+      {
+        "lat": 20.09031,
+        "lon": -75.70129,
+        "reference": "santa Lucia / callejón Santiago y teniente rey",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "11207"
+      },
+      {
+        "lat": 20.01343,
+        "lon": -75.83215,
+        "reference": "Gasometro",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "11268"
+      },
+      {
+        "lat": 20.01695,
+        "lon": -75.83198,
+        "reference": "Villa Roma",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "11403"
+      },
+      {
+        "lat": 20.01826,
+        "lon": -75.82892,
+        "reference": "San Félix y San Carlos",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "11438"
+      },
+      {
+        "lat": 20.02597,
+        "lon": -75.82472,
+        "reference": "Reloj",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "11630"
+      },
+      {
+        "lat": 20.11094,
+        "lon": -75.86609,
+        "reference": "Trocha # 377entre Calvario y Reloj",
+        "municipality": "San Luis",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "11822"
+      },
+      {
+        "lat": 20.0149,
+        "lon": -75.83327,
+        "reference": "Una cuadra detrás de un edificio",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "11890"
+      },
+      {
+        "lat": 20.01629,
+        "lon": -75.83202,
+        "reference": "Padre Pico y San Fernando",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "11979"
+      }
+    ],
+    "sc-02": [
+      {
+        "lat": 20.02356,
+        "lon": -75.82661,
+        "reference": "Calle San Gerónimo e/ Calvario y Carnicería",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 2,
+        "point_id": "9982"
+      },
+      {
+        "lat": 20.01921,
+        "lon": -75.82898,
+        "reference": "Una casa",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 2,
+        "point_id": "10865"
+      },
+      {
+        "lat": 20.0276,
+        "lon": -75.82789,
+        "reference": "Maceo y San Félix",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 2,
+        "point_id": "11036"
+      },
+      {
+        "lat": 20.01921,
+        "lon": -75.82898,
+        "reference": "Una casa",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "10864"
+      },
+      {
+        "lat": 20.04505,
+        "lon": -75.83304,
+        "reference": "Triplanta B56 apto 4 dtto José Martí",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "11023"
+      },
+      {
+        "lat": 20.01897,
+        "lon": -75.82771,
+        "reference": "Calle",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "11661"
+      },
+      {
+        "lat": 20.01901,
+        "lon": -75.83445,
+        "reference": "San carlos entre callejon santiago y Carlos duboy",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "12054"
+      },
+      {
+        "lat": 20.01946,
+        "lon": -75.8324,
+        "reference": "Santa Rita #101 alto",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "12066"
+      }
+    ],
+    "sc-03": [
+      {
+        "lat": 20.02265,
+        "lon": -75.83078,
+        "reference": "Jose A Saco (Enrramadas) No 170 alto entre Corona y Padre Pico",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "verificado",
+        "votes": 3,
+        "point_id": "9103"
+      },
+      {
+        "lat": 20.025,
+        "lon": -75.83,
+        "reference": "Los Pinos",
+        "municipality": "Santiago de Cuba",
+        "layer": "oficial",
+        "state": "por_verificar",
+        "votes": 2,
+        "point_id": "3790"
+      },
+      {
+        "lat": 20.03,
+        "lon": -75.83,
+        "reference": "Mariana de la Torre",
+        "municipality": "Santiago de Cuba",
+        "layer": "oficial",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "5135"
+      },
+      {
+        "lat": 20.03533,
+        "lon": -75.83485,
+        "reference": "Barrio",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 2,
+        "point_id": "9690"
+      },
+      {
+        "lat": 19.99701,
+        "lon": -75.83403,
+        "reference": "Calle 2 entre gasometro y  Calle 9 repto Mariana de la torre.",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 2,
+        "point_id": "10309"
+      },
+      {
+        "lat": 20.04058,
+        "lon": -75.82068,
+        "reference": "Calle 6 de Marialina",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 2,
+        "point_id": "10818"
+      },
+      {
+        "lat": 20.02483,
+        "lon": -75.83198,
+        "reference": "Callejón del muro",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 2,
+        "point_id": "10826"
+      },
+      {
+        "lat": 20.02511,
+        "lon": -75.82478,
+        "reference": "a mitad de cuadrs",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 2,
+        "point_id": "10939"
+      },
+      {
+        "lat": 20.02559,
+        "lon": -75.83021,
+        "reference": "Esquina corona y trinidad",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "9082"
+      },
+      {
+        "lat": 20.02815,
+        "lon": -75.82944,
+        "reference": "deciderio fajardo San fermin",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "10082"
+      },
+      {
+        "lat": 20.28629,
+        "lon": -76.28082,
+        "reference": "Reparto rosabal y Lumunba",
+        "municipality": "Contramaestre",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "10118"
+      },
+      {
+        "lat": 20.05469,
+        "lon": -75.98082,
+        "reference": "Pastorita edificio 22 apto 2",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "10806"
+      },
+      {
+        "lat": 20.05363,
+        "lon": -75.80998,
+        "reference": "Santamaria",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "10809"
+      },
+      {
+        "lat": 19.99483,
+        "lon": -75.83865,
+        "reference": "Avenida La Alameda",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "10810"
+      },
+      {
+        "lat": 20.02368,
+        "lon": -75.82951,
+        "reference": "Boutique La Reina",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "10844"
+      },
+      {
+        "lat": 19.985,
+        "lon": -75.7,
+        "reference": "Reparto santa Rosa",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "10849"
+      },
+      {
+        "lat": 20.02281,
+        "lon": -75.83016,
+        "reference": "Edificio",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "10877"
+      },
+      {
+        "lat": 20.06834,
+        "lon": -75.86609,
+        "reference": "Rastro entre Habana y Maceo",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "11089"
+      },
+      {
+        "lat": 20.04657,
+        "lon": -75.86854,
+        "reference": "Santa Lucía entre reloj y calvario #456",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "11111"
+      },
+      {
+        "lat": 20.03016,
+        "lon": -75.80035,
+        "reference": "Parque Cespedes",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "11437"
+      }
+    ],
+    "sc-07": [
+      {
+        "lat": 20.02376,
+        "lon": -75.81807,
+        "reference": "Caserio reconocible",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "verificado",
+        "votes": 6,
+        "point_id": "9562"
+      },
+      {
+        "lat": 20.01107,
+        "lon": -75.76711,
+        "reference": "1ra de portuondo",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "verificado",
+        "votes": 3,
+        "point_id": "10850"
+      },
+      {
+        "lat": 20.02424,
+        "lon": -75.81311,
+        "reference": "Garzón esq.2da",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 2,
+        "point_id": "9555"
+      },
+      {
+        "lat": 20.01162,
+        "lon": -75.83313,
+        "reference": "Calle 4. Reparto Mariana de la Torre",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 2,
+        "point_id": "10801"
+      },
+      {
+        "lat": 20.01685,
+        "lon": -75.82216,
+        "reference": "Reparto Villalon",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 2,
+        "point_id": "10803"
+      },
+      {
+        "lat": 20.01366,
+        "lon": -75.81781,
+        "reference": "Princess entre calvario y carnicería 572",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 2,
+        "point_id": "10820"
+      },
+      {
+        "lat": 20.01274,
+        "lon": -75.83452,
+        "reference": "Calle Indio entre calle 7 y 8",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 2,
+        "point_id": "10822"
+      },
+      {
+        "lat": 20.02422,
+        "lon": -75.81385,
+        "reference": "Plaza Marina",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 2,
+        "point_id": "10847"
+      },
+      {
+        "lat": 20.01619,
+        "lon": -75.82521,
+        "reference": "Avenida 12 de Agosto",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 2,
+        "point_id": "10886"
+      },
+      {
+        "lat": 19.99788,
+        "lon": -75.75877,
+        "reference": "Casa",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 2,
+        "point_id": "11160"
+      },
+      {
+        "lat": 20.08115,
+        "lon": -75.90591,
+        "reference": "Es una calle pequeña que no tiene salida ubicada a 2 cuadras de los 18 plantas de garzón, en el reparto Portuondo",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "9639"
+      },
+      {
+        "lat": 20.0135,
+        "lon": -75.83537,
+        "reference": "Es priorizado",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "10802"
+      },
+      {
+        "lat": 20.02346,
+        "lon": -75.81874,
+        "reference": "Edificio",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "10811"
+      },
+      {
+        "lat": 20.01366,
+        "lon": -75.81781,
+        "reference": "Santa Ursula",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "10819"
+      },
+      {
+        "lat": 19.99558,
+        "lon": -75.83404,
+        "reference": "General camach",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "10821"
+      },
+      {
+        "lat": 20.00474,
+        "lon": -75.83879,
+        "reference": "Mármol",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "10837"
+      },
+      {
+        "lat": 20.02436,
+        "lon": -75.83299,
+        "reference": "Fábrica de pru",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "10854"
+      },
+      {
+        "lat": 20.0183,
+        "lon": -75.82455,
+        "reference": "Casa normal a un costado de una secundaria básica",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "10857"
+      },
+      {
+        "lat": 20.01811,
+        "lon": -75.83241,
+        "reference": "Foco cultural Tívoli",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "10870"
+      },
+      {
+        "lat": 20.02281,
+        "lon": -75.83016,
+        "reference": "Cerca de la colonia",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "10921"
+      },
+      {
+        "lat": 20.17408,
+        "lon": -75.6601,
+        "reference": "Tívoli",
+        "municipality": "Songo-La Maya",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "10923"
+      },
+      {
+        "lat": 20.01777,
+        "lon": -75.82019,
+        "reference": "Casa",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "10943"
+      },
+      {
+        "lat": 20.02261,
+        "lon": -75.82922,
+        "reference": "Plaza de marte ,enramadas",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "10955"
+      },
+      {
+        "lat": 20.02261,
+        "lon": -75.82922,
+        "reference": "Carretera del Morro",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "10957"
+      },
+      {
+        "lat": 20.02303,
+        "lon": -75.81632,
+        "reference": "Calle Nueva #10 /Escario y Enramada reparto Santa Barbara",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "10974"
+      },
+      {
+        "lat": 20.05374,
+        "lon": -75.94849,
+        "reference": "San Carlos entre corona y padre pico",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "11192"
+      },
+      {
+        "lat": 20.01197,
+        "lon": -75.84103,
+        "reference": "Finca sabana ingenio ducuriaux caney",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "11257"
+      },
+      {
+        "lat": 20.01842,
+        "lon": -75.83283,
+        "reference": "Cerca del Museo del Tivolí",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "11293"
+      },
+      {
+        "lat": 20.01722,
+        "lon": -75.82131,
+        "reference": "Comandante Borrero entre 1ra de Villalón y 1ra de Asunción, esquina conocida como la batallita",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "11469"
+      },
+      {
+        "lat": 20.02354,
+        "lon": -75.81511,
+        "reference": "Una casa en pueblo",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "11732"
+      },
+      {
+        "lat": 20.01153,
+        "lon": -75.83212,
+        "reference": "Frente al gym de boxeo Virgen Felizola",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "11823"
+      },
+      {
+        "lat": 20.01897,
+        "lon": -75.82771,
+        "reference": "Trocha entre Santa Rosa y Santa Rita",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "11904"
+      },
+      {
+        "lat": 20.13444,
+        "lon": -75.76172,
+        "reference": "Trocha entre corona y mejorana",
+        "municipality": "Songo-La Maya",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "11951"
+      },
+      {
+        "lat": 20.03485,
+        "lon": -75.83313,
+        "reference": "Escario,calle contigua a los 18 plantas de Garzon rumbo a Plaza de Marte",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "12030"
+      }
+    ],
+    "sc-08": [
+      {
+        "lat": 19.99483,
+        "lon": -75.83865,
+        "reference": "Pizzaro entre 4rta y 5ta número 201 la casa q hace esquina",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "verificado",
+        "votes": 6,
+        "point_id": "10825"
+      },
+      {
+        "lat": 19.99561,
+        "lon": -75.8111,
+        "reference": "Chicharrones",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "verificado",
+        "votes": 5,
+        "point_id": "10824"
+      },
+      {
+        "lat": 20.02,
+        "lon": -75.82,
+        "reference": "Garzón",
+        "municipality": "Santiago de Cuba",
+        "layer": "oficial",
+        "state": "por_verificar",
+        "votes": 2,
+        "point_id": "5126"
+      },
+      {
+        "lat": 20.0108,
+        "lon": -75.82974,
+        "reference": "Calle 9 veguita de galo",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 3,
+        "point_id": "11267"
+      },
+      {
+        "lat": 20.00813,
+        "lon": -75.82213,
+        "reference": "Calle 20",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 2,
+        "point_id": "9904"
+      },
+      {
+        "lat": 20.007,
+        "lon": -75.83892,
+        "reference": "Calle 9 , Altamira",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 2,
+        "point_id": "10501"
+      },
+      {
+        "lat": 20.00823,
+        "lon": -75.83728,
+        "reference": "Policlínico 28 de Septiembre. Cristian/CyE, Altamira",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 2,
+        "point_id": "10505"
+      },
+      {
+        "lat": 20.00474,
+        "lon": -75.83879,
+        "reference": "Calle E, Altamira",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 2,
+        "point_id": "10664"
+      },
+      {
+        "lat": 20.0118,
+        "lon": -75.82902,
+        "reference": "Calle 11#52/calle iglesia y jardines reparto veguita de galo",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 2,
+        "point_id": "10872"
+      },
+      {
+        "lat": 20.00922,
+        "lon": -75.83127,
+        "reference": "Calle A",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 2,
+        "point_id": "10892"
+      },
+      {
+        "lat": 20.01185,
+        "lon": -75.82901,
+        "reference": "Veguita de galo",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 2,
+        "point_id": "10896"
+      },
+      {
+        "lat": 20.00932,
+        "lon": -75.83014,
+        "reference": "Una lomas",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 2,
+        "point_id": "10898"
+      },
+      {
+        "lat": 20.00828,
+        "lon": -75.82518,
+        "reference": "Calle K entre C y 9Veguita de galo",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 2,
+        "point_id": "10911"
+      },
+      {
+        "lat": 20.00509,
+        "lon": -75.83764,
+        "reference": "Una esquina",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 2,
+        "point_id": "10961"
+      },
+      {
+        "lat": 20.12298,
+        "lon": -75.89279,
+        "reference": "Santiago santiago de cuba",
+        "municipality": "San Luis",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "8715"
+      },
+      {
+        "lat": 20.00813,
+        "lon": -75.82213,
+        "reference": "Calle 20",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "9903"
+      },
+      {
+        "lat": 20.00755,
+        "lon": -75.84004,
+        "reference": "Los Bloque, entrada reparto Van Van",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "10497"
+      },
+      {
+        "lat": 20.00711,
+        "lon": -75.83801,
+        "reference": "Calle E /7y8 ,Altamira",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "10503"
+      },
+      {
+        "lat": 20.00677,
+        "lon": -75.82836,
+        "reference": "Seminternado Julio Trigo",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "10535"
+      },
+      {
+        "lat": 20.00602,
+        "lon": -75.83703,
+        "reference": "Avenida de Mármol, entre Calle E y Calle G",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "10680"
+      },
+      {
+        "lat": 20.00903,
+        "lon": -75.83562,
+        "reference": "Casa",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "10827"
+      },
+      {
+        "lat": 20.00588,
+        "lon": -75.83505,
+        "reference": "Calle A % Calke 2da Calle 3ra Rpto Vista Hermosa",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "10830"
+      },
+      {
+        "lat": 20.00722,
+        "lon": -75.83337,
+        "reference": "Calle E, entre calle 2da y Carretera del Morro",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "10889"
+      },
+      {
+        "lat": 20.00874,
+        "lon": -75.83144,
+        "reference": "Calle A de Veguita de Galo",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "10891"
+      },
+      {
+        "lat": 20.01366,
+        "lon": -75.81781,
+        "reference": "Hermanos Ducasse/1 y 3",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "11080"
+      },
+      {
+        "lat": 20.13386,
+        "lon": -75.94574,
+        "reference": "Santiago de Cuba. Altamira",
+        "municipality": "Palma Soriano",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "11133"
+      },
+      {
+        "lat": 20.00979,
+        "lon": -75.82821,
+        "reference": "Es una casa",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "11206"
+      },
+      {
+        "lat": 20.08721,
+        "lon": -75.88806,
+        "reference": "Caserío",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "11212"
+      }
+    ],
+    "sc-09": [
+      {
+        "lat": 19.99515,
+        "lon": -75.83879,
+        "reference": "hasta el aeropuero, litoral",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "verificado",
+        "votes": 7,
+        "point_id": "9454"
+      },
+      {
+        "lat": 20.00583,
+        "lon": -75.84085,
+        "reference": "Calle Cañada, Altamira",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "verificado",
+        "votes": 4,
+        "point_id": "10513"
+      },
+      {
+        "lat": 20.0341,
+        "lon": -75.83439,
+        "reference": "Calle 12 edificio 28 apartamento 5 reparto versalles",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 3,
+        "point_id": "10800"
+      },
+      {
+        "lat": 20.00382,
+        "lon": -75.84063,
+        "reference": "Calle 10 #679s reparto venceremos",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 2,
+        "point_id": "9586"
+      },
+      {
+        "lat": 20.00635,
+        "lon": -75.84037,
+        "reference": "Calle Cañada, Altamira",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 2,
+        "point_id": "10500"
+      },
+      {
+        "lat": 20.00575,
+        "lon": -75.82872,
+        "reference": "A-25 Apto 5 Reparto Antonio Maceo",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 2,
+        "point_id": "10534"
+      },
+      {
+        "lat": 19.99787,
+        "lon": -75.84002,
+        "reference": "Ave 1ra edif 6 bloque 36 apto 7",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 2,
+        "point_id": "10836"
+      },
+      {
+        "lat": 20.00092,
+        "lon": -75.8316,
+        "reference": "Antonio Maceo",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 2,
+        "point_id": "10935"
+      },
+      {
+        "lat": 20.00147,
+        "lon": -75.80469,
+        "reference": "Ciudamar",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 2,
+        "point_id": "10947"
+      },
+      {
+        "lat": 19.98352,
+        "lon": -75.86844,
+        "reference": "Barrio técnico, Punta Gorda",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 2,
+        "point_id": "10965"
+      },
+      {
+        "lat": 20.02754,
+        "lon": -76.13525,
+        "reference": "Antonio maceo",
+        "municipality": "Palma Soriano",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "9661"
+      },
+      {
+        "lat": 20.00722,
+        "lon": -75.83958,
+        "reference": "Calle Cañada y parte de Los Bloque",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "10116"
+      },
+      {
+        "lat": 20.00377,
+        "lon": -75.84245,
+        "reference": "Carretera de Punta Gorda ,Altamira (Los Muros)",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "10499"
+      },
+      {
+        "lat": 20.00359,
+        "lon": -75.84188,
+        "reference": "Los Muros, Carretera de Punta Gorda, Altamira",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "10511"
+      },
+      {
+        "lat": 20.00529,
+        "lon": -75.84142,
+        "reference": "Calle Cañada, Altamira",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "10512"
+      },
+      {
+        "lat": 20.007,
+        "lon": -75.8362,
+        "reference": "Calle F entre 4ta y 5 ta vista hermosa",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "10856"
+      },
+      {
+        "lat": 20.0059,
+        "lon": -75.8307,
+        "reference": "Edificio 12 plantas",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "10871"
+      },
+      {
+        "lat": 20.10752,
+        "lon": -75.86609,
+        "reference": "Calle primera de Versalles antes de llegar a la escuela militar por el punto de gas",
+        "municipality": "San Luis",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "10948"
+      },
+      {
+        "lat": 20.00053,
+        "lon": -75.84538,
+        "reference": "edificios Van van",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "12005"
+      }
+    ],
+    "sc-10": [
+      {
+        "lat": 20.02882,
+        "lon": -75.82093,
+        "reference": "Edificio 18 Plantas de Martí y la Central",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "verificado",
+        "votes": 5,
+        "point_id": "9979"
+      },
+      {
+        "lat": 20.02774,
+        "lon": -75.82304,
+        "reference": "Escalinata calle maceo",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "verificado",
+        "votes": 4,
+        "point_id": "9285"
+      },
+      {
+        "lat": 20.00076,
+        "lon": -75.82782,
+        "reference": "Culo del perro",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "verificado",
+        "votes": 3,
+        "point_id": "11142"
+      },
+      {
+        "lat": 20.028,
+        "lon": -75.833,
+        "reference": "Altamira",
+        "municipality": "Santiago de Cuba",
+        "layer": "oficial",
+        "state": "por_verificar",
+        "votes": 2,
+        "point_id": "3222"
+      },
+      {
+        "lat": 20.02625,
+        "lon": -75.8179,
+        "reference": "Martí y calle G",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 3,
+        "point_id": "10845"
+      },
+      {
+        "lat": 20.05363,
+        "lon": -75.80998,
+        "reference": "Micro nueve frente a la escuela de construcción",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 3,
+        "point_id": "10941"
+      },
+      {
+        "lat": 20.02774,
+        "lon": -75.8327,
+        "reference": "Esquina Maceo",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 2,
+        "point_id": "11155"
+      },
+      {
+        "lat": 20.0341,
+        "lon": -75.83439,
+        "reference": "/Calzada de Crombet 99y medio entre yarine y Puente de bacardí. Avenida Patria. Punto de Referencia: La cremería que hac",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "9567"
+      },
+      {
+        "lat": 20.02353,
+        "lon": -75.82391,
+        "reference": "San Agustín esquina San Gerónimo",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "10126"
+      },
+      {
+        "lat": 20.01856,
+        "lon": -75.67795,
+        "reference": "Un edificio",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "10964"
+      },
+      {
+        "lat": 20.11092,
+        "lon": -75.91003,
+        "reference": "Micro 8",
+        "municipality": "Palma Soriano",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "11191"
+      },
+      {
+        "lat": 20.02875,
+        "lon": -75.82145,
+        "reference": "Edif",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "11480"
+      }
+    ],
+    "sc-11": [
+      {
+        "lat": 20.01107,
+        "lon": -75.76711,
+        "reference": "Edificio 30",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 2,
+        "point_id": "10123"
+      },
+      {
+        "lat": 19.96501,
+        "lon": -75.77581,
+        "reference": "Abel Santamaría",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 2,
+        "point_id": "10829"
+      },
+      {
+        "lat": 20.00378,
+        "lon": -75.77116,
+        "reference": "Edf 3 esc A apt 9",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "11122"
+      },
+      {
+        "lat": 20.01686,
+        "lon": -75.92102,
+        "reference": "Reparto Abel Santamaria",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "11123"
+      },
+      {
+        "lat": 20.00378,
+        "lon": -75.77116,
+        "reference": "Reparto Abel Santamaría Micro 3",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "11166"
+      }
+    ],
+    "sc-12": [
+      {
+        "lat": 20.028,
+        "lon": -75.818,
+        "reference": "Portuondo",
+        "municipality": "Santiago de Cuba",
+        "layer": "oficial",
+        "state": "verificado",
+        "votes": 3,
+        "point_id": "5145"
+      },
+      {
+        "lat": 20.03,
+        "lon": -75.815,
+        "reference": "Yarayó",
+        "municipality": "Santiago de Cuba",
+        "layer": "oficial",
+        "state": "verificado",
+        "votes": 3,
+        "point_id": "5151"
+      },
+      {
+        "lat": 20.01958,
+        "lon": -75.80536,
+        "reference": "Calle 12 esquina Bravo Correoso",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "verificado",
+        "votes": 4,
+        "point_id": "10460"
+      },
+      {
+        "lat": 20.028,
+        "lon": -75.815,
+        "reference": "Tele Turquino",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "verificado",
+        "votes": 3,
+        "point_id": "10860"
+      },
+      {
+        "lat": 20.02832,
+        "lon": -75.81374,
+        "reference": "CD Antonio Maceo",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "verificado",
+        "votes": 3,
+        "point_id": "11148"
+      },
+      {
+        "lat": 20.028,
+        "lon": -75.815,
+        "reference": "Vista Hermosa",
+        "municipality": "Santiago de Cuba",
+        "layer": "oficial",
+        "state": "por_verificar",
+        "votes": 2,
+        "point_id": "4726"
+      },
+      {
+        "lat": 20.025,
+        "lon": -75.815,
+        "reference": "Vista Alegre",
+        "municipality": "Santiago de Cuba",
+        "layer": "oficial",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "4725"
+      },
+      {
+        "lat": 20.02608,
+        "lon": -75.81348,
+        "reference": "Calle L /4ta y avenida de cespedes reparto sueño",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 4,
+        "point_id": "11121"
+      },
+      {
+        "lat": 20.02353,
+        "lon": -75.82391,
+        "reference": "Un viplanta",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 2,
+        "point_id": "10842"
+      },
+      {
+        "lat": 20.0212,
+        "lon": -75.8102,
+        "reference": "Farmacia de Aguilera y calle 6",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 2,
+        "point_id": "10873"
+      },
+      {
+        "lat": 20.02653,
+        "lon": -75.81581,
+        "reference": "Cuadra antes de la Iglesia Bautista",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 2,
+        "point_id": "10970"
+      },
+      {
+        "lat": 20.01722,
+        "lon": -75.80312,
+        "reference": "Carretera de siboney, frente alnpalo de laura",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 2,
+        "point_id": "11110"
+      },
+      {
+        "lat": 20.252,
+        "lon": -76.02539,
+        "reference": "Escario 654 altos entre 7 y Pedro alvarado",
+        "municipality": "Palma Soriano",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "10403"
+      },
+      {
+        "lat": 20.09406,
+        "lon": -75.92926,
+        "reference": "Santiago Veguita de Galo.",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "10507"
+      },
+      {
+        "lat": 20.04657,
+        "lon": -75.86854,
+        "reference": "Calle fría San Pedrito",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "10799"
+      },
+      {
+        "lat": 20.02186,
+        "lon": -75.81202,
+        "reference": "Aguilera 8 y 9",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "10867"
+      },
+      {
+        "lat": 20.01902,
+        "lon": -75.80609,
+        "reference": "Calle 11 % Zayas y Correoso",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "10879"
+      },
+      {
+        "lat": 20.01948,
+        "lon": -75.80558,
+        "reference": "Campbell",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "10895"
+      },
+      {
+        "lat": 20.1162,
+        "lon": -75.93106,
+        "reference": "Tienda Fantasia",
+        "municipality": "Palma Soriano",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "10956"
+      },
+      {
+        "lat": 20.01366,
+        "lon": -75.83549,
+        "reference": "Calle 7 /8y10 #150 Mariana de La torte",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "10966"
+      },
+      {
+        "lat": 20.00969,
+        "lon": -75.83862,
+        "reference": "Aguilera 1153 entre 5 y 6 Rpto Santa Barbara",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "11171"
+      },
+      {
+        "lat": 20.03042,
+        "lon": -75.62137,
+        "reference": "Calle i número 159 entre 4ta y avenida reparto sueño",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "11217"
+      },
+      {
+        "lat": 20.02399,
+        "lon": -75.80806,
+        "reference": "Edificio 5",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "11577"
+      },
+      {
+        "lat": 20.02399,
+        "lon": -75.80806,
+        "reference": "Edificio",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "11578"
+      },
+      {
+        "lat": 20.02399,
+        "lon": -75.80806,
+        "reference": "Edificio 5",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "11579"
+      },
+      {
+        "lat": 20.02399,
+        "lon": -75.80806,
+        "reference": "Edificio",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "11580"
+      },
+      {
+        "lat": 20.01528,
+        "lon": -75.80631,
+        "reference": "edificios",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "12043"
+      }
+    ],
+    "sc-13": [
+      {
+        "lat": 20.01622,
+        "lon": -75.80963,
+        "reference": "30 de noviembre",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "verificado",
+        "votes": 5,
+        "point_id": "9384"
+      },
+      {
+        "lat": 20.02017,
+        "lon": -75.81011,
+        "reference": "Mediados de cuadra",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "verificado",
+        "votes": 3,
+        "point_id": "10922"
+      },
+      {
+        "lat": 20.02017,
+        "lon": -75.81011,
+        "reference": "Santa Bárbara",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 2,
+        "point_id": "9934"
+      },
+      {
+        "lat": 20.01927,
+        "lon": -75.80952,
+        "reference": "Santa Bárbara",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 2,
+        "point_id": "10934"
+      },
+      {
+        "lat": 20.01878,
+        "lon": -75.81044,
+        "reference": "Alfredo Zayas # 109",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 2,
+        "point_id": "11546"
+      },
+      {
+        "lat": 20.01622,
+        "lon": -75.80963,
+        "reference": "30 de noviembre",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "9183"
+      },
+      {
+        "lat": 20.01622,
+        "lon": -75.80963,
+        "reference": "30 de noviembre",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "9184"
+      },
+      {
+        "lat": 20.01622,
+        "lon": -75.80963,
+        "reference": "30 de noviembre",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "9263"
+      },
+      {
+        "lat": 20.01622,
+        "lon": -75.80963,
+        "reference": "30 de noviembre",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "9264"
+      },
+      {
+        "lat": 20.01622,
+        "lon": -75.80963,
+        "reference": "30 de noviembre",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "9265"
+      },
+      {
+        "lat": 20.01622,
+        "lon": -75.80963,
+        "reference": "30 de noviembre",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "9382"
+      },
+      {
+        "lat": 20.01622,
+        "lon": -75.80963,
+        "reference": "30 de noviembre",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "9383"
+      },
+      {
+        "lat": 20.0174,
+        "lon": -75.80637,
+        "reference": "Esquina Mendieta",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "10878"
+      },
+      {
+        "lat": 20.09212,
+        "lon": -75.83405,
+        "reference": "Chicharrones",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "10902"
+      },
+      {
+        "lat": 20.15897,
+        "lon": -75.88257,
+        "reference": "Calle 24 #55altos/3y5 Dessy",
+        "municipality": "San Luis",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "10909"
+      },
+      {
+        "lat": 20.01536,
+        "lon": -75.7946,
+        "reference": "San Juan",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "10937"
+      }
+    ],
+    "sc-14": [
+      {
+        "lat": 20.05776,
+        "lon": -75.77114,
+        "reference": "Caney",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 2,
+        "point_id": "11179"
+      },
+      {
+        "lat": 20.09205,
+        "lon": -76.05835,
+        "reference": "El caney",
+        "municipality": "Palma Soriano",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "10903"
+      }
+    ],
+    "sc-15": [
+      {
+        "lat": 20.03,
+        "lon": -75.8,
+        "reference": "Marimón",
+        "municipality": "Santiago de Cuba",
+        "layer": "oficial",
+        "state": "por_verificar",
+        "votes": 2,
+        "point_id": "3791"
+      }
+    ],
+    "sc-16": [
+      {
+        "lat": 20.0274,
+        "lon": -75.80817,
+        "reference": "Oficina comercial de cupet",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 2,
+        "point_id": "10994"
+      },
+      {
+        "lat": 20.0281,
+        "lon": -75.81189,
+        "reference": "Carlos de la Torre esquina a calle 6ta",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 2,
+        "point_id": "11144"
+      },
+      {
+        "lat": 20.0274,
+        "lon": -75.80817,
+        "reference": "Fisioterapia",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "10823"
+      },
+      {
+        "lat": 20.01134,
+        "lon": -75.80704,
+        "reference": "Un edificio",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "10938"
+      },
+      {
+        "lat": 20.03016,
+        "lon": -75.80035,
+        "reference": "Consultorio",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "10971"
+      }
+    ],
+    "sc-17": [
+      {
+        "lat": 20.04653,
+        "lon": -75.78031,
+        "reference": "Calle B #1B entre Patricio lumumba y los cocos reparto Jiménez",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "verificado",
+        "votes": 3,
+        "point_id": "10832"
+      },
+      {
+        "lat": 20.01622,
+        "lon": -75.92102,
+        "reference": "Calle 6sn santa maria",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 2,
+        "point_id": "10901"
+      },
+      {
+        "lat": 20.05438,
+        "lon": -75.8161,
+        "reference": "Planta Potabilizadora Quintero",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "9401"
+      }
+    ],
+    "sc-18": [
+      {
+        "lat": 20.03239,
+        "lon": -75.8176,
+        "reference": "Casa",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "verificado",
+        "votes": 4,
+        "point_id": "9948"
+      },
+      {
+        "lat": 20.0351,
+        "lon": -75.81513,
+        "reference": "Calle 8 de sueño Santiago de Cuba ciudad",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 2,
+        "point_id": "9996"
+      },
+      {
+        "lat": 19.987,
+        "lon": -75.59692,
+        "reference": "Altos de Quintero",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 2,
+        "point_id": "10894"
+      },
+      {
+        "lat": 20.00723,
+        "lon": -75.83733,
+        "reference": "CALLE E N⁰ 7ALTO ENTRE CALLE 6 Y CALLE 7 REPARTO DONATO MÁRMOL",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "11071"
+      },
+      {
+        "lat": 20.03419,
+        "lon": -75.81534,
+        "reference": "Atrás del Materno Norte",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "11417"
+      }
+    ],
+    "sc-19": [
+      {
+        "lat": 20.03426,
+        "lon": -75.82365,
+        "reference": "René ramos",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "verificado",
+        "votes": 3,
+        "point_id": "10932"
+      },
+      {
+        "lat": 20.03729,
+        "lon": -75.81974,
+        "reference": "Avenida patricio lumumba",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 2,
+        "point_id": "9250"
+      },
+      {
+        "lat": 20.03971,
+        "lon": -75.81751,
+        "reference": "Reparto Jiménez",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 2,
+        "point_id": "10813"
+      },
+      {
+        "lat": 20.03486,
+        "lon": -75.82608,
+        "reference": "Mariana Grajales #104/ Martires d Virginia y Yarayo, Los Olmos",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 2,
+        "point_id": "10861"
+      },
+      {
+        "lat": 20.03157,
+        "lon": -75.82065,
+        "reference": "Sorribes",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 2,
+        "point_id": "10890"
+      },
+      {
+        "lat": 20.14481,
+        "lon": -75.9018,
+        "reference": "Marialina",
+        "municipality": "San Luis",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 2,
+        "point_id": "10915"
+      },
+      {
+        "lat": 20.04728,
+        "lon": -75.82691,
+        "reference": "La Risueña",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "9954"
+      },
+      {
+        "lat": 20.03487,
+        "lon": -75.82732,
+        "reference": "Avenida Patria /Mariana Grajales y Soto",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "10509"
+      },
+      {
+        "lat": 20.03574,
+        "lon": -75.82534,
+        "reference": "Correo, Avenida Patria",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "10510"
+      },
+      {
+        "lat": 20.03224,
+        "lon": -75.82094,
+        "reference": "Callejon de Sanchez",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "10833"
+      },
+      {
+        "lat": 20.03278,
+        "lon": -75.82115,
+        "reference": "Una esquina",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "10866"
+      },
+      {
+        "lat": 20.02281,
+        "lon": -75.83016,
+        "reference": "Sorribes",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "10888"
+      },
+      {
+        "lat": 20.03426,
+        "lon": -75.82365,
+        "reference": "René Ramos Latour",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "10907"
+      },
+      {
+        "lat": 20.09753,
+        "lon": -75.8551,
+        "reference": "Versalles  , santiago  de cuba",
+        "municipality": "San Luis",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "10958"
+      },
+      {
+        "lat": 20.03192,
+        "lon": -75.82057,
+        "reference": "Medio de calle",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "11032"
+      },
+      {
+        "lat": 20.00115,
+        "lon": -75.83034,
+        "reference": "Bloque B alto Rpto Antonio Maceo",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "11173"
+      },
+      {
+        "lat": 20.03697,
+        "lon": -75.82466,
+        "reference": "Los pinos",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "11680"
+      }
+    ],
+    "sc-20": [
+      {
+        "lat": 20.0514,
+        "lon": -75.83271,
+        "reference": "Edificios",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "verificado",
+        "votes": 9,
+        "point_id": "8672"
+      },
+      {
+        "lat": 20.16229,
+        "lon": -76.02539,
+        "reference": "San Pedrito",
+        "municipality": "Palma Soriano",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 2,
+        "point_id": "10880"
+      },
+      {
+        "lat": 20.03983,
+        "lon": -75.83414,
+        "reference": "Edificio",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 2,
+        "point_id": "10906"
+      },
+      {
+        "lat": 20.03614,
+        "lon": -75.82768,
+        "reference": "Torrefactora de Café, Avenida Patria",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "10508"
+      },
+      {
+        "lat": 20.05822,
+        "lon": -75.91003,
+        "reference": "Distrito José Martí",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "10900"
+      },
+      {
+        "lat": 20.04345,
+        "lon": -75.83026,
+        "reference": "Carretera bacardi entre avenida las Americas y ave los pinos",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "11084"
+      }
+    ],
+    "sc-21": [
+      {
+        "lat": 20.08155,
+        "lon": -75.79687,
+        "reference": "Un caserío Elevado de la autopista boniato",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "10904"
+      },
+      {
+        "lat": 20.08764,
+        "lon": -75.78068,
+        "reference": "Puente de la línea San Vicente",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "11246"
+      },
+      {
+        "lat": 20.07586,
+        "lon": -75.80232,
+        "reference": "Poblado Boniato",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "11947"
+      },
+      {
+        "lat": 20.05673,
+        "lon": -75.80893,
+        "reference": "Avenida Federico Rey",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "12011"
+      }
+    ],
+    "sc-23": [
+      {
+        "lat": 20.04257,
+        "lon": -75.84941,
+        "reference": "Nuevo vista Alegre bajo",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "9769"
+      }
+    ],
+    "sc-24": [
+      {
+        "lat": 20.04307,
+        "lon": -75.83718,
+        "reference": "Edificios",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "verificado",
+        "votes": 4,
+        "point_id": "8675"
+      },
+      {
+        "lat": 20.03669,
+        "lon": -75.83533,
+        "reference": "Calle libertad entre jesús María y yarine",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 3,
+        "point_id": "10859"
+      },
+      {
+        "lat": 20.03728,
+        "lon": -75.83034,
+        "reference": "Carretera de Bacardí",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 3,
+        "point_id": "10874"
+      },
+      {
+        "lat": 20.04964,
+        "lon": -75.84691,
+        "reference": "Elevado del tren de Micro 8",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 2,
+        "point_id": "10807"
+      },
+      {
+        "lat": 20.04137,
+        "lon": -75.83596,
+        "reference": "Fuente del Distrito",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 2,
+        "point_id": "10815"
+      },
+      {
+        "lat": 20.04221,
+        "lon": -75.83892,
+        "reference": "Edificio",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 2,
+        "point_id": "10914"
+      },
+      {
+        "lat": 20.04839,
+        "lon": -75.84226,
+        "reference": "Micro 7",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 2,
+        "point_id": "10963"
+      },
+      {
+        "lat": 20.04208,
+        "lon": -75.8367,
+        "reference": "Edificio",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "10843"
+      },
+      {
+        "lat": 20.03869,
+        "lon": -75.83728,
+        "reference": "un edificio",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "10905"
+      },
+      {
+        "lat": 20.01777,
+        "lon": -75.82019,
+        "reference": "Edificio D-52",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "10954"
+      },
+      {
+        "lat": 20.04839,
+        "lon": -75.84226,
+        "reference": "Edificio",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "11106"
+      },
+      {
+        "lat": 20.02293,
+        "lon": -75.77325,
+        "reference": "Trocha",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "11184"
+      },
+      {
+        "lat": 20.04827,
+        "lon": -75.85144,
+        "reference": "Parada de los guao",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "11648"
+      },
+      {
+        "lat": 20.03798,
+        "lon": -75.83998,
+        "reference": "Calle A % 4ta y 5ta Agüero",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "11704"
+      },
+      {
+        "lat": 20.03503,
+        "lon": -75.83452,
+        "reference": "Cuadra",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "11978"
+      }
+    ],
+    "sc-25": [
+      {
+        "lat": 20.04233,
+        "lon": -75.84544,
+        "reference": "Raúl Perozo #232 7/11",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "verificado",
+        "votes": 3,
+        "point_id": "9603"
+      },
+      {
+        "lat": 20.05095,
+        "lon": -75.832,
+        "reference": "Aguero",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "11020"
+      },
+      {
+        "lat": 20.04459,
+        "lon": -75.84698,
+        "reference": "Calle línea",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "11202"
+      }
+    ],
+    "sc-26": [
+      {
+        "lat": 20.05017,
+        "lon": -75.94731,
+        "reference": "Calle Jose Marti El Cobre",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "verificado",
+        "votes": 4,
+        "point_id": "9337"
+      }
+    ],
+    "sf-ii": [
+      {
+        "lat": 20.05776,
+        "lon": -75.77114,
+        "reference": "Poblado El Caney",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 3,
+        "point_id": "9298"
+      },
+      {
+        "lat": 20.04842,
+        "lon": -75.83148,
+        "reference": "Micro 9,  edificio",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 2,
+        "point_id": "10929"
+      },
+      {
+        "lat": 20.04653,
+        "lon": -75.78031,
+        "reference": "Calle 1ra del modelo",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "10828"
+      },
+      {
+        "lat": 20.04842,
+        "lon": -75.83148,
+        "reference": "Un edificio",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "10927"
+      },
+      {
+        "lat": 20.03016,
+        "lon": -75.80035,
+        "reference": "Centro ciudad",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "11188"
+      },
+      {
+        "lat": 20.04565,
+        "lon": -75.84976,
+        "reference": "Marimon calle 2da",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "11236"
+      },
+      {
+        "lat": 20.04576,
+        "lon": -75.84976,
+        "reference": "Marimon calle 2da",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "11238"
+      }
+    ],
+    "slm-song": [
+      {
+        "lat": 20.00661,
+        "lon": -75.73196,
+        "reference": "Sevilla",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "10817"
+      },
+      {
+        "lat": 20.17609,
+        "lon": -75.71087,
+        "reference": "Mi casa",
+        "municipality": "Songo-La Maya",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "11829"
+      },
+      {
+        "lat": 20.07371,
+        "lon": -75.86214,
+        "reference": "Carretera de siboney,el brujo",
+        "municipality": "Santiago de Cuba",
+        "layer": "colaborativa",
+        "state": "por_verificar",
+        "votes": 1,
+        "point_id": "12018"
+      }
+    ]
+  }
+}

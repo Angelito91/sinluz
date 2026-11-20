@@ -15,12 +15,8 @@
     "preview": "bun run sync && cd web && bunx vite preview",
     "test": "bun test worker/test",
     "data:check": "bun run worker/scripts/build-data.ts",
-    "data:report": "bun run worker/scripts/report.ts",
-    "data:review": "bun run worker/scripts/review.ts",
-    "data:score": "bun run worker/scripts/score.ts",
     "fixtures": "bun run worker/scripts/fetch-fixtures.ts",
     "geojson": "bun run worker/scripts/build-geojson.ts",
-    "replay": "bun run worker/scripts/replay.ts",
     "deploy": "bun run deploy:api && bun run deploy:web",
     "deploy:api": "cd worker && bunx wrangler deploy",
     "deploy:web": "bun run build && cd web && bunx wrangler pages deploy dist --project-name sinluz --branch main --commit-dirty=true"

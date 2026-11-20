@@ -2,12 +2,17 @@ import { AlertTriangle, RefreshCw, WifiOff } from "lucide-react";
 
 type Props = {
   online: boolean;
-  ageMin: number;
+  /** Minutos desde la última lectura correcta del canal por el servidor. */
+  pipelineAgeMin: number;
+  /** Minutos desde el último mensaje publicado en el canal. */
+  channelAgeMin: number | null;
   error?: string;
   isValidating: boolean;
 };
 
-export default function StatusBanner({ online, ageMin, error, isValidating }: Props) {
+const age = (min: number) => (min < 60 ? `${Math.round(min)} min` : `${Math.floor(min / 60)} h`);
+
+export default function StatusBanner({ online, pipelineAgeMin, channelAgeMin, error, isValidating }: Props) {
   if (!online) {
     return (
       <Bar tone="warn" icon={<WifiOff className="h-3.5 w-3.5" />}>
@@ -15,24 +20,24 @@ export default function StatusBanner({ online, ageMin, error, isValidating }: Pr
       </Bar>
     );
   }
-  if (error && ageMin > 90) {
+  if (error) {
     return (
       <Bar tone="warn" icon={<AlertTriangle className="h-3.5 w-3.5" />}>
-        No se pudo actualizar. Datos de hace {Math.round(ageMin / 60)} h
+        No se pudo actualizar. Datos de hace {age(pipelineAgeMin)}
       </Bar>
     );
   }
-  if (ageMin > 360) {
+  if (pipelineAgeMin > 30) {
     return (
-      <Bar tone="bad" icon={<AlertTriangle className="h-3.5 w-3.5" />}>
-        El canal lleva {Math.floor(ageMin / 60)} h sin publicar. No hay datos fiables.
+      <Bar tone={pipelineAgeMin > 360 ? "bad" : "warn"} icon={<AlertTriangle className="h-3.5 w-3.5" />}>
+        No se pudo leer el canal desde hace {age(pipelineAgeMin)}. Los estados pueden haber cambiado.
       </Bar>
     );
   }
-  if (ageMin > 90) {
+  if (channelAgeMin != null && channelAgeMin > 360) {
     return (
       <Bar tone="warn" icon={<AlertTriangle className="h-3.5 w-3.5" />}>
-        Última actualización hace {Math.floor(ageMin / 60)} h. Puede haber cambiado.
+        El canal lleva {Math.floor(channelAgeMin / 60)} h sin publicar. Los estados pueden no estar al día.
       </Bar>
     );
   }

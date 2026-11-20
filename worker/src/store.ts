@@ -1,99 +1,123 @@
-import type { CircuitStatus, StatusPayload } from "@sinluz/shared";
-import { aliasIndex } from "./catalog";
-import { applyMessage, emptyRuntime, toPayload } from "./state";
+import { StatusPayload, type CircuitStatus } from "@sinluz/shared";
+import { emptyState, mergeOverrides, type Override } from "./state";
+import type { AiBinding } from "./llm";
 
 export type Env = {
   DB: D1Database;
+  /** Binding de Workers AI (`[ai]` en wrangler.toml). */
+  AI?: AiBinding;
   INGEST_URL: string;
   INGEST_LIMIT: string;
+  /** Interruptor de emergencia: "false" apaga la IA sin borrar el binding. */
   LLM_ENABLED?: string;
+  LLM_MODEL?: string;
   INGEST_TOKEN?: string;
   ADMIN_TOKEN?: string;
   ALERT_BOT_TOKEN?: string;
   ALERT_CHAT_ID?: string;
-  LLM_API_KEY?: string;
-  LLM_MODEL?: string;
 };
 
-type RawRow = { id: number; posted_at: number; text: string };
-
-type OverrideRow = {
-  circuit_id: string;
-  status: CircuitStatus;
-  since: number | null;
+export type IngestLog = {
+  at: number;
+  source: string;
+  ok: number;
+  detail: string | null;
 };
 
-/** Hash síncrono y barato: solo detecta ediciones de texto. */
-export function hashText(text: string): string {
-  let h = 5381;
-  for (let i = 0; i < text.length; i++) h = ((h << 5) + h + text.charCodeAt(i)) | 0;
-  return (h >>> 0).toString(36);
+export function llmEnabled(env: Env): boolean {
+  return Boolean(env.AI) && env.LLM_ENABLED !== "false";
 }
 
-/**
- * Reconstruye el estado completo desde los mensajes crudos. Idempotente.
- * Las correcciones manuales se aplican al final, así que un rebuild no las
- * borra: eso es justo lo que las hace útiles.
- */
-export async function rebuild(env: Env, sourceUsed = "cron"): Promise<StatusPayload> {
-  const { results } = await env.DB.prepare(
-    "SELECT id, posted_at, text FROM raw_messages ORDER BY posted_at ASC, id ASC",
-  ).all<RawRow>();
-
-  const rt = emptyRuntime();
-  for (const row of results ?? []) {
-    applyMessage(rt, { id: row.id, date: row.posted_at, text: row.text }, aliasIndex);
-  }
-
-  const payload = toPayload(rt, Math.floor(Date.now() / 1000), sourceUsed);
-  await applyOverrides(env, payload);
-  await saveSnapshot(env, payload);
-
-  return payload;
-}
-
-/** Aplica las filas de `circuit_overrides` sobre el payload. */
-export async function applyOverrides(env: Env, payload: StatusPayload): Promise<void> {
-  const { results } = await env.DB.prepare(
-    "SELECT circuit_id, status, since FROM circuit_overrides",
-  ).all<OverrideRow>();
-  for (const row of results ?? []) {
-    const idx = payload.circuits.findIndex((c) => c.id === row.circuit_id);
-    const next = {
-      id: row.circuit_id,
-      status: row.status,
-      since: row.status === "out" ? row.since : null,
-      source_message_id: null,
-      confidence: 1,
-      reported_duration_min: null,
-    };
-    if (idx >= 0) payload.circuits[idx] = next;
-    else payload.circuits.push(next);
+function parseState(raw: string | null): StatusPayload {
+  if (!raw) return emptyState(0);
+  try {
+    const parsed = StatusPayload.safeParse(JSON.parse(raw));
+    if (!parsed.success) return emptyState(0);
+    return { ...parsed.data, circuits: parsed.data.circuits.filter((c) => c.status === "out") };
+  } catch {
+    return emptyState(0);
   }
 }
 
-async function saveSnapshot(env: Env, payload: StatusPayload): Promise<void> {
+/** Estado crudo que interpretó la IA, sin correcciones manuales. */
+export async function getStoredState(env: Env): Promise<StatusPayload> {
+  const row = await env.DB.prepare("SELECT payload FROM state_snapshot WHERE id = 1").first<{
+    payload: string;
+  }>();
+  return parseState(row?.payload ?? null);
+}
+
+/** Estado que sirve la API: estado crudo + correcciones manuales. */
+export async function getSnapshot(env: Env): Promise<StatusPayload> {
+  const [state, overrides] = await Promise.all([getStoredState(env), listOverrides(env)]);
+  return mergeOverrides(state, overrides);
+}
+
+export async function saveState(env: Env, state: StatusPayload): Promise<StatusPayload> {
+  const payload = StatusPayload.parse({
+    ...state,
+    circuits: state.circuits.filter((c) => c.status === "out"),
+  });
   await env.DB.prepare(
     `INSERT INTO state_snapshot (id, payload, generated_at) VALUES (1, ?, ?)
      ON CONFLICT(id) DO UPDATE SET payload = excluded.payload, generated_at = excluded.generated_at`,
   )
     .bind(JSON.stringify(payload), payload.generated_at)
     .run();
+  return payload;
 }
 
-export async function getSnapshot(env: Env): Promise<StatusPayload> {
-  const row = await env.DB.prepare("SELECT payload FROM state_snapshot WHERE id = 1").first<{
-    payload: string;
+/** Ingesta correcta sin mensajes nuevos: solo se anota que el canal se consultó. */
+export async function touchState(env: Env, now: number): Promise<StatusPayload> {
+  const state = await getStoredState(env);
+  return saveState(env, { ...state, generated_at: now });
+}
+
+export async function getSetting(env: Env, key: string): Promise<string | null> {
+  const row = await env.DB.prepare("SELECT value FROM settings WHERE key = ?").bind(key).first<{
+    value: string;
   }>();
-  if (row) return JSON.parse(row.payload) as StatusPayload;
+  return row?.value ?? null;
+}
 
-  // Primer arranque: si ya hay mensajes, reconstruimos; si no, estado vacío.
-  const count = await env.DB.prepare("SELECT COUNT(*) AS n FROM raw_messages").first<{ n: number }>();
-  if ((count?.n ?? 0) > 0) return rebuild(env, "rebuild");
+export async function setSetting(env: Env, key: string, value: string): Promise<void> {
+  await env.DB.prepare(
+    `INSERT INTO settings (key, value) VALUES (?, ?)
+     ON CONFLICT(key) DO UPDATE SET value = excluded.value`,
+  )
+    .bind(key, value)
+    .run();
+}
 
-  const empty = toPayload(emptyRuntime(), Math.floor(Date.now() / 1000), "empty");
-  await applyOverrides(env, empty);
-  return empty;
+export async function logIngest(
+  env: Env,
+  source: string,
+  ok: boolean,
+  detail: string,
+): Promise<void> {
+  const now = Math.floor(Date.now() / 1000);
+  await env.DB.batch([
+    env.DB.prepare("INSERT INTO ingest_log (at, source, ok, detail) VALUES (?, ?, ?, ?)").bind(
+      now,
+      source,
+      ok ? 1 : 0,
+      detail,
+    ),
+    env.DB.prepare("DELETE FROM ingest_log WHERE at < ?").bind(now - 30 * 86400),
+  ]);
+}
+
+export async function lastIngest(env: Env): Promise<IngestLog | null> {
+  return env.DB.prepare(
+    "SELECT at, source, ok, detail FROM ingest_log ORDER BY id DESC LIMIT 1",
+  ).first<IngestLog>();
+}
+
+export async function listOverrides(env: Env): Promise<Override[]> {
+  const { results } = await env.DB.prepare(
+    "SELECT circuit_id, status, since, updated_at FROM circuit_overrides ORDER BY circuit_id",
+  ).all<Override>();
+  return results ?? [];
 }
 
 export async function setCircuitOverride(
@@ -110,20 +134,10 @@ export async function setCircuitOverride(
   )
     .bind(circuitId, status, status === "out" ? (since ?? now) : null, now)
     .run();
-
-  // Reconstruye para que el override se aplique sobre el estado real.
-  return rebuild(env, "override");
+  return getSnapshot(env);
 }
 
-/** Borra una corrección manual; el estado vuelve a lo que digan los mensajes. */
 export async function clearCircuitOverride(env: Env, circuitId: string): Promise<StatusPayload> {
   await env.DB.prepare("DELETE FROM circuit_overrides WHERE circuit_id = ?").bind(circuitId).run();
-  return rebuild(env, "override");
-}
-
-export async function listOverrides(env: Env): Promise<OverrideRow[]> {
-  const { results } = await env.DB.prepare(
-    "SELECT circuit_id, status, since FROM circuit_overrides ORDER BY circuit_id",
-  ).all<OverrideRow>();
-  return results ?? [];
+  return getSnapshot(env);
 }

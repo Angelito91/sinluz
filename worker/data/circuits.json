@@ -15,7 +15,8 @@
       -76.1994
     ],
     "radius_m": 2200,
-    "geo_confidence": "centroid"
+    "geo_confidence": "centroid",
+    "geo_source": "centroide municipal"
   },
   {
     "id": "cta-02",
@@ -34,6 +35,7 @@
     ],
     "radius_m": 2200,
     "geo_confidence": "centroid",
+    "geo_source": "centroide municipal",
     "notes": "Forma parte de 1 y 2 Contramaestre y 3+2"
   },
   {
@@ -53,6 +55,7 @@
     ],
     "radius_m": 2200,
     "geo_confidence": "centroid",
+    "geo_source": "centroide municipal",
     "notes": "Forma parte de 3+2"
   },
   {
@@ -70,7 +73,8 @@
       -76.1925
     ],
     "radius_m": 1800,
-    "geo_confidence": "centroid"
+    "geo_confidence": "centroid",
+    "geo_source": "centroide municipal"
   },
   {
     "id": "line-4385",
@@ -83,11 +87,12 @@
       "4385"
     ],
     "anchor": [
-      20.364,
-      -76.2122
+      20.29049,
+      -76.25318
     ],
     "radius_m": 4500,
-    "geo_confidence": "centroid"
+    "geo_confidence": "approximate",
+    "geo_source": "elTOQUE"
   },
   {
     "id": "line-4390",
@@ -100,11 +105,12 @@
       "4390"
     ],
     "anchor": [
-      20.3585,
-      -76.1871
+      20.364,
+      -76.2122
     ],
     "radius_m": 4500,
-    "geo_confidence": "centroid"
+    "geo_confidence": "centroid",
+    "geo_source": "centroide municipal"
   },
   {
     "id": "line-4395",
@@ -119,11 +125,12 @@
       "4395 5175 Contramaestre"
     ],
     "anchor": [
-      20.3817,
-      -76.2035
+      20.30049,
+      -76.24774
     ],
     "radius_m": 4500,
-    "geo_confidence": "centroid",
+    "geo_confidence": "approximate",
+    "geo_source": "elTOQUE",
     "notes": "SD 5175 es el seccionalizado asociado"
   },
   {
@@ -137,17 +144,18 @@
       "4435"
     ],
     "anchor": [
-      20.351,
-      -76.2073
+      20.3002,
+      -76.2394
     ],
     "radius_m": 4500,
-    "geo_confidence": "centroid"
+    "geo_confidence": "reported",
+    "geo_source": "elTOQUE"
   },
   {
     "id": "line-5330",
     "kind": "linea",
     "name": "Línea 5330-El Cristo",
-    "municipio": "Palma Soriano",
+    "municipio": "Santiago de Cuba",
     "aliases": [
       "Línea 5330 El Cristo",
       "5330 El Cristo",
@@ -156,11 +164,12 @@
       "5330"
     ],
     "anchor": [
-      20.2804,
-      -76.0402
+      20.12106,
+      -75.74936
     ],
     "radius_m": 4500,
-    "geo_confidence": "centroid"
+    "geo_confidence": "approximate",
+    "geo_source": "elTOQUE"
   },
   {
     "id": "line-5335",
@@ -175,11 +184,12 @@
       "5335 5617 Guamá"
     ],
     "anchor": [
-      19.9743,
-      -76.5059
+      19.97312,
+      -76.41059
     ],
     "radius_m": 4500,
-    "geo_confidence": "centroid",
+    "geo_confidence": "approximate",
+    "geo_source": "elTOQUE",
     "notes": "Aparece como \"5335-Guamá seccionalizada\""
   },
   {
@@ -193,11 +203,12 @@
       "5380"
     ],
     "anchor": [
-      20.4336,
-      -75.9948
+      20.4283,
+      -75.92789
     ],
     "radius_m": 4500,
-    "geo_confidence": "centroid"
+    "geo_confidence": "approximate",
+    "geo_source": "elTOQUE"
   },
   {
     "id": "line-5385",
@@ -212,11 +223,12 @@
       "5385 San Luis"
     ],
     "anchor": [
-      20.2848,
-      -76.045
+      20.2804,
+      -76.0402
     ],
     "radius_m": 4500,
     "geo_confidence": "centroid",
+    "geo_source": "centroide municipal",
     "notes": "El canal la nombra Palma y San Luis indistintamente"
   },
   {
@@ -234,11 +246,12 @@
       "5390 4260"
     ],
     "anchor": [
-      20.2021,
-      -75.5802
+      20.24,
+      -75.5
     ],
     "radius_m": 4500,
-    "geo_confidence": "centroid",
+    "geo_confidence": "approximate",
+    "geo_source": "elTOQUE",
     "notes": "SD 4260 es el seccionalizado asociado"
   },
   {
@@ -253,11 +266,12 @@
       "LI 5395 San Luis"
     ],
     "anchor": [
-      20.2825,
-      -75.7827
+      20.33155,
+      -75.70954
     ],
     "radius_m": 4500,
-    "geo_confidence": "centroid",
+    "geo_confidence": "approximate",
+    "geo_source": "elTOQUE",
     "notes": "El canal escribe a veces \"LI\""
   },
   {
@@ -272,11 +286,12 @@
       "Baconao"
     ],
     "anchor": [
-      20.0217,
-      -75.8297
+      19.96108,
+      -75.70486
     ],
     "radius_m": 4500,
-    "geo_confidence": "centroid"
+    "geo_confidence": "reported",
+    "geo_source": "elTOQUE"
   },
   {
     "id": "line-5980",
@@ -292,11 +307,12 @@
       "5980 Sueros Bombeo"
     ],
     "anchor": [
-      20.0261,
-      -75.8345
+      20.02507,
+      -75.79474
     ],
     "radius_m": 4500,
-    "geo_confidence": "centroid"
+    "geo_confidence": "reported",
+    "geo_source": "elTOQUE"
   },
   {
     "id": "pal-01",
@@ -311,11 +327,12 @@
       "1 Palma"
     ],
     "anchor": [
-      20.2712,
-      -76.0394
+      20.2144,
+      -76.00032
     ],
     "radius_m": 2200,
-    "geo_confidence": "centroid"
+    "geo_confidence": "reported",
+    "geo_source": "elTOQUE"
   },
   {
     "id": "pal-02",
@@ -329,11 +346,12 @@
       "2 Palma"
     ],
     "anchor": [
-      20.2893,
-      -76.0333
+      20.22717,
+      -76.00417
     ],
     "radius_m": 2200,
-    "geo_confidence": "centroid"
+    "geo_confidence": "approximate",
+    "geo_source": "elTOQUE"
   },
   {
     "id": "pal-04",
@@ -348,11 +366,12 @@
       "4 Palma"
     ],
     "anchor": [
-      20.2781,
-      -76.053
+      20.20235,
+      -75.98545
     ],
     "radius_m": 2200,
-    "geo_confidence": "centroid"
+    "geo_confidence": "approximate",
+    "geo_source": "elTOQUE"
   },
   {
     "id": "sc-01",
@@ -366,11 +385,12 @@
       "Circuito 1 de Santiago"
     ],
     "anchor": [
-      20.0125,
-      -75.8289
+      20.01476,
+      -75.83025
     ],
     "radius_m": 1400,
-    "geo_confidence": "centroid"
+    "geo_confidence": "mapped",
+    "geo_source": "trazado detallado"
   },
   {
     "id": "sc-02",
@@ -384,11 +404,12 @@
       "Circuito 2 de Santiago"
     ],
     "anchor": [
-      20.0306,
-      -75.8228
+      20.02167,
+      -75.82848
     ],
     "radius_m": 1400,
-    "geo_confidence": "centroid"
+    "geo_confidence": "mapped",
+    "geo_source": "trazado detallado"
   },
   {
     "id": "sc-03",
@@ -402,11 +423,12 @@
       "Circuito 3 de Santiago"
     ],
     "anchor": [
-      20.0194,
-      -75.8425
+      20.02629,
+      -75.82937
     ],
     "radius_m": 1400,
-    "geo_confidence": "centroid"
+    "geo_confidence": "mapped",
+    "geo_source": "trazado detallado"
   },
   {
     "id": "sc-04",
@@ -420,11 +442,12 @@
       "Circuito 4 de Santiago"
     ],
     "anchor": [
-      20.0139,
-      -75.8174
+      20.0217,
+      -75.8297
     ],
     "radius_m": 1400,
-    "geo_confidence": "centroid"
+    "geo_confidence": "centroid",
+    "geo_source": "centroide municipal"
   },
   {
     "id": "sc-05",
@@ -438,11 +461,12 @@
       "Circuito 5 de Santiago"
     ],
     "anchor": [
-      20.0371,
-      -75.8338
+      20.0261,
+      -75.8345
     ],
     "radius_m": 1400,
-    "geo_confidence": "centroid"
+    "geo_confidence": "centroid",
+    "geo_source": "centroide municipal"
   },
   {
     "id": "sc-06",
@@ -456,11 +480,12 @@
       "Circuito 6 de Santiago"
     ],
     "anchor": [
-      20.0064,
-      -75.8376
+      20.0125,
+      -75.8289
     ],
     "radius_m": 1400,
-    "geo_confidence": "centroid"
+    "geo_confidence": "centroid",
+    "geo_source": "centroide municipal"
   },
   {
     "id": "sc-07",
@@ -476,11 +501,12 @@
       "Circuito 7 seccionalizado"
     ],
     "anchor": [
-      20.028,
-      -75.8124
+      20.01917,
+      -75.82421
     ],
     "radius_m": 1400,
-    "geo_confidence": "centroid",
+    "geo_confidence": "reported",
+    "geo_source": "elTOQUE",
     "notes": "SD 3030 es el seccionalizado asociado"
   },
   {
@@ -495,11 +521,12 @@
       "Circuito 8 de Santiago"
     ],
     "anchor": [
-      20.0291,
-      -75.8477
+      20.01083,
+      -75.8318
     ],
     "radius_m": 1400,
-    "geo_confidence": "centroid"
+    "geo_confidence": "mapped",
+    "geo_source": "trazado detallado"
   },
   {
     "id": "sc-09",
@@ -514,11 +541,12 @@
       "9 SI 4074"
     ],
     "anchor": [
-      20.0031,
-      -75.821
+      19.99842,
+      -75.84837
     ],
     "radius_m": 1400,
-    "geo_confidence": "centroid",
+    "geo_confidence": "mapped",
+    "geo_source": "trazado detallado",
     "notes": "SI 4074 es el seccionalizado asociado"
   },
   {
@@ -532,11 +560,12 @@
       "Cto 10"
     ],
     "anchor": [
-      20.0423,
-      -75.8232
+      20.03198,
+      -75.83424
     ],
     "radius_m": 1400,
-    "geo_confidence": "centroid"
+    "geo_confidence": "mapped",
+    "geo_source": "trazado detallado"
   },
   {
     "id": "sc-11",
@@ -549,11 +578,12 @@
       "Cto 11"
     ],
     "anchor": [
-      20.0104,
-      -75.8492
+      19.99088,
+      -75.72314
     ],
     "radius_m": 1400,
-    "geo_confidence": "centroid"
+    "geo_confidence": "mapped",
+    "geo_source": "trazado detallado"
   },
   {
     "id": "sc-12",
@@ -566,11 +596,12 @@
       "Cto 12"
     ],
     "anchor": [
-      20.0167,
-      -75.8068
+      20.0247,
+      -75.80428
     ],
     "radius_m": 1400,
-    "geo_confidence": "centroid"
+    "geo_confidence": "mapped",
+    "geo_source": "trazado detallado"
   },
   {
     "id": "sc-13",
@@ -583,11 +614,12 @@
       "Cto 13"
     ],
     "anchor": [
-      20.0416,
-      -75.8437
+      20.02124,
+      -75.79649
     ],
     "radius_m": 1400,
-    "geo_confidence": "centroid"
+    "geo_confidence": "mapped",
+    "geo_source": "trazado detallado"
   },
   {
     "id": "sc-14",
@@ -602,11 +634,12 @@
       "14 SI 3010"
     ],
     "anchor": [
-      19.9967,
-      -75.8329
+      20.05776,
+      -75.77114
     ],
     "radius_m": 1400,
-    "geo_confidence": "centroid",
+    "geo_confidence": "approximate",
+    "geo_source": "elTOQUE",
     "notes": "SI 3010 es el seccionalizado asociado"
   },
   {
@@ -620,11 +653,12 @@
       "Cto 15"
     ],
     "anchor": [
-      20.0385,
-      -75.8098
+      20.03,
+      -75.8
     ],
     "radius_m": 1400,
-    "geo_confidence": "centroid"
+    "geo_confidence": "approximate",
+    "geo_source": "elTOQUE"
   },
   {
     "id": "sc-16",
@@ -637,11 +671,12 @@
       "Cto 16"
     ],
     "anchor": [
-      20.0228,
-      -75.8565
+      20.02816,
+      -75.80772
     ],
     "radius_m": 1400,
-    "geo_confidence": "centroid"
+    "geo_confidence": "approximate",
+    "geo_source": "elTOQUE"
   },
   {
     "id": "sc-17",
@@ -654,11 +689,12 @@
       "Cto 17"
     ],
     "anchor": [
-      20.0022,
-      -75.8102
+      20.05563,
+      -75.81623
     ],
     "radius_m": 1400,
-    "geo_confidence": "centroid"
+    "geo_confidence": "mapped",
+    "geo_source": "trazado detallado"
   },
   {
     "id": "sc-18",
@@ -671,11 +707,12 @@
       "Cto 18"
     ],
     "anchor": [
-      20.05,
-      -75.831
+      20.03298,
+      -75.817
     ],
     "radius_m": 1400,
-    "geo_confidence": "centroid",
+    "geo_confidence": "reported",
+    "geo_source": "elTOQUE",
     "notes": "Sin menciones en el corpus; existe por numeración"
   },
   {
@@ -689,11 +726,12 @@
       "Cto 19"
     ],
     "anchor": [
-      19.9994,
-      -75.8483
+      20.03474,
+      -75.82327
     ],
     "radius_m": 1400,
-    "geo_confidence": "centroid"
+    "geo_confidence": "reported",
+    "geo_source": "elTOQUE"
   },
   {
     "id": "sc-20",
@@ -706,11 +744,12 @@
       "Cto 20"
     ],
     "anchor": [
-      20.0257,
-      -75.8002
+      20.04921,
+      -75.83242
     ],
     "radius_m": 1400,
-    "geo_confidence": "centroid"
+    "geo_confidence": "reported",
+    "geo_source": "elTOQUE"
   },
   {
     "id": "sc-21",
@@ -723,11 +762,12 @@
       "Cto 21"
     ],
     "anchor": [
-      20.0391,
-      -75.8547
+      20.07829,
+      -75.79914
     ],
     "radius_m": 1400,
-    "geo_confidence": "centroid"
+    "geo_confidence": "mapped",
+    "geo_source": "trazado detallado"
   },
   {
     "id": "sc-22",
@@ -740,11 +780,12 @@
       "Cto 22"
     ],
     "anchor": [
-      19.9913,
-      -75.8229
+      20.0306,
+      -75.8228
     ],
     "radius_m": 1400,
-    "geo_confidence": "centroid"
+    "geo_confidence": "centroid",
+    "geo_source": "centroide municipal"
   },
   {
     "id": "sc-23",
@@ -757,11 +798,12 @@
       "Cto 23"
     ],
     "anchor": [
-      20.0493,
-      -75.8139
+      20.04257,
+      -75.84941
     ],
     "radius_m": 1400,
-    "geo_confidence": "centroid"
+    "geo_confidence": "approximate",
+    "geo_source": "elTOQUE"
   },
   {
     "id": "sc-24",
@@ -774,11 +816,12 @@
       "Cto 24"
     ],
     "anchor": [
-      20.0118,
-      -75.8607
+      20.04229,
+      -75.83823
     ],
     "radius_m": 1400,
-    "geo_confidence": "centroid"
+    "geo_confidence": "reported",
+    "geo_source": "elTOQUE"
   },
   {
     "id": "sc-25",
@@ -791,11 +834,12 @@
       "Cto 25"
     ],
     "anchor": [
-      20.0078,
-      -75.7996
+      20.03885,
+      -75.84644
     ],
     "radius_m": 1400,
-    "geo_confidence": "centroid"
+    "geo_confidence": "mapped",
+    "geo_source": "trazado detallado"
   },
   {
     "id": "sc-26",
@@ -808,11 +852,12 @@
       "Cto 26"
     ],
     "anchor": [
-      20.0529,
-      -75.8427
+      20.05017,
+      -75.94731
     ],
     "radius_m": 1400,
-    "geo_confidence": "centroid"
+    "geo_confidence": "reported",
+    "geo_source": "elTOQUE"
   },
   {
     "id": "sf-ii",
@@ -830,7 +875,8 @@
       -75.5013
     ],
     "radius_m": 4500,
-    "geo_confidence": "centroid"
+    "geo_confidence": "centroid",
+    "geo_source": "centroide municipal"
   },
   {
     "id": "slm-song",
@@ -844,11 +890,12 @@
       "Circuito Ramal Songo"
     ],
     "anchor": [
-      20.2065,
-      -75.585
+      20.17609,
+      -75.71087
     ],
     "radius_m": 2500,
-    "geo_confidence": "centroid"
+    "geo_confidence": "approximate",
+    "geo_source": "elTOQUE"
   },
   {
     "id": "tf-iii",
@@ -868,6 +915,7 @@
       -76.3124
     ],
     "radius_m": 4500,
-    "geo_confidence": "centroid"
+    "geo_confidence": "centroid",
+    "geo_source": "centroide municipal"
   }
 ]

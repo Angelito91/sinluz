@@ -32,9 +32,3 @@ export function hhmm(ts: number | null): string {
     timeZone: "America/Havana",
   }).format(new Date(ts * 1000));
 }
-
-export function freshness(ageMin: number): "fresh" | "stale" | "dead" {
-  if (ageMin <= 90) return "fresh";
-  if (ageMin <= 360) return "stale";
-  return "dead";
-}

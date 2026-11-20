@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Radio } from "lucide-react";
 import MapView from "./components/MapView";
 import CircuitList from "./components/CircuitList";
@@ -8,6 +8,9 @@ import { useNow } from "./hooks/useNow";
 import { useFavorites, useOnline } from "./hooks/useLocal";
 import { ago } from "./lib/time";
 import { buildRows, filterRows, sortRows } from "./lib/view";
+import { areaAt, summarizeAreas, type AreaFeature } from "@sinluz/shared/areas";
+import { useGeo } from "./hooks/useGeo";
+import { useLocate, type Locate } from "./hooks/useLocate";
 
 export default function App() {
   const { status, error, isLoading, isValidating } = useStatus();
@@ -19,15 +22,62 @@ export default function App() {
   const [query, setQuery] = useState("");
   const [onlyFavs, setOnlyFavs] = useState(false);
   const [selected, setSelected] = useState<string | null>(null);
+  const [area, setArea] = useState<string | null>(null);
+  const geo = useGeo();
+  const locate = useLocate();
 
-  const rows = useMemo(() => sortRows(buildRows(catalog ?? [], status)), [catalog, status]);
+  // «sin confirmar» depende de la hora: se recalcula cada minuto, no cada segundo.
+  const minute = Math.floor(now / 60);
+  const rows = useMemo(
+    () => sortRows(buildRows(catalog ?? [], status, minute * 60)),
+    [catalog, status, minute],
+  );
   const visible = useMemo(
-    () => filterRows(rows, query, onlyFavs ? favorites.ids : undefined),
-    [rows, query, onlyFavs, favorites.ids],
+    () => filterRows(rows, query, onlyFavs ? favorites.ids : undefined, area),
+    [rows, query, onlyFavs, favorites.ids, area],
+  );
+  const areas = useMemo(
+    () => summarizeAreas(rows.map((r) => ({ municipio: r.circuit.municipio, status: r.status }))),
+    [rows],
   );
 
-  const affected = rows.filter((r) => r.state.status === "out");
-  const ageMin = status?.source.age_min ?? 0;
+  // En qué municipio está el usuario: se calcula aquí, la posición no sale del dispositivo.
+  const pos = locate.position;
+  const here = useMemo(
+    () => (pos && geo ? areaAt(geo.features as unknown as AreaFeature[], pos.lat, pos.lon) : null),
+    [pos, geo],
+  );
+  // Al localizarse, se selecciona su municipio.
+  useEffect(() => {
+    if (here) setArea(here);
+  }, [here]);
+
+  const pickArea = (name: string | null) => {
+    setArea(name);
+    setSelected(null);
+  };
+
+  const pickCircuit = (id: string | null) => {
+    if (!id) {
+      setSelected(null);
+      return;
+    }
+    setSelected(id);
+    const m = rows.find((r) => r.circuit.id === id)?.circuit.municipio;
+    if (m) setArea(m);
+  };
+  const clearSelection = () => {
+    setSelected(null);
+    setArea(null);
+  };
+  const areaInfo = area ? areas.get(area) : null;
+
+  const affected = rows.filter((r) => r.status === "out");
+  const unconfirmed = rows.filter((r) => r.status === "stale").length;
+  // Antigüedades calculadas aquí con la hora actual: no vienen congeladas del servidor.
+  const pipelineAgeMin = status ? Math.max(0, (now - status.generated_at) / 60) : 0;
+  const lastMessageAt = status?.source.last_message_at ?? null;
+  const channelAgeMin = lastMessageAt ? Math.max(0, (now - lastMessageAt) / 60) : null;
   const deficit = status?.province.deficit_mw;
   const served = status?.province.served_mw;
 
@@ -39,14 +89,26 @@ export default function App() {
           <p className="mt-1 text-[11.5px] leading-none text-ink/45">Santiago de Cuba</p>
         </div>
         <div className="flex items-center gap-1.5 text-[11px] text-ink/45">
-          <Radio className={`h-3 w-3 ${ageMin <= 90 ? "text-emerald-600" : "text-amber-600"}`} />
-          <span className="tabular-nums">{ago(status?.source.last_message_at ?? null, now)}</span>
+          <Radio className={`h-3 w-3 ${pipelineAgeMin <= 30 ? "text-emerald-600" : "text-amber-600"}`} />
+          <span className="tabular-nums">{ago(lastMessageAt, now)}</span>
         </div>
       </header>
 
       <main className="flex min-h-0 flex-1 flex-col">
         <div className="relative z-0 min-h-0 flex-1">
-          <MapView rows={rows} selected={selected} onSelect={setSelected} />
+          <MapView
+            areas={areas}
+            area={area}
+            onArea={pickArea}
+            here={here}
+            locate={locate}
+            rows={rows}
+            selected={selected}
+            onSelect={pickCircuit}
+            onClear={clearSelection}
+            now={now}
+          />
+          <LocateNote locate={locate} here={here} loaded={!!geo} />
         </div>
 
         <section
@@ -66,6 +128,11 @@ export default function App() {
                   <span className="ml-1.5 text-[13px] font-normal text-ink/50">
                     {affected.length === 1 ? "circuito afectado" : "circuitos afectados"}
                   </span>
+                  {unconfirmed > 0 && (
+                    <span className="ml-2 text-[12px] font-normal text-amber-700">
+                      +{unconfirmed} sin confirmar
+                    </span>
+                  )}
                 </p>
               </div>
               {(deficit != null || served != null) && (
@@ -77,7 +144,39 @@ export default function App() {
             </div>
           </div>
 
-          <StatusBanner online={online} ageMin={ageMin} error={error?.message} isValidating={isValidating} />
+          {area && areaInfo && (
+            <div className="mx-4 mb-2 rounded-xl bg-black/[0.04] px-3 py-2">
+              <div className="flex items-center justify-between gap-2">
+                <p className="text-[13px] font-semibold">
+                  {area}
+                  {area === here && <span className="ml-1.5 text-[11px] font-medium text-blue-600">estás aquí</span>}
+                </p>
+                <button onClick={() => pickArea(null)} className="text-[11.5px] text-ink/50 active:text-ink">
+                  Ver todo
+                </button>
+              </div>
+              <p className="mt-0.5 text-[12px] text-ink/60">
+                {areaInfo.out > 0
+                  ? `${areaInfo.out} de ${areaInfo.total} circuitos sin servicio`
+                  : areaInfo.stale > 0
+                    ? `${areaInfo.stale} sin confirmar · el resto con servicio`
+                    : `Sin afectaciones informadas en ${areaInfo.total} circuitos`}
+              </p>
+              {area === here && (
+                <p className="mt-1 text-[11px] leading-snug text-ink/45">
+                  No sabemos qué circuito te alimenta: mira los de tu municipio y elige el tuyo (⭐ para guardarlo).
+                </p>
+              )}
+            </div>
+          )}
+
+          <StatusBanner
+            online={online}
+            pipelineAgeMin={pipelineAgeMin}
+            channelAgeMin={channelAgeMin}
+            error={error?.message}
+            isValidating={isValidating}
+          />
 
           {isLoading && !status ? (
             <Skeleton />
@@ -88,7 +187,7 @@ export default function App() {
               rows={visible}
               now={now}
               selected={selected}
-              onSelect={setSelected}
+              onSelect={pickCircuit}
               query={query}
               onQuery={setQuery}
               favorites={favorites}
@@ -99,13 +198,30 @@ export default function App() {
           )}
 
           <p className="shrink-0 border-t border-black/5 px-4 py-2 pb-[max(0.5rem,env(safe-area-inset-bottom))] text-[10px] leading-snug text-ink/35">
-            Fuente: canal oficial de la Empresa Eléctrica de Santiago de Cuba. App no oficial.
-            «Sin afectación reportada» no significa que haya corriente. Límites: geoBoundaries (CC BY
-            4.0) · OpenStreetMap.
+            Fuente del estado: canal oficial de la Empresa Eléctrica de Santiago de Cuba. App no
+            oficial. El estado de cada circuito es el del último aviso del canal: «con servicio»
+            significa que no se ha informado ninguna afectación. Ubicación de circuitos{" "}
+            <strong className="font-medium text-ink/70">aproximada</strong>, basada en aportes
+            colaborativos y en el mapa de circuitos de elTOQUE; no es el área de servicio oficial.
+            Límites: geoBoundaries (CC BY 4.0) · Mapa: OpenStreetMap.
           </p>
         </section>
       </main>
     </div>
+  );
+}
+
+/** Mensaje breve sobre el mapa cuando la localización no da un municipio. */
+function LocateNote({ locate, here, loaded }: { locate: Locate; here: string | null; loaded: boolean }) {
+  let text: string | null = null;
+  if (locate.state === "denied") text = "Sin permiso de ubicación. Elige tu municipio en el mapa.";
+  else if (locate.state === "unavailable") text = "No se pudo obtener tu ubicación. Elige tu municipio en el mapa.";
+  else if (locate.state === "ok" && loaded && !here) text = "Estás fuera de la provincia de Santiago de Cuba.";
+  if (!text) return null;
+  return (
+    <p className="pointer-events-none absolute inset-x-3 top-2 z-[1000] rounded-lg bg-white/95 px-3 py-2 text-center text-[12px] text-ink/70 shadow-sm">
+      {text}
+    </p>
   );
 }
 

@@ -1,62 +1,70 @@
 import type { CatalogCircuit, CircuitState, StatusPayload } from "@sinluz/shared";
+import { displayStatus, type DisplayStatus } from "@sinluz/shared/status";
 
 export type Row = {
   circuit: CatalogCircuit;
   state: CircuitState;
+  /** Lo que se muestra: `out`, `ok`, o `stale` (afectado sin confirmar desde hace horas). */
+  status: DisplayStatus;
 };
 
+/** Un circuito que el canal nunca ha mencionado cuenta como con servicio. */
 const EMPTY: CircuitState = {
   id: "",
-  status: "unknown",
+  status: "ok",
   since: null,
+  last_mention_at: null,
   source_message_id: null,
-  confidence: 0,
 };
 
-export function buildRows(catalog: CatalogCircuit[], status?: StatusPayload): Row[] {
+export function buildRows(catalog: CatalogCircuit[], status: StatusPayload | undefined, now: number): Row[] {
   const byId = new Map((status?.circuits ?? []).map((c) => [c.id, c]));
-  return catalog.map((circuit) => ({
-    circuit,
-    state: byId.get(circuit.id) ?? { ...EMPTY, id: circuit.id },
-  }));
+  return catalog.map((circuit) => {
+    const state = byId.get(circuit.id) ?? { ...EMPTY, id: circuit.id };
+    return { circuit, state, status: displayStatus(state, now) };
+  });
 }
 
-const rank = (s: CircuitState) => (s.status === "out" ? 0 : s.status === "none_reported" ? 1 : 2);
+const rank = (r: Row) => (r.status === "out" ? 0 : r.status === "stale" ? 1 : 2);
 
 export function sortRows(rows: Row[]): Row[] {
   return [...rows].sort(
     (a, b) =>
-      rank(a.state) - rank(b.state) ||
+      rank(a) - rank(b) ||
       (a.state.since ?? Number.MAX_SAFE_INTEGER) - (b.state.since ?? Number.MAX_SAFE_INTEGER) ||
       a.circuit.name.localeCompare(b.circuit.name, "es"),
   );
 }
 
-export function filterRows(rows: Row[], query: string, favs?: string[]): Row[] {
+export function filterRows(rows: Row[], query: string, favs?: string[], area?: string | null): Row[] {
   const q = query
     .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[̀-ͯ]/g, "")
     .toLowerCase()
     .trim();
   return rows.filter((r) => {
     if (favs && !favs.includes(r.circuit.id)) return false;
+    if (area && r.circuit.municipio !== area) return false;
     if (!q) return true;
     const hay = `${r.circuit.name} ${r.circuit.municipio} ${r.circuit.id}`
       .normalize("NFD")
-      .replace(/[\u0300-\u036f]/g, "")
+      .replace(/[̀-ͯ]/g, "")
       .toLowerCase();
     return hay.includes(q);
   });
 }
 
-export const STATUS_LABEL: Record<CircuitState["status"], string> = {
+export const STATUS_LABEL: Record<DisplayStatus, string> = {
   out: "sin servicio",
-  none_reported: "sin afectación reportada",
-  unknown: "sin datos",
+  stale: "sin confirmar",
+  ok: "con servicio",
 };
 
-export const STATUS_COLOR: Record<CircuitState["status"], string> = {
+export const STATUS_COLOR: Record<DisplayStatus, string> = {
   out: "#d64545",
-  none_reported: "#3f7d5c",
-  unknown: "#a3a39c",
+  stale: "#c98a1b",
+  ok: "#3f7d5c",
 };
+
+/** Color de relleno de un área según su estado resumido. */
+export const AREA_COLOR = STATUS_COLOR;

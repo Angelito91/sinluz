@@ -8,10 +8,19 @@ binding = "DB"
 database_name = "sinluz"
 database_id = "a8166ab2-3947-45fa-9731-58b5a5ede486"
 
+# Workers AI: interpreta los avisos del canal (gratis hasta 10 000 neuronas/día).
+[ai]
+binding = "AI"
+
 [triggers]
 crons = ["*/5 * * * *"]
 
 [vars]
 INGEST_URL = "https://tg.i-c-a.su/json/electricastgo"
 INGEST_LIMIT = "30"
-LLM_ENABLED = "false"
+LLM_MODEL = "@cf/meta/llama-3.3-70b-instruct-fp8-fast"
+# Interruptor de emergencia: "false" deja de interpretar sin quitar el binding [ai].
+# LLM_ENABLED = "false"
+
+[observability]
+enabled = true

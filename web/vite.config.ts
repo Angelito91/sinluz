@@ -29,6 +29,15 @@ export default defineConfig({
         navigateFallback: "/index.html",
         runtimeCaching: [
           {
+            urlPattern: ({ url }) => url.hostname.endsWith("tile.openstreetmap.org"),
+            handler: "CacheFirst",
+            options: {
+              cacheName: "basemap",
+              expiration: { maxEntries: 350, maxAgeSeconds: 60 * 60 * 24 * 30 },
+              cacheableResponse: { statuses: [0, 200] },
+            },
+          },
+          {
             urlPattern: ({ url }) => url.pathname.startsWith("/api/"),
             handler: "NetworkFirst",
             options: {

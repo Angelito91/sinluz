@@ -1,151 +1,203 @@
 import { describe, expect, test } from "bun:test";
-import { classify, parseMetrics } from "../src/classify";
-import { aliasIndex } from "../src/catalog";
-import { applyMessage, emptyRuntime } from "../src/state";
+import { applyChanges, emptyState, mergeOverrides } from "../src/state";
+import type { LlmResult, Message } from "../src/llm";
 
-describe("intención", () => {
-  test("snapshot explícito", () => {
-    expect(classify("Se afecta el servicio eléctrico en los siguientes circuitos:\n8\n9")).toBe("snapshot");
-  });
+const msg = (id: number, date: number, text = ""): Message => ({ id, date, text });
 
-  test("top-N nunca es snapshot", () => {
-    expect(
-      classify("📌 Circuitos con mayor tiempo de afectación:\nCircuito 1 ➡️ 9 horas"),
-    ).toBe("top_n");
-  });
+const result = (
+  cambios: LlmResult["cambios"],
+  metrics: LlmResult["metrics"] = null,
+): LlmResult => ({ cambios, metrics });
 
-  test("lista de afectados sin 'se afecta' se trata como parcial", () => {
-    expect(
-      classify(
-        "Actualización de los circuitos que se encuentran afectados por déficit:\nLínea 4390-Contramaestre➡️ 16 horas",
-      ),
-    ).toBe("top_n");
-  });
+const T = 1_700_000_000;
 
-  test("altas incrementales", () => {
-    expect(
-      classify("se incorporan a la afectación la línea 4435-Contramaestre y línea 5390-San Luis"),
-    ).toBe("add");
-  });
-
-  test("aviso de una línea que añade un circuito", () => {
-    expect(
-      classify("🚨 Estimados clientes se encuentra afectado por Déficit de Generación el circuito 3 de Santiago."),
-    ).toBe("add");
-    expect(
-      classify("🚨 Se encuentran afectados por Déficit la línea 4390- Contramaestre y 5390- La Maya."),
-    ).toBe("add");
-    expect(classify("🚨 Se encuentra disparada la línea 5975- Baconao.")).toBe("add");
-  });
-
-  test("aviso de una línea que devuelve circuitos al servicio", () => {
-    expect(
-      classify("🔉 Se encuentran con servicio:<br>Circuito 21<br>Circuito 2<br>Línea 4385- Contramaestre"),
-    ).toBe("restore");
-    expect(classify("🔉 Con servicio el circuito 2 de Palma.")).toBe("restore");
-  });
-
-  test("'con servicio 40 MW' es cifra, no restablecimiento", () => {
-    expect(classify("En estos momentos la provincia tiene 100 MW afectados. Con servicio 40 MW")).toBe(
-      "metrics",
+describe("applyChanges", () => {
+  test("un out nuevo usa la fecha del mensaje", () => {
+    const s = applyChanges(
+      emptyState(),
+      [msg(1, T)],
+      result([{ circuit_id: "sc-08", status: "out", source_message_id: 1, duration_min: null }]),
+      T + 10,
     );
+
+    expect(s.circuits).toEqual([
+      {
+        id: "sc-08",
+        status: "out",
+        since: T,
+        last_mention_at: T,
+        source_message_id: 1,
+      },
+    ]);
+    expect(s.source.last_message_id).toBe(1);
+    expect(s.generated_at).toBe(T + 10);
   });
 
-  test("restablecimiento", () => {
-    expect(classify("Se restablece el servicio eléctrico a la siguiente Línea:\nLI 5395-San Luis")).toBe(
-      "restore",
+  test("la duración publicada manda sobre la fecha del mensaje", () => {
+    const s = applyChanges(
+      emptyState(),
+      [msg(1, T)],
+      result([{ circuit_id: "sc-08", status: "out", source_message_id: 1, duration_min: 90 }]),
+      T,
     );
-    expect(classify("Se encuentran restablecidos los siguientes circuitos:")).toBe("restore");
+
+    expect(s.circuits[0]?.since).toBe(T - 90 * 60);
   });
 
-  test("aviso genérico de restablecimiento no cambia estado", () => {
-    expect(
-      classify(
-        "el comportamiento de las afectaciones y el restablecimiento del servicio estará en dependencia del SEN",
-      ),
-    ).toBe("info");
-  });
-
-  test("métricas de la provincia", () => {
-    expect(classify("En estos momentos la provincia tiene 100 MW afectados. Con servicio 40 MW")).toBe(
-      "metrics",
+  test("un circuito ya afectado conserva su since si no hay duración", () => {
+    const first = applyChanges(
+      emptyState(),
+      [msg(1, T)],
+      result([{ circuit_id: "sc-08", status: "out", source_message_id: 1, duration_min: null }]),
+      T,
     );
-    expect(parseMetrics("MW Afectados- 91\nMW Servidos - 40")).toEqual({ deficit_mw: 91, served_mw: 40 });
+    const second = applyChanges(
+      first,
+      [msg(2, T + 3600)],
+      result([{ circuit_id: "sc-08", status: "out", source_message_id: 2, duration_min: null }]),
+      T + 3600,
+    );
+
+    expect(second.circuits[0]?.since).toBe(T);
+    expect(second.circuits[0]?.last_mention_at).toBe(T + 3600);
+    expect(second.circuits[0]?.source_message_id).toBe(2);
   });
 
-  test("teléfonos y avisos son info", () => {
-    expect(classify("haga su reporte al Centro Telefónico mediante el 18888")).toBe("info");
+  test("una duración imposible se ignora y se usa la fecha del mensaje", () => {
+    const s = applyChanges(
+      emptyState(),
+      [msg(1, T)],
+      result([{ circuit_id: "sc-08", status: "out", source_message_id: 1, duration_min: 99_000 }]),
+      T,
+    );
+
+    expect(s.circuits[0]?.since).toBe(T);
+  });
+
+  test("ok elimina el circuito del estado", () => {
+    const first = applyChanges(
+      emptyState(),
+      [msg(1, T)],
+      result([{ circuit_id: "sc-08", status: "out", source_message_id: 1, duration_min: null }]),
+      T,
+    );
+    const second = applyChanges(
+      first,
+      [msg(2, T + 60)],
+      result([{ circuit_id: "sc-08", status: "ok", source_message_id: 2, duration_min: null }]),
+      T + 60,
+    );
+
+    expect(second.circuits).toEqual([]);
+  });
+
+  test("gana el cambio del mensaje más reciente", () => {
+    const s = applyChanges(
+      emptyState(),
+      [msg(1, T), msg(2, T + 60), msg(3, T + 120)],
+      result([
+        { circuit_id: "sc-08", status: "out", source_message_id: 1, duration_min: null },
+        { circuit_id: "sc-08", status: "ok", source_message_id: 2, duration_min: null },
+        { circuit_id: "sc-08", status: "out", source_message_id: 3, duration_min: 30 },
+      ]),
+      T + 120,
+    );
+
+    expect(s.circuits[0]).toMatchObject({ id: "sc-08", status: "out", since: T + 120 - 1800 });
+  });
+
+  test("una confirmación posterior conserva la duración del mismo lote", () => {
+    const s = applyChanges(
+      emptyState(),
+      [msg(1, T), msg(2, T + 3600)],
+      result([
+        { circuit_id: "sc-08", status: "out", source_message_id: 1, duration_min: 540 },
+        { circuit_id: "sc-08", status: "out", source_message_id: 2, duration_min: null },
+      ]),
+      T + 3600,
+    );
+
+    expect(s.circuits[0]).toMatchObject({
+      id: "sc-08",
+      since: T - 540 * 60,
+      last_mention_at: T + 3600,
+      source_message_id: 2,
+    });
+  });
+
+  test("ignora circuitos y mensajes que no están en el lote", () => {
+    const s = applyChanges(
+      emptyState(),
+      [msg(1, T)],
+      result([
+        { circuit_id: "no-existe", status: "out", source_message_id: 1, duration_min: null },
+        { circuit_id: "sc-08", status: "out", source_message_id: 99, duration_min: null },
+      ]),
+      T,
+    );
+
+    expect(s.circuits).toEqual([]);
+    expect(s.source.last_message_id).toBe(1);
+  });
+
+  test("aplica métricas válidas e ignora las imposibles", () => {
+    const first = applyChanges(
+      emptyState(),
+      [msg(1, T)],
+      result([], { deficit_mw: 100, served_mw: 40 }),
+      T,
+    );
+    expect(first.province).toEqual({ deficit_mw: 100, served_mw: 40 });
+
+    const second = applyChanges(
+      first,
+      [msg(2, T + 60)],
+      result([], { deficit_mw: 1245, served_mw: null }),
+      T + 60,
+    );
+    expect(second.province).toEqual({ deficit_mw: 100, served_mw: 40 });
+
+    const third = applyChanges(second, [msg(3, T + 120)], result([], null), T + 120);
+    expect(third.province).toEqual({ deficit_mw: 100, served_mw: 40 });
+  });
+
+  test("advanceCursor=false no mueve el cursor del canal", () => {
+    const s = applyChanges(
+      emptyState(),
+      [msg(999, T)],
+      result([{ circuit_id: "sc-08", status: "out", source_message_id: 999, duration_min: null }]),
+      T,
+      false,
+    );
+
+    expect(s.source.last_message_id).toBe(null);
+    expect(s.circuits).toHaveLength(1);
   });
 });
 
-const msg = (id: number, date: number, text: string) => ({ id, date, text });
+describe("mergeOverrides", () => {
+  const base = applyChanges(
+    emptyState(),
+    [msg(1, T)],
+    result([{ circuit_id: "sc-08", status: "out", source_message_id: 1, duration_min: null }]),
+    T,
+  );
 
-describe("máquina de estados", () => {
-  test("un top-N no borra circuitos afectados", () => {
-    const rt = emptyRuntime();
-    applyMessage(rt, msg(1, 1000, "Se afecta el servicio eléctrico en los siguientes circuitos:\n8\n9"), aliasIndex);
-    expect([...rt.circuits.keys()].sort()).toEqual(["sc-08", "sc-09"]);
-
-    applyMessage(rt, msg(2, 2000, "Circuitos con mayor tiempo de afectación:\nCircuito 20 ➡️ 3 horas"), aliasIndex);
-
-    expect(rt.circuits.get("sc-08")?.status).toBe("out");
-    expect(rt.circuits.get("sc-09")?.status).toBe("out");
-    expect(rt.circuits.get("sc-20")?.status).toBe("out");
+  test("un override ok quita el circuito", () => {
+    const s = mergeOverrides(base, [
+      { circuit_id: "sc-08", status: "ok", since: null, updated_at: T + 60 },
+    ]);
+    expect(s.circuits).toEqual([]);
   });
 
-  test("un snapshot sí reemplaza el conjunto", () => {
-    const rt = emptyRuntime();
-    applyMessage(rt, msg(1, 1000, "Se afecta el servicio eléctrico en los siguientes circuitos:\n8\n9"), aliasIndex);
-    applyMessage(rt, msg(2, 2000, "Se afecta el servicio eléctrico en los siguientes circuitos:\n12"), aliasIndex);
-
-    expect(rt.circuits.get("sc-08")?.status).toBe("none_reported");
-    expect(rt.circuits.get("sc-12")?.status).toBe("out");
-    expect(rt.circuits.get("sc-12")?.since).toBe(2000);
-  });
-
-  test("conserva el inicio de la afectación si el circuito sigue en la lista", () => {
-    const rt = emptyRuntime();
-    applyMessage(rt, msg(1, 1000, "Se afecta el servicio eléctrico en los siguientes circuitos:\n12"), aliasIndex);
-    applyMessage(rt, msg(2, 5000, "Se afecta el servicio eléctrico en los siguientes circuitos:\n12\n14"), aliasIndex);
-
-    expect(rt.circuits.get("sc-12")?.since).toBe(1000);
-    expect(rt.circuits.get("sc-14")?.since).toBe(5000);
-  });
-
-  test("un snapshot que no se entiende se ignora", () => {
-    const rt = emptyRuntime();
-    applyMessage(rt, msg(1, 1000, "Se afecta el servicio eléctrico en los siguientes circuitos:\n8"), aliasIndex);
-    const r = applyMessage(
-      rt,
-      msg(2, 2000, "Se afecta el servicio eléctrico en los siguientes circuitos:\nzzz desconocido"),
-      aliasIndex,
-    );
-    expect(r.intent).toBe("info");
-    expect(rt.circuits.get("sc-08")?.status).toBe("out");
-  });
-
-  test("restablecer deja el circuito en none_reported, nunca en 'con luz'", () => {
-    const rt = emptyRuntime();
-    applyMessage(rt, msg(1, 1000, "Se afecta el servicio eléctrico en los siguientes circuitos:\n8"), aliasIndex);
-    applyMessage(rt, msg(2, 2000, "Se restablece el servicio eléctrico a la siguiente Línea:\nLI 5395-San Luis"), aliasIndex);
-    applyMessage(rt, msg(3, 3000, "Se restablece el servicio al circuito 8"), aliasIndex);
-
-    expect(rt.circuits.get("sc-08")?.status).toBe("none_reported");
-    expect(rt.circuits.get("sc-08")?.since).toBe(null);
-  });
-
-  test("un top-N sin historial deduce el inicio desde la duración publicada", () => {
-    const rt = emptyRuntime();
-    applyMessage(rt, msg(1, 10_000_000, "Circuitos con mayor tiempo de afectación:\nCircuito 20 ➡️ 10 horas"), aliasIndex);
-    const c = rt.circuits.get("sc-20");
-    expect(c?.since).toBe(10_000_000 - 600 * 60);
-    expect(c?.confidence).toBeLessThanOrEqual(0.6);
-  });
-
-  test("las métricas actualizan la provincia", () => {
-    const rt = emptyRuntime();
-    applyMessage(rt, msg(1, 1000, "En estos momentos la provincia tiene 100 MW afectados. Con servicio 40 MW"), aliasIndex);
-    expect(rt.deficit_mw).toBe(100);
-    expect(rt.served_mw).toBe(40);
+  test("un override out añade o actualiza el circuito", () => {
+    const s = mergeOverrides(base, [
+      { circuit_id: "sc-09", status: "out", since: T - 100, updated_at: T + 60 },
+    ]);
+    expect(s.circuits.find((c) => c.id === "sc-09")).toMatchObject({
+      status: "out",
+      since: T - 100,
+      source_message_id: null,
+    });
   });
 });

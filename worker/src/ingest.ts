@@ -1,112 +1,175 @@
-import type { Env } from "./store";
-import { hashText, rebuild } from "./store";
-import { classify } from "./classify";
+import { DEFAULT_MODEL, decide, type Message } from "./llm";
+import {
+  getSetting,
+  getSnapshot,
+  getStoredState,
+  llmEnabled,
+  logIngest,
+  saveState,
+  setSetting,
+  touchState,
+  type Env,
+} from "./store";
+import { applyChanges } from "./state";
 
 const MIN = 60_000;
 const MAX_BACKOFF_MIN = 40;
+/** 1 página normal + hasta 3 anteriores si entre dos ingestas se publicó más de lo que cabe. */
+const MAX_PAGES = 4;
+/** Mensajes por llamada al modelo. */
+const BATCH_SIZE = 15;
+/** Tope de llamadas al modelo por ejecución. */
+const MAX_BATCHES = 4;
 
 type TelegramMessage = { id: number; date: number; message?: string };
 
 export type IngestResult = {
   ok: boolean;
   skipped?: boolean;
-  stored: number;
+  processed: number;
+  changes: number;
   detail: string;
 };
 
+const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+
 /**
- * Una sola petición por ejecución. El bridge es un servicio personal:
- * se le trata con cuidado (timeout corto, backoff exponencial, sin reintentos
- * agresivos). Cualquier error lo pone en cuarentena.
+ * Ingesta incremental: el estado vive en una sola fila y avanza por lotes.
+ * Si el modelo falla, no se guarda nada y el próximo cron reintenta.
  */
 export async function ingest(env: Env, source = "cron"): Promise<IngestResult> {
   const now = Date.now();
+  const nowSec = Math.floor(now / 1000);
 
   const backoffRaw = await getSetting(env, "backoff_until");
   const backoffUntil = backoffRaw ? Number(backoffRaw) : 0;
   if (backoffUntil > now) {
+    await checkAlerts(env);
     return {
       ok: false,
       skipped: true,
-      stored: 0,
+      processed: 0,
+      changes: 0,
       detail: `cuarentena hasta ${new Date(backoffUntil).toISOString()}`,
     };
   }
 
-  const limit = Number(env.INGEST_LIMIT ?? 30);
-  const url = `${env.INGEST_URL}?limit=${limit}`;
+  if (!llmEnabled(env)) {
+    const detail = env.AI ? "IA desactivada por LLM_ENABLED" : "falta el binding AI";
+    await setSetting(env, "last_error", detail);
+    await logIngest(env, source, false, detail);
+    await checkAlerts(env);
+    return { ok: false, processed: 0, changes: 0, detail };
+  }
 
-  let messages: TelegramMessage[] = [];
+  const state = await getStoredState(env);
+  let messages: Message[];
+
   try {
-    const res = await fetch(url, {
-      headers: {
-        accept: "application/json",
-        "user-agent": "sinluz/1.0 (+https://github.com/sinluz)",
-      },
-      signal: AbortSignal.timeout(20_000),
-    });
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    const data = (await res.json()) as { messages?: TelegramMessage[] };
-    messages = (data.messages ?? []).filter((m) => typeof m.message === "string" && m.message.length > 0);
-    if (messages.length === 0) throw new Error("respuesta sin mensajes");
+    messages = await fetchNew(env, state.source.last_message_id);
   } catch (err) {
     const detail = (err as Error).message;
     const failures = await countRecentFailures(env);
     const minutes = Math.min(MAX_BACKOFF_MIN, 5 * 2 ** Math.min(failures, 3));
     await setSetting(env, "backoff_until", String(now + minutes * MIN));
-    await log(env, source, false, detail);
-    return { ok: false, stored: 0, detail: `fallo: ${detail} · backoff ${minutes} min` };
+    await setSetting(env, "last_error", detail);
+    await logIngest(env, source, false, detail);
+    await checkAlerts(env);
+    return { ok: false, processed: 0, changes: 0, detail: `fallo: ${detail} · backoff ${minutes} min` };
   }
 
-  const statements = messages.map((m) =>
-    env.DB.prepare(
-      `INSERT INTO raw_messages (id, posted_at, text, text_hash, intent, parsed_at)
-       VALUES (?, ?, ?, ?, ?, ?)
-       ON CONFLICT(id) DO UPDATE SET
-         text = excluded.text,
-         text_hash = excluded.text_hash,
-         intent = excluded.intent,
-         parsed_at = excluded.parsed_at
-       WHERE raw_messages.text_hash <> excluded.text_hash`,
-    ).bind(
-      m.id,
-      m.date,
-      m.message!,
-      hashText(m.message!),
-      classify(m.message!),
-      Math.floor(now / 1000),
-    ),
-  );
-
-  try {
-    await env.DB.batch(statements);
-  } catch (err) {
-    await log(env, source, false, `D1: ${(err as Error).message}`);
-    return { ok: false, stored: 0, detail: `error guardando: ${(err as Error).message}` };
+  if (messages.length === 0) {
+    await touchState(env, nowSec);
+    await setSetting(env, "backoff_until", "0");
+    await setSetting(env, "last_ok_at", String(nowSec));
+    await setSetting(env, "last_error", "");
+    await logIngest(env, source, true, "sin mensajes nuevos");
+    await checkAlerts(env);
+    return { ok: true, processed: 0, changes: 0, detail: "sin mensajes nuevos" };
   }
 
+  let current = state;
+  let processed = 0;
+  let changes = 0;
+  const batches = chunk(messages, BATCH_SIZE).slice(0, MAX_BATCHES);
+
+  for (const batch of batches) {
+    const result = await decide(env.AI!, env.LLM_MODEL || DEFAULT_MODEL, {
+      now: nowSec,
+      state: current,
+      messages: batch,
+    });
+
+    if (!result.ok) {
+      await setSetting(env, "last_error", result.error);
+      await logIngest(env, source, false, `IA: ${result.error}`);
+      await checkAlerts(env);
+      return { ok: false, processed: 0, changes: 0, detail: `IA: ${result.error}` };
+    }
+
+    current = applyChanges(current, batch, result.result, nowSec);
+    processed += batch.length;
+    changes += result.result.cambios.length;
+  }
+
+  // Un solo guardado: si un lote falla, el estado anterior y el cursor no se tocan.
+  await saveState(env, current);
+
+  const pending = messages.length - processed;
+  const detail = `${processed} mensajes · ${changes} cambios${pending > 0 ? ` · ${pending} pendientes` : ""}`;
   await setSetting(env, "backoff_until", "0");
-  const payload = await rebuild(env, source);
-  await log(env, source, true, `${messages.length} leídos · ${payload.circuits.length} circuitos`);
-  await maybeAlert(env, payload.source.age_min);
+  await setSetting(env, "last_ok_at", String(nowSec));
+  await setSetting(env, "last_error", "");
+  await logIngest(env, source, true, detail);
+  await checkAlerts(env);
 
-  return { ok: true, stored: messages.length, detail: `${messages.length} mensajes` };
+  return { ok: true, processed, changes, detail };
 }
 
-async function getSetting(env: Env, key: string): Promise<string | null> {
-  const row = await env.DB.prepare("SELECT value FROM settings WHERE key = ?").bind(key).first<{
-    value: string;
-  }>();
-  return row?.value ?? null;
+function chunk<T>(items: T[], size: number): T[][] {
+  const out: T[][] = [];
+  for (let i = 0; i < items.length; i += size) out.push(items.slice(i, i + size));
+  return out;
 }
 
-async function setSetting(env: Env, key: string, value: string): Promise<void> {
-  await env.DB.prepare(
-    `INSERT INTO settings (key, value) VALUES (?, ?)
-     ON CONFLICT(key) DO UPDATE SET value = excluded.value`,
-  )
-    .bind(key, value)
-    .run();
+/** Pide páginas hasta cubrir el último id procesado (o hasta MAX_PAGES). */
+async function fetchNew(env: Env, lastId: number | null): Promise<Message[]> {
+  const limit = Number(env.INGEST_LIMIT ?? 30);
+  const all: TelegramMessage[] = [];
+
+  for (let page = 1; page <= MAX_PAGES; page++) {
+    const pageMessages = await fetchPage(env, page, limit);
+    if (pageMessages.length === 0) break;
+    all.push(...pageMessages);
+
+    const min = Math.min(...pageMessages.map((m) => m.id));
+    const covered = lastId == null ? pageMessages.length < limit : min <= lastId + 1;
+    if (covered || pageMessages.length < limit) break;
+    await sleep(2000); // el bridge admite 15 peticiones/min
+  }
+
+  const unique = new Map<number, Message>();
+  for (const m of all) {
+    if (typeof m.message !== "string" || m.message.trim().length === 0) continue;
+    if (lastId != null && m.id <= lastId) continue;
+    unique.set(m.id, { id: m.id, date: m.date, text: m.message });
+  }
+
+  return [...unique.values()].sort((a, b) => a.id - b.id || a.date - b.date);
+}
+
+async function fetchPage(env: Env, page: number, limit: number): Promise<TelegramMessage[]> {
+  const url = `${env.INGEST_URL}?limit=${limit}${page > 1 ? `&page=${page}` : ""}`;
+  const res = await fetch(url, {
+    headers: {
+      accept: "application/json",
+      "user-agent": "sinluz/2.0 (+https://github.com/sinluz)",
+    },
+    signal: AbortSignal.timeout(20_000),
+  });
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  const data = (await res.json()) as { messages?: TelegramMessage[] };
+  return (data.messages ?? []).filter((m) => typeof m.message === "string" && m.message.length > 0);
 }
 
 async function countRecentFailures(env: Env): Promise<number> {
@@ -118,22 +181,41 @@ async function countRecentFailures(env: Env): Promise<number> {
   return row?.n ?? 0;
 }
 
-async function log(env: Env, source: string, ok: boolean, detail: string): Promise<void> {
-  await env.DB.prepare("INSERT INTO ingest_log (at, source, ok, detail) VALUES (?, ?, ?, ?)")
-    .bind(Math.floor(Date.now() / 1000), source, ok ? 1 : 0, detail)
-    .run();
+/**
+ * Avisa al admin por Telegram:
+ *  - no se puede leer el canal desde hace más de 1 h
+ *  - el canal lleva más de 6 h sin publicar (solo si la lectura funciona)
+ */
+async function checkAlerts(env: Env): Promise<void> {
+  if (!env.ALERT_BOT_TOKEN || !env.ALERT_CHAT_ID) return;
+
+  const now = Date.now();
+  const lastOk = Number((await getSetting(env, "last_ok_at")) ?? 0) * 1000;
+
+  if (lastOk > 0 && now - lastOk > 60 * MIN) {
+    const h = Math.max(1, Math.round((now - lastOk) / (60 * MIN)));
+    await alertOnce(
+      env,
+      "alert_pipeline_at",
+      `⚠️ SinLuz: no se puede actualizar el estado desde hace ${h} h. Revisa el bridge o la IA.`,
+    );
+    return;
+  }
+
+  const snapshot = await getSnapshot(env);
+  const lastMessage = (snapshot.source.last_message_at ?? 0) * 1000;
+  if (lastMessage > 0 && now - lastMessage > 360 * MIN) {
+    const h = Math.round((now - lastMessage) / (60 * MIN));
+    await alertOnce(env, "alert_channel_at", `⚠️ SinLuz: el canal no publica desde hace ${h} h.`);
+  }
 }
 
-/** Aviso al admin si el canal lleva más de 6 h sin publicar. */
-async function maybeAlert(env: Env, ageMin: number): Promise<void> {
-  if (!env.ALERT_BOT_TOKEN || !env.ALERT_CHAT_ID) return;
-  if (ageMin < 360) return;
-
-  const last = await getSetting(env, "last_alert_at");
+/** Un mismo aviso no se repite antes de 6 h. */
+async function alertOnce(env: Env, key: string, text: string): Promise<void> {
+  const last = await getSetting(env, key);
   if (last && Date.now() - Number(last) < 6 * 60 * MIN) return;
-  await setSetting(env, "last_alert_at", String(Date.now()));
+  await setSetting(env, key, String(Date.now()));
 
-  const text = `⚠️ SinLuz: el canal no publica desde hace ${Math.round(ageMin / 60)} h. Revisa el bridge o usa el ingreso manual.`;
   try {
     await fetch(`https://api.telegram.org/bot${env.ALERT_BOT_TOKEN}/sendMessage`, {
       method: "POST",

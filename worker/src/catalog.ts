@@ -1,7 +1,7 @@
 import data from "../data/circuits.json";
-import type { CatalogCircuit } from "@sinluz/shared";
-import { buildAliasIndex } from "./normalize";
+import { CatalogCircuit } from "@sinluz/shared";
 
-export const catalog = data as CatalogCircuit[];
-export const aliasIndex = buildAliasIndex(catalog);
+/** El catálogo es la única fuente de ids válidos. Se valida al arrancar. */
+export const catalog = CatalogCircuit.array().parse(data);
 export const byId = new Map(catalog.map((c) => [c.id, c]));
+export const catalogIds = new Set(catalog.map((c) => c.id));

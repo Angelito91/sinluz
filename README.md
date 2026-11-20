@@ -3,12 +3,15 @@
 Estado de los circuitos eléctricos de la provincia, a partir del canal oficial
 de Telegram [@electricastgo](https://t.me/electricastgo).
 
-**PWA instalable**, mapa propio sin teselas, contador de tiempo sin luz al
-segundo y funcionamiento sin conexión. Coste de infraestructura: 0 €.
+**PWA instalable**, mapa con teselas suaves y ubicación **aproximada** de los
+circuitos, contador de tiempo sin luz al segundo y funcionamiento sin conexión.
+Coste de infraestructura: 0 €.
 
-> **Regla de producto:** la app nunca afirma que hay corriente. Lo máximo que
-> puede decir es **«sin afectación reportada»**, que es exactamente lo que el
-> canal permite saber.
+> **Regla de producto:** el estado de cada circuito es el del **último aviso del
+> canal** y se mantiene hasta que un aviso lo cambie: «con servicio» hasta que
+> digan lo contrario, «sin servicio» hasta que digan que volvió. Un circuito
+> afectado que el canal no menciona en 12 h pasa a **«sin confirmar»** (nunca a
+> «con servicio»), y la app muestra siempre la hora del último aviso.
 
 ---
 
@@ -17,10 +20,10 @@ segundo y funcionamiento sin conexión. Coste de infraestructura: 0 €.
 | Pieza | Estado |
 |---|---|
 | Catálogo (48 circuitos, 9 municipios) | listo |
-| Parser determinista (intención + nombres) | listo · cobertura 100 % del corpus real |
-| Tests (`bun test`) | 30 pass |
+| Intérprete LLM (Workers AI + Zod) | listo · sin reglas ni alias matching |
+| Tests (`bun test`) | 40 pass |
 | Worker + D1 + cron | listo · probado en local con datos en vivo |
-| Frontend (mapa + lista + favoritos + offline) | listo |
+| Frontend (mapa por municipios + «dónde estoy» + lista + favoritos + offline) | listo |
 | Deploy (Worker + Pages) | **en producción** |
 | Dominio propio | pendiente (hoy usa `workers.dev` + `pages.dev`) |
 
@@ -40,40 +43,38 @@ segundo y funcionamiento sin conexión. Coste de infraestructura: 0 €.
 
 ```
 Telegram @electricastgo
-        │  (bridge público /json, 1 petición cada 5 min)
+        │  (bridge público /json, consulta cada 5 min)
         ▼
-Cloudflare Worker ── cron */5 ──► D1 (raw_messages)
+Cloudflare Worker ── cron */5 ──► lote de mensajes nuevos
         │                              │
-        │  parser determinista         │  replay completo
+        │  Workers AI: estado actual   │
+        │  + catálogo + mensajes       │
         ▼                              ▼
-   state_snapshot (1 fila) ◄──── rebuild idempotente
+   JSON validado con Zod ──► state_snapshot (1 fila)
         │
         │  GET /api/v1/status  (caché de borde 30 s)
         ▼
 PWA React 19  ·  mapa GeoJSON  ·  offline con Workbox
 ```
 
-### El parser y sus reglas duras
+### El intérprete y sus reglas duras
 
-| `intent` | Se dispara con | Efecto |
-|---|---|---|
-| `snapshot` | «Se afecta el servicio eléctrico en los siguientes circuitos» | reemplaza el conjunto |
-| `add` | «se incorporan a la afectación…» | suma |
-| `restore` | «Se restablece el servicio…» | resta |
-| `top_n` | «Circuitos con **mayor** tiempo de afectación» | **nunca borra** |
-| `metrics` | «MW afectados / MW servidos» | actualiza cifras |
-| `info` | teléfonos, avisos, reiteraciones | solo archiva |
+No hay parser determinista ni emparejador de alias. El único intérprete es un
+modelo de Workers AI: recibe el estado actual (solo circuitos afectados), el
+catálogo y un lote de mensajes nuevos, y devuelve **solo** un JSON con
+`cambios[]` y `metrics`. El servidor lo valida con Zod y vuelve a filtrar ids,
+mensajes y cifras.
 
-Guardas, todas con test:
-
-1. `top_n` e `info` **jamás** alteran la pertenencia al conjunto.
-2. Un `snapshot` sin ninguna coincidencia se trata como `info` (protección ante
-   un parseo roto).
-3. `restore` de un circuito que no estaba afectado se ignora sin fallar.
-4. Un circuito que sale del conjunto queda en `none_reported`, nunca en verde.
-5. «Actualización de los circuitos que se encuentran afectados» **sin** «se
-   afecta el servicio» se clasifica como `top_n`: el canal suele listar ahí solo
-   los más críticos.
+1. **Nada se deduce por omisión.** Que un circuito no aparezca en una lista no lo
+   restablece: solo un `ok` explícito lo saca de la afectación.
+2. **Sin historial.** Solo se guarda el estado presente y el último id procesado;
+   no hay `raw_messages` ni decisiones por mensaje.
+3. **El servidor calcula el tiempo.** El modelo devuelve `source_message_id` y,
+   si el canal lo publica, `duration_min`. El `since` se deriva en el worker.
+4. **Cifras plausibles.** Las métricas provinciales se aceptan entre 0 y 600 MW;
+   el parte nacional del SEN se ignora.
+5. **Si el modelo falla, no se toca nada.** No se guarda snapshot ni avanza el
+   cursor, y el cron reintenta en la siguiente ejecución.
 
 Detalle completo en [`docs/mvp.md`](docs/mvp.md). Guía para quien mantiene los
 datos en [`docs/guia-datos.md`](docs/guia-datos.md). Cómo probar lo desplegado
@@ -100,7 +101,10 @@ bun install
 ```bash
 # 1. API con D1 local (puerto 8787)
 cd worker
-bunx wrangler d1 execute sinluz --local --file=schema.sql
+bunx wrangler d1 execute sinluz --local --file=schema.sql   # primer arranque
+# Si vienes del diseño anterior con raw_messages/llm_decisions:
+#   bunx wrangler d1 execute sinluz --local --file=reset.sql
+#   bunx wrangler d1 execute sinluz --local --file=schema.sql
 printf 'INGEST_TOKEN=dev\nADMIN_TOKEN=dev\n' > .dev.vars
 bunx wrangler dev
 
@@ -121,16 +125,12 @@ curl http://127.0.0.1:8787/api/health
 ## Comandos
 
 ```bash
-bun test                 # 30 tests: parser, máquina de estados, corpus real
+bun test                 # 40 tests: contrato del LLM, máquina de estados y D1
 bun run typecheck        # worker, scripts y web (tsc --noEmit)
 bun run build            # sync + typecheck + build de la PWA
 bun run preview          # sirve el build en 4173 (con proxy /api → 8787)
 
 bun run data:check       # circuits.csv → circuits.json (valida el catálogo)
-bun run data:report      # cobertura del parser sobre el corpus real
-bun run data:review      # muestra de mensajes para etiquetar a mano
-bun run data:score       # compara las etiquetas humanas con el parser
-bun run replay           # reconstruye el estado desde el corpus (--json)
 bun run fixtures         # vuelve a descargar mensajes reales del canal
 bun run geojson          # regenera el GeoJSON de los 9 municipios
 bun run sync             # copia los datos generados a web/public
@@ -151,15 +151,16 @@ DELETE /api/v1/admin/override/:circuit   Bearer ADMIN_TOKEN · quita la correcci
 POST /api/v1/refresh          Bearer INGEST_TOKEN · fuerza una ingesta
 ```
 
-Las correcciones manuales se guardan en su propia tabla y se aplican al final de
-cada reconstrucción, así que una ingesta no las borra.
+Las correcciones manuales se guardan en su propia tabla y se aplican al leer el
+estado, así que una ingesta no las borra.
 
 `GET /api/v1/status` se sirve con
 `Cache-Control: public, max-age=30, stale-while-revalidate=60, stale-if-error=86400`,
 así que el origen recibe ~2 peticiones por minuto.
 
-Frescura en la UI: `≤ 90 min` normal · `90–360 min` aviso ámbar · `> 360 min`
-«sin datos fiables».
+Frescura en la UI: ingesta normal por debajo de 30 min · aviso si el pipeline se
+retrasa o el canal calla más de 6 h · un afectado sin menciones en 12 h pasa a
+«sin confirmar».
 
 ---
 
@@ -213,16 +214,15 @@ sinluz/
 ├── worker/
 │   ├── src/
 │   │   ├── index.ts             Hono: rutas + cron
-│   │   ├── ingest.ts            1 petición/ejecución, backoff 5→40 min
-│   │   ├── classify.ts          intención y cifras MW
-│   │   ├── normalize.ts         nombres → id de circuito
-│   │   ├── state.ts             aplicación de intenciones
-│   │   ├── store.ts             D1: snapshot + rebuild
-│   │   └── catalog.ts           catálogo y índice de alias
+│   │   ├── ingest.ts            lotes de 15, backoff 5→40 min
+│   │   ├── llm.ts               prompt, esquema y llamada a Workers AI
+│   │   ├── state.ts             cambios validados → estado
+│   │   ├── store.ts             D1: snapshot, overrides y settings
+│   │   └── catalog.ts           catálogo y `byId`
 │   ├── data/circuits.csv        ← lo edita la analista
 │   ├── data/municipios.geojson  9 municipios, 21 KB
-│   ├── scripts/                 datos, informes y replay
-│   └── test/                    30 tests + corpus real de 293 mensajes
+│   ├── scripts/                 catálogo, GeoJSON y fixtures
+│   └── test/                    40 tests + corpus real de referencia
 ├── web/src/                     App, MapView, CircuitList, hooks
 └── docs/                        MVP y guía de datos
 ```
@@ -242,6 +242,6 @@ D1, de forma que el bridge caído no deja la app sin datos.
 ## Aviso
 
 App no oficial, sin relación con la Empresa Eléctrica ni con el canal. Los datos
-provienen de mensajes públicos y pueden estar desactualizados. «Sin afectación
-reportada» significa que el canal no menciona ese circuito, no que tenga
-servicio.
+provienen de mensajes públicos y pueden estar desactualizados. «Con servicio»
+significa que el canal no ha informado ninguna afectación; la hora del último
+aviso se muestra siempre.

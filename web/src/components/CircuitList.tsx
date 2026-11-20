@@ -1,7 +1,7 @@
 import { Search, Star, X } from "lucide-react";
 import type { Row } from "../lib/view";
 import { STATUS_COLOR, STATUS_LABEL } from "../lib/view";
-import { elapsed, hhmm } from "../lib/time";
+import { ago, elapsed, hhmm } from "../lib/time";
 
 type Props = {
   rows: Row[];
@@ -73,15 +73,17 @@ export default function CircuitList({
           </li>
         )}
 
-        {rows.map(({ circuit, state }) => {
+        {rows.map(({ circuit, state, status }) => {
           const fav = favorites.has(circuit.id);
           const active = selected === circuit.id;
           const detail =
-            state.status === "out"
-              ? state.duration_mismatch && state.reported_duration_min != null
-                ? `el canal informa ${formatMin(state.reported_duration_min)}`
-                : `desde ${hhmm(state.since)}`
-              : STATUS_LABEL[state.status];
+            status === "out"
+              ? `desde ${hhmm(state.since)}`
+              : status === "stale"
+                ? `sin confirmar · último aviso ${ago(state.last_mention_at, now)}`
+                : state.last_mention_at
+                  ? `con servicio · aviso ${ago(state.last_mention_at, now)}`
+                  : STATUS_LABEL.ok;
 
           return (
             <li key={circuit.id}>
@@ -99,9 +101,9 @@ export default function CircuitList({
                     aria-hidden
                     className="h-2.5 w-2.5 shrink-0 rounded-full"
                     style={{
-                      background: STATUS_COLOR[state.status],
+                      background: STATUS_COLOR[status],
                       boxShadow:
-                        state.status === "out" ? "0 0 0 3px rgba(214,69,69,0.14)" : undefined,
+                        status === "out" ? "0 0 0 3px rgba(214,69,69,0.14)" : undefined,
                     }}
                   />
                   <span className="min-w-0 flex-1">
@@ -114,10 +116,10 @@ export default function CircuitList({
                   </span>
                   <span
                     className={`shrink-0 text-right text-[12.5px] tabular-nums ${
-                      state.status === "out" ? "font-semibold text-[#b93b3b]" : "text-ink/35"
+                      status === "out" ? "font-semibold text-[#b93b3b]" : "text-ink/35"
                     }`}
                   >
-                    {state.status === "out" ? elapsed(state.since, now) : ""}
+                    {status === "out" ? elapsed(state.since, now) : ""}
                   </span>
                 </button>
 
@@ -138,10 +140,4 @@ export default function CircuitList({
       </ul>
     </div>
   );
-}
-
-function formatMin(min: number): string {
-  const h = Math.floor(min / 60);
-  const m = Math.round(min % 60);
-  return h > 0 ? `${h} h ${String(m).padStart(2, "0")} min` : `${m} min`;
 }
