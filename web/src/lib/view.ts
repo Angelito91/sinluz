@@ -61,9 +61,9 @@ export const STATUS_LABEL: Record<DisplayStatus, string> = {
 };
 
 export const STATUS_COLOR: Record<DisplayStatus, string> = {
-  out: "#d64545",
-  stale: "#c98a1b",
-  ok: "#3f7d5c",
+  out: "var(--color-out)",
+  stale: "var(--color-stale)",
+  ok: "var(--color-ok)",
 };
 
 /** Color de relleno de un área según su estado resumido. */

@@ -3,9 +3,20 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-    <meta name="theme-color" content="#0b0d0f" />
+    <meta name="theme-color" content="#f7f7f5" />
     <meta name="description" content="Estado eléctrico de los circuitos de Santiago de Cuba, actualizado desde el canal oficial de la Empresa Eléctrica." />
     <title>SinLuz · Santiago de Cuba</title>
+    <script>
+      (() => {
+        try {
+          const t = localStorage.getItem("theme");
+          const dark = t === "dark" || (t !== "light" && matchMedia("(prefers-color-scheme: dark)").matches);
+          if (dark) document.documentElement.classList.add("dark");
+          const m = document.querySelector('meta[name="theme-color"]');
+          if (m) m.setAttribute("content", dark ? "#0b0e11" : "#f7f7f5");
+        } catch {}
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>

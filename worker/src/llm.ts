@@ -13,8 +13,8 @@ import { byId, catalog } from "./catalog";
 /** Lo único que usamos del binding `AI` de Cloudflare. */
 export type AiBinding = { run(model: string, input: unknown): Promise<unknown> };
 
-export const DEFAULT_MODEL = "@cf/meta/llama-3.3-70b-instruct-fp8-fast";
-const TIMEOUT_MS = 20_000;
+export const DEFAULT_MODEL = "@cf/mistralai/mistral-small-3.1-24b-instruct";
+const TIMEOUT_MS = 60_000;
 export const MAX_DURATION_MIN = 7 * 24 * 60;
 const MAX_PROVINCE_MW = 600;
 

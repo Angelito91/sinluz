@@ -18,7 +18,7 @@ crons = ["*/5 * * * *"]
 [vars]
 INGEST_URL = "https://tg.i-c-a.su/json/electricastgo"
 INGEST_LIMIT = "30"
-LLM_MODEL = "@cf/meta/llama-3.3-70b-instruct-fp8-fast"
+LLM_MODEL = "@cf/mistralai/mistral-small-3.1-24b-instruct"
 # Interruptor de emergencia: "false" deja de interpretar sin quitar el binding [ai].
 # LLM_ENABLED = "false"
 

@@ -1,16 +1,34 @@
-import { useEffect, useMemo, useState } from "react";
-import { Radio } from "lucide-react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { Monitor, Moon, Radio, Sun } from "lucide-react";
 import MapView from "./components/MapView";
 import CircuitList from "./components/CircuitList";
 import StatusBanner from "./components/StatusBanner";
 import { useCatalog, useStatus } from "./hooks/useStatus";
 import { useNow } from "./hooks/useNow";
 import { useFavorites, useOnline } from "./hooks/useLocal";
+import { useTheme } from "./hooks/useTheme";
 import { ago } from "./lib/time";
 import { buildRows, filterRows, sortRows } from "./lib/view";
 import { areaAt, summarizeAreas, type AreaFeature } from "@sinluz/shared/areas";
 import { useGeo } from "./hooks/useGeo";
 import { useLocate, type Locate } from "./hooks/useLocate";
+
+const SNAP_POINTS = [0.4, 0.68, 0.92];
+const MIN_SHEET = 0.32;
+const MAX_SHEET = 0.94;
+
+function snapSheet(value: number): number {
+  let best = SNAP_POINTS[0]!;
+  let bestDist = Math.abs(value - best);
+  for (const p of SNAP_POINTS) {
+    const d = Math.abs(value - p);
+    if (d < bestDist) {
+      best = p;
+      bestDist = d;
+    }
+  }
+  return best;
+}
 
 export default function App() {
   const { status, error, isLoading, isValidating } = useStatus();
@@ -18,12 +36,17 @@ export default function App() {
   const now = useNow();
   const online = useOnline();
   const favorites = useFavorites();
+  const theme = useTheme();
+  const dark = theme.resolved === "dark";
 
   const [query, setQuery] = useState("");
   const [onlyFavs, setOnlyFavs] = useState(false);
   const [selected, setSelected] = useState<string | null>(null);
   const [area, setArea] = useState<string | null>(null);
-  const [sheetOpen, setSheetOpen] = useState(false);
+  const [sheetFrac, setSheetFrac] = useState(0.4);
+  const [dragging, setDragging] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const dragRef = useRef<{ y: number; frac: number; moved: boolean } | null>(null);
   const geo = useGeo();
   const locate = useLocate();
 
@@ -67,25 +90,83 @@ export default function App() {
     const m = rows.find((r) => r.circuit.id === id)?.circuit.municipio;
     if (m) setArea(m);
   };
-  const areaInfo = area ? areas.get(area) : null;  const affected = rows.filter((r) => r.status === "out");
+  const areaInfo = area ? areas.get(area) : null;
+  const affected = rows.filter((r) => r.status === "out").length;
   const unconfirmed = rows.filter((r) => r.status === "stale").length;
+  const okCount = Math.max(0, rows.length - affected - unconfirmed);
   // Antigüedades calculadas aquí con la hora actual: no vienen congeladas del servidor.
   const pipelineAgeMin = status ? Math.max(0, (now - status.generated_at) / 60) : 0;
   const lastMessageAt = status?.source.last_message_at ?? null;
   const channelAgeMin = lastMessageAt ? Math.max(0, (now - lastMessageAt) / 60) : null;
   const deficit = status?.province.deficit_mw;
   const served = status?.province.served_mw;
+  const total = rows.length || 1;
+
+  const ThemeIcon = theme.theme === "system" ? Monitor : dark ? Moon : Sun;
+  const themeLabel =
+    theme.theme === "system" ? "Tema: automático" : dark ? "Tema: oscuro" : "Tema: claro";
+
+  useEffect(() => {
+    const onMove = (e: PointerEvent) => {
+      const d = dragRef.current;
+      if (!d) return;
+      const h = containerRef.current?.clientHeight || window.innerHeight;
+      const dy = d.y - e.clientY;
+      if (Math.abs(dy) > 6) d.moved = true;
+      const next = Math.min(MAX_SHEET, Math.max(MIN_SHEET, d.frac + dy / h));
+      setSheetFrac(next);
+    };
+    const onUp = () => {
+      if (!dragRef.current) return;
+      dragRef.current = null;
+      setDragging(false);
+      setSheetFrac((v) => snapSheet(v));
+    };
+    window.addEventListener("pointermove", onMove);
+    window.addEventListener("pointerup", onUp);
+    window.addEventListener("pointercancel", onUp);
+    return () => {
+      window.removeEventListener("pointermove", onMove);
+      window.removeEventListener("pointerup", onUp);
+      window.removeEventListener("pointercancel", onUp);
+    };
+  }, []);
+
+  const onHandleDown = (e: React.PointerEvent<HTMLButtonElement>) => {
+    if (e.button !== 0) return;
+    e.currentTarget.setPointerCapture(e.pointerId);
+    dragRef.current = { y: e.clientY, frac: sheetFrac, moved: false };
+    setDragging(true);
+  };
+
+  const onHandleClick = () => {
+    if (dragRef.current?.moved) return;
+    setSheetFrac((v) => (v < 0.5 ? 0.68 : 0.4));
+  };
+
+  const sheetExpanded = sheetFrac > 0.55;
 
   return (
-    <div className="mx-auto flex h-dvh w-full max-w-md flex-col overflow-hidden bg-paper text-ink">
+    <div ref={containerRef} className="mx-auto flex h-dvh w-full max-w-md flex-col overflow-hidden bg-paper text-ink">
       <header className="flex items-center justify-between px-4 pb-2 pt-[max(0.75rem,env(safe-area-inset-top))]">
         <div>
           <h1 className="text-[19px] font-semibold leading-none tracking-tight">SinLuz</h1>
           <p className="mt-1 text-[11.5px] leading-none text-ink/45">Santiago de Cuba</p>
         </div>
-        <div className="flex items-center gap-1.5 text-[11px] text-ink/45">
-          <Radio className={`h-3 w-3 ${pipelineAgeMin <= 30 ? "text-emerald-600" : "text-amber-600"}`} />
-          <span className="tabular-nums">{ago(lastMessageAt, now)}</span>
+        <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1.5 text-[11px] text-ink/45">
+            <Radio className={`h-3 w-3 ${pipelineAgeMin <= 30 ? "text-emerald-500 dark:text-emerald-400" : "text-amber-600 dark:text-amber-400"}`} />
+            <span className="tabular-nums">{ago(lastMessageAt, now)}</span>
+          </div>
+          <button
+            type="button"
+            onClick={theme.cycle}
+            aria-label={themeLabel}
+            title={themeLabel}
+            className="flex h-8 w-8 items-center justify-center rounded-full text-ink/45 transition hover:bg-muted hover:text-ink/70"
+          >
+            <ThemeIcon className="h-4 w-4" />
+          </button>
         </div>
       </header>
 
@@ -101,42 +182,40 @@ export default function App() {
             onSelect={pickCircuit}
             onDeselect={() => setSelected(null)}
             now={now}
+            dark={dark}
           />
           <LocateNote locate={locate} here={here} loaded={!!geo} />
         </div>
 
         <section
-          className={`relative z-10 flex shrink-0 flex-col rounded-t-[20px] border-t border-black/5 bg-paper shadow-[0_-8px_30px_rgba(0,0,0,0.06)] transition-[height] duration-300 ease-out ${
-            sheetOpen ? "h-[56%]" : "h-[40%]"
+          className={`relative z-10 flex shrink-0 flex-col rounded-t-[20px] border-t border-line bg-paper shadow-[0_-8px_30px_rgba(0,0,0,0.06)] dark:shadow-[0_-8px_30px_rgba(0,0,0,0.35)] ${
+            dragging ? "" : "transition-[height] duration-300 ease-out"
           }`}
+          style={{ height: `${sheetFrac * 100}%` }}
           aria-label="Estado de los circuitos"
         >
           <button
             type="button"
-            onClick={() => setSheetOpen((v) => !v)}
-            aria-expanded={sheetOpen}
-            aria-label={sheetOpen ? "Contraer el panel" : "Expandir el panel"}
-            className="mx-auto mt-2 flex h-5 w-14 shrink-0 items-center justify-center rounded-full"
+            onPointerDown={onHandleDown}
+            onClick={onHandleClick}
+            aria-expanded={sheetExpanded}
+            aria-label={sheetExpanded ? "Contraer el panel" : "Expandir el panel"}
+            className="mx-auto mt-1 flex h-7 w-20 shrink-0 cursor-grab touch-none items-center justify-center rounded-full active:cursor-grabbing"
           >
-            <span className="h-1 w-9 rounded-full bg-black/12" aria-hidden />
+            <span className="h-1 w-10 rounded-full bg-ink/15" aria-hidden />
           </button>
 
-          <div className="px-4 pb-3 pt-2">
+          <div className="px-4 pb-2 pt-1">
             <div className="flex items-end justify-between gap-3">
               <div>
                 <p className="text-[11px] font-medium uppercase tracking-wider text-ink/40">
                   Ahora mismo
                 </p>
                 <p className="mt-0.5 text-[24px] font-semibold leading-none tabular-nums">
-                  {isLoading && !status ? "—" : affected.length}
+                  {isLoading && !status ? "—" : affected}
                   <span className="ml-1.5 text-[13px] font-normal text-ink/50">
-                    {affected.length === 1 ? "circuito afectado" : "circuitos afectados"}
+                    {affected === 1 ? "circuito afectado" : "circuitos afectados"}
                   </span>
-                  {unconfirmed > 0 && (
-                    <span className="ml-2 text-[12px] font-normal text-amber-700">
-                      +{unconfirmed} sin confirmar
-                    </span>
-                  )}
                 </p>
               </div>
               {(deficit != null || served != null) && (
@@ -146,16 +225,47 @@ export default function App() {
                 </div>
               )}
             </div>
+
+            {rows.length > 0 && (
+              <div className="mt-2.5">
+                <div className="flex h-1.5 w-full overflow-hidden rounded-full bg-muted" aria-hidden>
+                  {affected > 0 && (
+                    <span className="h-full bg-out" style={{ width: `${(affected / total) * 100}%` }} />
+                  )}
+                  {unconfirmed > 0 && (
+                    <span className="h-full bg-stale" style={{ width: `${(unconfirmed / total) * 100}%` }} />
+                  )}
+                  {okCount > 0 && (
+                    <span className="h-full bg-ok/70 dark:bg-ok/60" style={{ width: `${(okCount / total) * 100}%` }} />
+                  )}
+                </div>
+                <div className="mt-1.5 flex flex-wrap gap-x-3 gap-y-0.5 text-[10.5px] text-ink/55">
+                  <span className="inline-flex items-center gap-1">
+                    <i className="h-1.5 w-1.5 rounded-full bg-out" aria-hidden /> {affected} sin servicio
+                  </span>
+                  {unconfirmed > 0 && (
+                    <span className="inline-flex items-center gap-1">
+                      <i className="h-1.5 w-1.5 rounded-full bg-stale" aria-hidden /> {unconfirmed} sin confirmar
+                    </span>
+                  )}
+                  <span className="inline-flex items-center gap-1">
+                    <i className="h-1.5 w-1.5 rounded-full bg-ok/70 dark:bg-ok/60" aria-hidden /> {okCount} con servicio
+                  </span>
+                </div>
+              </div>
+            )}
           </div>
 
           {area && (
-            <div className="mx-4 mb-2 rounded-xl bg-black/[0.04] px-3 py-2">
+            <div className="mx-4 mb-2 rounded-xl bg-muted px-3 py-2 ring-1 ring-line/40">
               <div className="flex items-center justify-between gap-2">
                 <p className="text-[13px] font-semibold">
                   {area}
-                  {area === here && <span className="ml-1.5 text-[11px] font-medium text-blue-600">estás aquí</span>}
+                  {area === here && (
+                    <span className="ml-1.5 text-[11px] font-medium text-blue-600 dark:text-blue-400">estás aquí</span>
+                  )}
                 </p>
-                <button onClick={() => pickArea(null)} className="text-[11.5px] text-ink/50 active:text-ink">
+                <button onClick={() => pickArea(null)} className="text-[11.5px] text-ink/50 hover:text-ink/70 active:text-ink">
                   Ver todo
                 </button>
               </div>
@@ -210,7 +320,7 @@ export default function App() {
             />
           )}
 
-          <details className="shrink-0 border-t border-black/5 px-4 py-2 pb-[max(0.5rem,env(safe-area-inset-bottom))] text-[10.5px] leading-snug text-ink/50">
+          <details className="shrink-0 border-t border-line px-4 py-2 pb-[max(0.5rem,env(safe-area-inset-bottom))] text-[10.5px] leading-snug text-ink/50">
             <summary className="cursor-pointer list-none text-[11px] font-medium text-ink/60">
               Fuentes y límites
             </summary>
@@ -237,7 +347,7 @@ function LocateNote({ locate, here, loaded }: { locate: Locate; here: string | n
   else if (locate.state === "ok" && loaded && !here) text = "Estás fuera de la provincia de Santiago de Cuba.";
   if (!text) return null;
   return (
-    <p className="pointer-events-none absolute inset-x-3 top-2 z-[1000] rounded-lg bg-white/95 px-3 py-2 text-center text-[12px] text-ink/70 shadow-sm">
+    <p className="pointer-events-none absolute inset-x-3 top-2 z-[1000] rounded-lg bg-surface/95 px-3 py-2 text-center text-[12px] text-ink/70 shadow-sm ring-1 ring-line backdrop-blur">
       {text}
     </p>
   );
@@ -247,7 +357,9 @@ function Chip({ label, value, tone }: { label: string; value: string; tone?: "ou
   return (
     <span
       className={`rounded-lg px-2 py-1 text-[10.5px] leading-none ${
-        tone === "out" ? "bg-red-50 text-red-800" : "bg-black/[0.04] text-ink/60"
+        tone === "out"
+          ? "bg-red-50 text-red-800 ring-1 ring-red-200/60 dark:bg-red-500/12 dark:text-red-200 dark:ring-red-400/20"
+          : "bg-muted text-ink/60 ring-1 ring-line/40"
       }`}
     >
       <span className="block text-[9px] uppercase tracking-wide opacity-60">{label}</span>
@@ -261,8 +373,8 @@ function Skeleton() {
     <div className="space-y-2 px-4 py-2" aria-hidden>
       {[0, 1, 2, 3, 4].map((i) => (
         <div key={i} className="flex items-center gap-3">
-          <div className="h-2.5 w-2.5 animate-pulse rounded-full bg-black/10" />
-          <div className="h-3 flex-1 animate-pulse rounded bg-black/8" style={{ maxWidth: `${70 - i * 6}%` }} />
+          <div className="h-2.5 w-2.5 animate-pulse rounded-full bg-ink/12" />
+          <div className="h-3 flex-1 animate-pulse rounded bg-ink/10" style={{ maxWidth: `${70 - i * 6}%` }} />
         </div>
       ))}
     </div>

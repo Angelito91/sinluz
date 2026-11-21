@@ -61,9 +61,9 @@ function Bar({
   icon: React.ReactNode;
 }) {
   const styles = {
-    warn: "bg-amber-50 text-amber-900 border-amber-200",
-    bad: "bg-red-50 text-red-900 border-red-200",
-    muted: "bg-black/[0.03] text-ink/60 border-transparent",
+    warn: "bg-amber-50 text-amber-900 border-amber-200/70 dark:bg-amber-500/12 dark:text-amber-200 dark:border-amber-400/20",
+    bad: "bg-red-50 text-red-900 border-red-200/70 dark:bg-red-500/12 dark:text-red-200 dark:border-red-400/20",
+    muted: "bg-muted text-ink/60 border-transparent",
   }[tone];
 
   return (

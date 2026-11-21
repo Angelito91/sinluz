@@ -40,13 +40,13 @@ export default function CircuitList({
             onChange={(e) => onQuery(e.target.value)}
             placeholder="Buscar circuito o municipio"
             aria-label="Buscar circuito"
-            className="h-10 w-full rounded-xl border border-black/8 bg-white pl-9 pr-9 text-[14px] outline-none placeholder:text-ink/35 focus:border-black/25"
+            className="h-10 w-full rounded-xl border border-line bg-surface pl-9 pr-9 text-[14px] text-ink outline-none placeholder:text-ink/35 focus:border-ink/25"
           />
           {query && (
             <button
               aria-label="Borrar búsqueda"
               onClick={() => onQuery("")}
-              className="absolute right-2 top-1/2 -translate-y-1/2 rounded-full p-1.5 text-ink/40 hover:bg-black/5"
+              className="absolute right-2 top-1/2 -translate-y-1/2 rounded-full p-1.5 text-ink/40 hover:bg-muted"
             >
               <X className="h-3.5 w-3.5" />
             </button>
@@ -59,7 +59,7 @@ export default function CircuitList({
             className={`flex h-10 items-center gap-1.5 rounded-xl border px-3 text-[13px] transition ${
               onlyFavs
                 ? "border-ink bg-ink text-paper"
-                : "border-black/8 bg-white text-ink/70 hover:border-black/20"
+                : "border-line bg-surface text-ink/70 hover:border-ink/20"
             }`}
           >
             <Star className={`h-3.5 w-3.5 ${onlyFavs ? "fill-current" : ""}`} />
@@ -89,7 +89,7 @@ export default function CircuitList({
             <li key={circuit.id}>
               <div
                 className={`group flex items-center gap-3 rounded-xl px-2 py-2.5 transition ${
-                  active ? "bg-black/[0.045]" : "hover:bg-black/[0.025]"
+                  active ? "bg-muted" : "hover:bg-muted/60"
                 }`}
               >
                 <button
@@ -103,7 +103,9 @@ export default function CircuitList({
                     style={{
                       background: STATUS_COLOR[status],
                       boxShadow:
-                        status === "out" ? "0 0 0 3px rgba(214,69,69,0.14)" : undefined,
+                        status === "out"
+                          ? "0 0 0 3px color-mix(in srgb, var(--color-out) 18%, transparent)"
+                          : undefined,
                     }}
                   />
                   <span className="min-w-0 flex-1">
@@ -116,7 +118,7 @@ export default function CircuitList({
                   </span>
                   <span
                     className={`shrink-0 text-right text-[12.5px] tabular-nums ${
-                      status === "out" ? "font-semibold text-[#b93b3b]" : "text-ink/35"
+                      status === "out" ? "font-semibold text-out" : "text-ink/35"
                     }`}
                   >
                     {status === "out" ? elapsed(state.since, now) : ""}
@@ -128,7 +130,7 @@ export default function CircuitList({
                   aria-label={fav ? "Quitar de mi circuito" : "Marcar como mi circuito"}
                   aria-pressed={fav}
                   className={`shrink-0 rounded-full p-1.5 transition ${
-                    fav ? "text-amber-500" : "text-ink/20 hover:text-ink/40"
+                    fav ? "text-amber-500" : "text-ink/20 hover:text-ink/45"
                   }`}
                 >
                   <Star className={`h-4 w-4 ${fav ? "fill-current" : ""}`} />

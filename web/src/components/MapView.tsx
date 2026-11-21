@@ -16,7 +16,7 @@ import L from "leaflet";
 import type { PathOptions } from "leaflet";
 import { Crosshair, Loader2, X } from "lucide-react";
 import "leaflet/dist/leaflet.css";
-import { STATUS_COLOR, STATUS_LABEL, type Row } from "../lib/view";
+import { STATUS_LABEL, type Row } from "../lib/view";
 import { elapsed } from "../lib/time";
 import type { Locate } from "../hooks/useLocate";
 import { useGeo, type Features } from "../hooks/useGeo";
@@ -34,6 +34,7 @@ type Props = {
   onSelect: (id: string) => void;
   onDeselect: () => void;
   now: number;
+  dark: boolean;
 };
 
 const PROVINCE: [number, number][] = [
@@ -47,13 +48,6 @@ const BOUNDS: [number, number][] = [
   [20.62, -75.29],
 ];
 
-/** En el mapa el verde del listado se cambia por un gris neutro. */
-const MAP_DOT: Record<Row["status"], string> = {
-  out: STATUS_COLOR.out,
-  stale: STATUS_COLOR.stale,
-  ok: "#77837c",
-};
-
 const CONFIDENCE: Record<string, string> = {
   mapped: "detallada",
   reported: "verificada",
@@ -62,13 +56,14 @@ const CONFIDENCE: Record<string, string> = {
 };
 
 /** Municipios: solo contorno. El color se reserva para los circuitos. */
-function areaStyle(selected: boolean, here: boolean): PathOptions {
+function areaStyle(selected: boolean, here: boolean, dark: boolean): PathOptions {
+  const base = dark ? "#2a3138" : "#c8cec9";
   return {
-    color: selected ? "#0b0d0f" : here ? "#2563eb" : "#c8cec9",
+    color: selected ? (dark ? "#e8edf2" : "#0b0d0f") : here ? "#4ea1ff" : base,
     weight: selected || here ? 1.8 : 0.8,
-    opacity: 0.9,
-    fillColor: "#0b0d0f",
-    fillOpacity: selected ? 0.03 : 0,
+    opacity: selected || here ? 0.95 : dark ? 0.7 : 0.9,
+    fillColor: dark ? "#e8edf2" : "#0b0d0f",
+    fillOpacity: selected ? (dark ? 0.06 : 0.03) : 0,
     lineJoin: "round",
   };
 }
@@ -81,6 +76,12 @@ function labelHtml(name: string): string {
 
 const rank = (r: Row) => (r.status === "out" ? 3 : r.status === "stale" ? 2 : 1);
 
+function mapDot(status: Row["status"], dark: boolean): string {
+  if (status === "out") return dark ? "#f07171" : "#d64545";
+  if (status === "stale") return dark ? "#e0a83a" : "#c98a1b";
+  return dark ? "#8c9a92" : "#77837c";
+}
+
 export default function MapView({
   area,
   onArea,
@@ -91,14 +92,15 @@ export default function MapView({
   onSelect,
   onDeselect,
   now,
+  dark,
 }: Props) {
   const geo = useGeo();
   const circuits = useCircuitGeo();
   const [zoom, setZoom] = useState(8);
 
   // react-leaflet no restilla al cambiar las props: cambiar la clave rehace la capa.
-  // Solo depende de la selección de municipio, no del estado de los circuitos.
-  const key = useMemo(() => `${area ?? ""}#${here ?? ""}`, [area, here]);
+  // Solo depende de la selección de municipio y del tema, no del estado de los circuitos.
+  const key = useMemo(() => `${area ?? ""}#${here ?? ""}#${dark ? "d" : "l"}`, [area, here, dark]);
   const selectedRow = selected ? rows.find((r) => r.circuit.id === selected) : undefined;
   const reference = selectedRow ? circuits?.references.get(selectedRow.circuit.id) : undefined;
 
@@ -108,13 +110,13 @@ export default function MapView({
         bounds={PROVINCE}
         boundsOptions={{ padding: [8, 8] }}
         minZoom={7}
-        maxZoom={13}
+        maxZoom={18}
         maxBounds={BOUNDS}
         maxBoundsViscosity={0.85}
         zoomControl={false}
         attributionControl={false}
         className="h-full w-full"
-        style={{ background: "#f4f5f2" }}
+        style={{ background: dark ? "#0f1317" : "#f4f5f2" }}
       >
         <TileLayer
           url="https://tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -127,7 +129,7 @@ export default function MapView({
           className="basemap-tiles"
         />
 
-        <ProvinceMask geo={geo} />
+        <ProvinceMask geo={geo} dark={dark} />
 
         {geo && (
           <GeoJSON
@@ -135,7 +137,7 @@ export default function MapView({
             data={geo}
             style={(f) => {
               const name = f?.properties?.name as string;
-              return areaStyle(name === area, name === here);
+              return areaStyle(name === area, name === here, dark);
             }}
             onEachFeature={(f, layer) => {
               const name = (f.properties as { name: string }).name;
@@ -154,7 +156,7 @@ export default function MapView({
         )}
 
         <Pane name="circuits" style={{ zIndex: 450 }}>
-          <CircuitGeometry rows={rows} selected={selected} zoom={zoom} circuits={circuits} />
+          <CircuitGeometry rows={rows} selected={selected} zoom={zoom} circuits={circuits} dark={dark} />
         </Pane>
 
         <CircuitMarkers
@@ -164,6 +166,7 @@ export default function MapView({
           zoom={zoom}
           now={now}
           circuits={circuits}
+          dark={dark}
         />
 
         {locate.position && (
@@ -171,12 +174,24 @@ export default function MapView({
             <Circle
               center={[locate.position.lat, locate.position.lon]}
               radius={Math.max(30, locate.position.accuracy)}
-              pathOptions={{ color: "#2563eb", weight: 1, fillColor: "#2563eb", fillOpacity: 0.07, interactive: false }}
+              pathOptions={{
+                color: "#4ea1ff",
+                weight: 1,
+                fillColor: "#4ea1ff",
+                fillOpacity: dark ? 0.1 : 0.07,
+                interactive: false,
+              }}
             />
             <CircleMarker
               center={[locate.position.lat, locate.position.lon]}
               radius={5}
-              pathOptions={{ color: "#ffffff", weight: 2, fillColor: "#2563eb", fillOpacity: 1, interactive: false }}
+              pathOptions={{
+                color: dark ? "#0b0e11" : "#ffffff",
+                weight: 2,
+                fillColor: "#4ea1ff",
+                fillOpacity: 1,
+                interactive: false,
+              }}
             />
           </>
         )}
@@ -184,19 +199,20 @@ export default function MapView({
         <MapState onZoom={setZoom} />
         <ClearOnTap onDeselect={onDeselect} />
         <FitView geo={geo} area={area} selected={selected} rows={rows} circuits={circuits} />
+        <InvalidateOnResize />
         {!selectedRow && <Controls locate={locate} />}
-        {!selectedRow && <MapFooter />}
+        {!selectedRow && <MapFooter dark={dark} />}
       </MapContainer>
 
       {selectedRow && (
-        <SelectedCard row={selectedRow} reference={reference} now={now} onClose={onDeselect} />
+        <SelectedCard row={selectedRow} reference={reference} now={now} onClose={onDeselect} dark={dark} />
       )}
     </div>
   );
 }
 
 /** Oculta todo lo que queda fuera de los municipios de Santiago de Cuba. */
-function ProvinceMask({ geo }: { geo: Features | null }) {
+function ProvinceMask({ geo, dark }: { geo: Features | null; dark: boolean }) {
   const rings = useMemo(() => {
     if (!geo) return null;
 
@@ -228,7 +244,12 @@ function ProvinceMask({ geo }: { geo: Features | null }) {
     <Pane name="province-mask" style={{ zIndex: 250 }}>
       <Polygon
         positions={rings}
-        pathOptions={{ stroke: false, fillColor: "#f4f5f2", fillOpacity: 1, interactive: false }}
+        pathOptions={{
+          stroke: false,
+          fillColor: dark ? "#0b0e11" : "#f4f5f2",
+          fillOpacity: 1,
+          interactive: false,
+        }}
       />
     </Pane>
   );
@@ -240,11 +261,13 @@ function CircuitGeometry({
   selected,
   zoom,
   circuits,
+  dark,
 }: {
   rows: Row[];
   selected: string | null;
   zoom: number;
   circuits: CircuitGeo | null;
+  dark: boolean;
 }) {
   if (!circuits || !selected) return null;
 
@@ -255,7 +278,7 @@ function CircuitGeometry({
   const zones = circuits.zones.get(selected) ?? [];
   if (routes.length === 0 && zones.length === 0) return null;
 
-  const color = row.status === "out" ? STATUS_COLOR.out : row.status === "stale" ? STATUS_COLOR.stale : "#4f5b54";
+  const color = mapDot(row.status, dark);
   const stop = (e: L.LeafletMouseEvent) => L.DomEvent.stopPropagation(e);
 
   return (
@@ -288,7 +311,7 @@ function CircuitGeometry({
               weight: 1.2,
               opacity: 0.7,
               fillColor: color,
-              fillOpacity: 0.07,
+              fillOpacity: dark ? 0.1 : 0.07,
               dashArray: "4 4",
             }}
             eventHandlers={{ click: stop }}
@@ -311,6 +334,7 @@ function CircuitMarkers({
   zoom,
   now,
   circuits,
+  dark,
 }: {
   rows: Row[];
   selected: string | null;
@@ -318,8 +342,11 @@ function CircuitMarkers({
   zoom: number;
   now: number;
   circuits: CircuitGeo | null;
+  dark: boolean;
 }) {
   const ordered = useMemo(() => [...rows].sort((a, b) => rank(a) - rank(b)), [rows]);
+  const ring = dark ? "#0b0e11" : "#ffffff";
+  const activeStroke = dark ? "#e8edf2" : "#0b0d0f";
 
   return (
     <>
@@ -333,7 +360,7 @@ function CircuitMarkers({
         const visible = zoom >= 10 || active || row.status !== "ok";
         if (!visible) return null;
 
-        const color = MAP_DOT[row.status];
+        const color = mapDot(row.status, dark);
         const radius = active ? 6.5 : row.status === "out" ? 5.5 : row.status === "stale" ? 4.5 : 3.5;
         const uncertain = ref?.confidence === "centroid";
 
@@ -346,9 +373,9 @@ function CircuitMarkers({
                 pathOptions={{
                   color,
                   weight: 1.5,
-                  opacity: 0.4,
+                  opacity: 0.45,
                   fillColor: color,
-                  fillOpacity: 0.06,
+                  fillOpacity: dark ? 0.1 : 0.06,
                   interactive: false,
                 }}
               />
@@ -374,7 +401,7 @@ function CircuitMarkers({
               center={position}
               radius={radius}
               pathOptions={{
-                color: active ? "#0b0d0f" : "#ffffff",
+                color: active ? activeStroke : ring,
                 weight: active ? 2.5 : 1.5,
                 fillColor: color,
                 fillOpacity: uncertain ? 0 : 1,
@@ -413,6 +440,25 @@ function ClearOnTap({ onDeselect }: { onDeselect: () => void }) {
   return null;
 }
 
+/** Recalcula el mapa cuando su contenedor cambia de tamaño (p. ej. al arrastrar el panel). */
+function InvalidateOnResize() {
+  const map = useMap();
+  useEffect(() => {
+    const target = map.getContainer().parentElement ?? map.getContainer();
+    let raf = 0;
+    const ro = new ResizeObserver(() => {
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(() => map.invalidateSize({ animate: false }));
+    });
+    ro.observe(target);
+    return () => {
+      cancelAnimationFrame(raf);
+      ro.disconnect();
+    };
+  }, [map]);
+  return null;
+}
+
 /** Encuadra el circuito seleccionado; si no, el municipio; si no, la provincia. */
 function FitView({
   geo,
@@ -441,7 +487,7 @@ function FitView({
 
   useEffect(() => {
     if (anchor) {
-      map.flyTo(anchor, Math.max(map.getZoom(), 12), { duration: 0.5 });
+      map.flyTo(anchor, Math.max(map.getZoom(), 14), { duration: 0.5 });
       return;
     }
     if (!geo) return;
@@ -480,7 +526,7 @@ function Controls({ locate }: { locate: Locate }) {
           aria-label="Mostrar dónde estoy"
           onClick={locate.request}
           disabled={locate.state === "loading"}
-          className="flex h-11 w-11 items-center justify-center rounded-full bg-white/95 text-ink/60 shadow-sm active:bg-black/5 disabled:opacity-60"
+          className="flex h-11 w-11 items-center justify-center rounded-full bg-surface/95 text-ink/70 shadow-sm ring-1 ring-line backdrop-blur active:bg-muted disabled:opacity-60"
         >
           {locate.state === "loading" ? <Loader2 className="h-4.5 w-4.5 animate-spin" /> : <Crosshair className="h-4.5 w-4.5" />}
         </button>
@@ -490,17 +536,17 @@ function Controls({ locate }: { locate: Locate }) {
 }
 
 /** Leyenda mínima + atribución. */
-function MapFooter() {
+function MapFooter({ dark }: { dark: boolean }) {
   const ref = useControlRef();
 
   return (
     <div ref={ref} className="leaflet-bottom leaflet-left">
       <div className="leaflet-control map-footer">
         <span>
-          <i style={{ background: MAP_DOT.out }} /> Sin servicio
+          <i style={{ background: mapDot("out", dark) }} /> Sin servicio
         </span>
         <span>
-          <i style={{ background: MAP_DOT.stale }} /> Sin confirmar
+          <i style={{ background: mapDot("stale", dark) }} /> Sin confirmar
         </span>
         <span>
           <i className="is-ok" /> Con servicio
@@ -518,32 +564,34 @@ function SelectedCard({
   reference,
   now,
   onClose,
+  dark,
 }: {
   row: Row;
   reference?: CircuitReference;
   now: number;
   onClose: () => void;
+  dark: boolean;
 }) {
-  const color = STATUS_COLOR[row.status];
+  const color = mapDot(row.status, dark);
   const confidence = CONFIDENCE[reference?.confidence ?? ""] ?? "aproximada";
   const meta =
     row.status === "out"
-      ? "text-[#b93b3b] font-medium"
+      ? "text-out font-medium"
       : row.status === "stale"
-        ? "text-amber-700 font-medium"
+        ? "text-stale font-medium"
         : "text-ink/55";
 
   return (
     <section
       aria-label={`Detalle de ${row.circuit.name}`}
       aria-live="polite"
-      className="selected-card absolute inset-x-3 bottom-3 z-[1000] rounded-2xl border border-black/8 bg-white/97 p-3 shadow-[0_8px_30px_rgba(0,0,0,0.16)] backdrop-blur-md"
+      className="selected-card absolute inset-x-3 bottom-3 z-[1000] rounded-2xl border border-line bg-surface/97 p-3 shadow-[0_8px_30px_rgba(0,0,0,0.16)] backdrop-blur-md dark:shadow-[0_8px_30px_rgba(0,0,0,0.45)]"
     >
       <div className="flex items-start gap-3">
         <span
           aria-hidden
           className="mt-1 h-2.5 w-2.5 shrink-0 rounded-full"
-          style={{ background: color, boxShadow: row.status === "out" ? `0 0 0 4px ${color}22` : undefined }}
+          style={{ background: color, boxShadow: row.status === "out" ? `0 0 0 4px ${color}33` : undefined }}
         />
         <div className="min-w-0 flex-1">
           <p className="text-[10px] uppercase tracking-wider text-ink/40">{row.circuit.municipio}</p>
@@ -555,7 +603,7 @@ function SelectedCard({
               href="https://www.openstreetmap.org/copyright"
               target="_blank"
               rel="noreferrer"
-              className="underline decoration-black/20 underline-offset-2"
+              className="underline decoration-ink/20 underline-offset-2"
             >
               © OpenStreetMap
             </a>
@@ -564,7 +612,7 @@ function SelectedCard({
         <button
           onClick={onClose}
           aria-label="Cerrar detalle del circuito"
-          className="rounded-full p-1.5 text-ink/35 transition hover:bg-black/5 hover:text-ink/70"
+          className="rounded-full p-1.5 text-ink/40 transition hover:bg-muted hover:text-ink/70"
         >
           <X className="h-4 w-4" />
         </button>

@@ -17,7 +17,7 @@ const MAX_BACKOFF_MIN = 40;
 /** 1 página normal + hasta 3 anteriores si entre dos ingestas se publicó más de lo que cabe. */
 const MAX_PAGES = 4;
 /** Mensajes por llamada al modelo. */
-const BATCH_SIZE = 15;
+const BATCH_SIZE = 12;
 /** Tope de llamadas al modelo por ejecución. */
 const MAX_BATCHES = 4;
 
@@ -138,7 +138,15 @@ async function fetchNew(env: Env, lastId: number | null): Promise<Message[]> {
   const all: TelegramMessage[] = [];
 
   for (let page = 1; page <= MAX_PAGES; page++) {
-    const pageMessages = await fetchPage(env, page, limit);
+    let pageMessages: TelegramMessage[];
+    try {
+      pageMessages = await fetchPage(env, page, limit);
+    } catch (err) {
+      // Un fallo en una página anterior no debe tirar lo ya leído: procesamos
+      // lo que tengamos y el próximo cron continúa desde el último id guardado.
+      if (page === 1) throw err;
+      break;
+    }
     if (pageMessages.length === 0) break;
     all.push(...pageMessages);
 
@@ -158,18 +166,39 @@ async function fetchNew(env: Env, lastId: number | null): Promise<Message[]> {
   return [...unique.values()].sort((a, b) => a.id - b.id || a.date - b.date);
 }
 
+/** Intentos ante 429/5xx antes de rendirse; los esperas son 5 s y 15 s. */
+const FETCH_ATTEMPTS = 3;
+const RETRY_WAIT_MS = [5_000, 15_000];
+
 async function fetchPage(env: Env, page: number, limit: number): Promise<TelegramMessage[]> {
   const url = `${env.INGEST_URL}?limit=${limit}${page > 1 ? `&page=${page}` : ""}`;
-  const res = await fetch(url, {
-    headers: {
-      accept: "application/json",
-      "user-agent": "sinluz/2.0 (+https://github.com/sinluz)",
-    },
-    signal: AbortSignal.timeout(20_000),
-  });
-  if (!res.ok) throw new Error(`HTTP ${res.status}`);
-  const data = (await res.json()) as { messages?: TelegramMessage[] };
-  return (data.messages ?? []).filter((m) => typeof m.message === "string" && m.message.length > 0);
+
+  // El bridge limita por IP y devuelve 429 con frecuencia. Reintentamos con
+  // espera creciente: un 429 puntual no debe perder toda la ingesta.
+  for (let attempt = 0; ; attempt++) {
+    const res = await fetch(url, {
+      headers: {
+        accept: "application/json",
+        "user-agent": "sinluz/2.0 (+https://github.com/sinluz)",
+      },
+      signal: AbortSignal.timeout(20_000),
+    });
+
+    const retryable = res.status === 429 || res.status >= 500;
+    if (retryable && attempt < FETCH_ATTEMPTS - 1) {
+      const retry = Number(res.headers.get("retry-after"));
+      const wait =
+        Number.isFinite(retry) && retry > 0
+          ? Math.min(retry * 1000, 20_000)
+          : RETRY_WAIT_MS[Math.min(attempt, RETRY_WAIT_MS.length - 1)]!;
+      await sleep(wait);
+      continue;
+    }
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+
+    const data = (await res.json()) as { messages?: TelegramMessage[] };
+    return (data.messages ?? []).filter((m) => typeof m.message === "string" && m.message.length > 0);
+  }
 }
 
 async function countRecentFailures(env: Env): Promise<number> {

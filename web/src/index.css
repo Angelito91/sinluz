@@ -1,12 +1,30 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 @theme {
   --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   --color-ink: #0b0d0f;
   --color-paper: #f7f7f5;
+  --color-surface: #ffffff;
+  --color-muted: rgb(11 13 15 / 0.045);
+  --color-line: rgb(0 0 0 / 0.08);
   --color-out: #d64545;
   --color-ok: #3f7d5c;
   --color-warn: #b78119;
+  --color-stale: #c98a1b;
+}
+
+.dark {
+  --color-ink: #e8edf2;
+  --color-paper: #0b0e11;
+  --color-surface: #151a1f;
+  --color-muted: rgb(255 255 255 / 0.055);
+  --color-line: rgb(255 255 255 / 0.1);
+  --color-out: #f07171;
+  --color-ok: #6fc08f;
+  --color-warn: #e0a83a;
+  --color-stale: #e0a83a;
 }
 
 html,
@@ -22,6 +40,15 @@ body {
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
   overscroll-behavior: none;
+  color-scheme: light;
+}
+.dark body {
+  color-scheme: dark;
+}
+
+::selection {
+  background: rgb(59 130 246 / 0.25);
+  color: inherit;
 }
 
 /* Leaflet: mapa en papel, controles discretos. */
@@ -29,14 +56,28 @@ body {
   background: #f4f5f2;
   font-family: var(--font-sans);
 }
+.dark .leaflet-container {
+  background: #0f1317;
+}
 .leaflet-control-attribution {
   font-size: 9px;
   background: rgb(255 255 255 / 0.7) !important;
+  color: rgb(11 13 15 / 0.7) !important;
+}
+.dark .leaflet-control-attribution {
+  background: rgb(21 26 31 / 0.8) !important;
+  color: rgb(232 237 242 / 0.65) !important;
+}
+.dark .leaflet-control-attribution a {
+  color: rgb(232 237 242 / 0.75) !important;
 }
 
 /* Teselas casi monocromas: el color se reserva para el estado. */
 .leaflet-tile-pane .basemap-tiles {
   filter: grayscale(0.92) saturate(0.15) contrast(0.92) brightness(1.04);
+}
+.dark .leaflet-tile-pane .basemap-tiles {
+  filter: invert(0.93) hue-rotate(185deg) saturate(0.28) brightness(0.9) contrast(0.95);
 }
 
 /* Municipios: solo el nombre, sin caja ni flecha. */
@@ -50,9 +91,9 @@ body {
   white-space: nowrap;
   color: var(--color-ink);
   text-shadow:
-    0 0 3px #fff,
-    0 0 3px #fff,
-    0 0 6px #fff;
+    0 0 3px var(--color-paper),
+    0 0 3px var(--color-paper),
+    0 0 6px var(--color-paper);
 }
 .leaflet-tooltip.area-label::before {
   display: none;
@@ -75,7 +116,7 @@ body {
   transition: stroke-width 120ms ease-out;
 }
 .circuit-dot:focus-visible {
-  outline: 2px solid #0b0d0f;
+  outline: 2px solid var(--color-ink);
   outline-offset: 2px;
 }
 
@@ -86,11 +127,16 @@ body {
   border-radius: 6px;
   box-shadow: 0 1px 6px rgb(0 0 0 / 0.14);
   padding: 3px 6px;
-  color: var(--color-ink);
+  color: #0b0d0f;
   font-size: 10.5px;
   line-height: 1.2;
   white-space: nowrap;
   pointer-events: none;
+}
+.dark .leaflet-tooltip.circuit-label {
+  background: rgb(21 26 31 / 0.96);
+  box-shadow: 0 1px 8px rgb(0 0 0 / 0.4);
+  color: #e8edf2;
 }
 .leaflet-tooltip.circuit-label::before {
   display: none;
@@ -109,9 +155,14 @@ body {
   border-radius: 7px;
   background: rgb(255 255 255 / 0.86);
   box-shadow: 0 1px 6px rgb(0 0 0 / 0.08);
-  backdrop-filter: blur(4px);
+  backdrop-filter: blur(6px);
   font-size: 9.5px;
   color: rgb(11 13 15 / 0.55);
+}
+.dark .map-footer.leaflet-control {
+  background: rgb(21 26 31 / 0.88);
+  box-shadow: 0 1px 8px rgb(0 0 0 / 0.35);
+  color: rgb(232 237 242 / 0.6);
 }
 .map-footer span {
   display: inline-flex;
@@ -127,6 +178,9 @@ body {
 .map-footer i.is-ok {
   background: #77837c;
 }
+.dark .map-footer i.is-ok {
+  background: #8c9a92;
+}
 .map-footer a {
   color: inherit;
   text-decoration: none;
@@ -135,7 +189,7 @@ body {
   text-decoration: underline;
 }
 
-/* La hoja inferior no debe atrapar el gesto del mapa al contraerla. */
+/* Tarjeta de circuito seleccionado. */
 .selected-card {
   animation: card-in 160ms ease-out;
 }
@@ -157,4 +211,7 @@ body {
 .overflow-y-auto {
   scrollbar-width: thin;
   scrollbar-color: rgb(0 0 0 / 0.14) transparent;
+}
+.dark .overflow-y-auto {
+  scrollbar-color: rgb(255 255 255 / 0.18) transparent;
 }
