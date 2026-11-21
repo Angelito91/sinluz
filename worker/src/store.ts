@@ -113,6 +113,19 @@ export async function lastIngest(env: Env): Promise<IngestLog | null> {
   ).first<IngestLog>();
 }
 
+export async function lastIngestWithChanges(
+  env: Env,
+): Promise<{ at: number; changes: number; detail: string } | null> {
+  const row = await env.DB.prepare(
+    "SELECT at, detail FROM ingest_log WHERE ok = 1 AND detail LIKE '%cambios%' AND detail NOT LIKE 'sin mensajes%' ORDER BY id DESC LIMIT 1",
+  ).first<{ at: number; detail: string | null }>();
+  if (!row?.detail) return null;
+  const m = row.detail.match(/(\d+)\s+cambios/);
+  const changes = m ? Number(m[1]) : 0;
+  if (!changes) return null;
+  return { at: row.at, changes, detail: row.detail };
+}
+
 export async function listOverrides(env: Env): Promise<Override[]> {
   const { results } = await env.DB.prepare(
     "SELECT circuit_id, status, since, updated_at FROM circuit_overrides ORDER BY circuit_id",

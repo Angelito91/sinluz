@@ -8,6 +8,7 @@ import {
   getSnapshot,
   getStoredState,
   lastIngest,
+  lastIngestWithChanges,
   listOverrides,
   llmEnabled,
   saveState,
@@ -34,11 +35,12 @@ app.use("*", async (c, next) => {
 const CACHE_STATUS = "public, max-age=30, stale-while-revalidate=60, stale-if-error=86400";
 
 app.get("/api/v1/status", async (c) => {
-  const [payload, lastError, backoffUntil, lastOkAt] = await Promise.all([
+  const [payload, lastError, backoffUntil, lastOkAt, lastChanges] = await Promise.all([
     getSnapshot(c.env),
     getSetting(c.env, "last_error"),
     getSetting(c.env, "backoff_until"),
     getSetting(c.env, "last_ok_at"),
+    lastIngestWithChanges(c.env),
   ]);
   c.header("cache-control", CACHE_STATUS);
   const backoffRaw = backoffUntil ? Number(backoffUntil) : null;
@@ -48,6 +50,8 @@ app.get("/api/v1/status", async (c) => {
       last_error: lastError || null,
       backoff_until: backoffRaw ? (backoffRaw > 1e12 ? Math.round(backoffRaw / 1000) : backoffRaw) : null,
       last_ok_at: lastOkAt ? Number(lastOkAt) || null : null,
+      last_changes_at: lastChanges?.at ?? null,
+      last_changes_count: lastChanges?.changes ?? null,
     },
   });
 });

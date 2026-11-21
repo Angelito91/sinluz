@@ -25,6 +25,7 @@ describe("applyChanges", () => {
         id: "sc-08",
         status: "out",
         since: T,
+        since_kind: "reported",
         last_mention_at: T,
         source_message_id: 1,
       },

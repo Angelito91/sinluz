@@ -1,7 +1,9 @@
-import { AlertTriangle, Search, Star, X } from "lucide-react";
+import { AlertTriangle, Info, Search, Star, X } from "lucide-react";
 import type { Row } from "../lib/view";
 import { STATUS_COLOR, STATUS_LABEL } from "../lib/view";
 import { ago, elapsed, hhmm } from "../lib/time";
+
+const STALE_HELP = "Afectado según el último aviso, pero el canal no lo ha vuelto a mencionar en varias horas.";
 
 type Props = {
   rows: Row[];
@@ -16,6 +18,9 @@ type Props = {
   hasFavs: boolean;
   onlyIssues: boolean;
   onOnlyIssues: (v: boolean) => void;
+  area: string | null;
+  onArea: (a: string | null) => void;
+  municipios: string[];
   emptyText: string;
 };
 
@@ -32,6 +37,9 @@ export default function CircuitList({
   hasFavs,
   onlyIssues,
   onOnlyIssues,
+  area,
+  onArea,
+  municipios,
   emptyText,
 }: Props) {
   return (
@@ -86,6 +94,19 @@ export default function CircuitList({
         )}
       </div>
 
+      {municipios.length > 0 && (
+        <div className="flex gap-1.5 overflow-x-auto px-4 pb-2 scrollbar-none" role="group" aria-label="Filtrar por municipio">
+          <ChipBtn active={area === null} onClick={() => onArea(null)}>
+            Todos
+          </ChipBtn>
+          {municipios.map((m) => (
+            <ChipBtn key={m} active={area === m} onClick={() => onArea(area === m ? null : m)}>
+              {m}
+            </ChipBtn>
+          ))}
+        </div>
+      )}
+
       <ul className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-2 pb-6">
         {rows.length === 0 && (
           <li className="px-3 py-10 text-center text-[13px] text-ink/55">{emptyText}</li>
@@ -94,11 +115,12 @@ export default function CircuitList({
         {rows.map(({ circuit, state, status }) => {
           const fav = favorites.has(circuit.id);
           const active = selected === circuit.id;
+          const sinceLabel = state.since_kind === "reported" ? "reportado" : "desde";
           const confirm =
             state.last_mention_at != null ? ` · confirmado ${ago(state.last_mention_at, now)}` : "";
           const detail =
             status === "out"
-              ? `desde ${hhmm(state.since)}${confirm}`
+              ? `${sinceLabel} ${hhmm(state.since)}${confirm}`
               : status === "stale"
                 ? `sin confirmar · último aviso ${ago(state.last_mention_at, now)}`
                 : state.last_mention_at
@@ -132,8 +154,14 @@ export default function CircuitList({
                     <span className="block truncate text-[14px] font-medium leading-tight">
                       {circuit.name}
                     </span>
-                    <span className="mt-0.5 block truncate text-[11.5px] leading-tight text-ink/45">
-                      {circuit.municipio} · {detail}
+                    <span
+                      className="mt-0.5 flex items-center gap-1 truncate text-[11.5px] leading-tight text-ink/45"
+                      title={status === "stale" ? STALE_HELP : undefined}
+                    >
+                      <span className="truncate">
+                        {circuit.municipio} · {detail}
+                      </span>
+                      {status === "stale" && <Info className="h-3 w-3 shrink-0 text-stale/70" aria-hidden />}
                     </span>
                   </span>
                   <span
@@ -161,5 +189,19 @@ export default function CircuitList({
         })}
       </ul>
     </div>
+  );
+}
+
+function ChipBtn({ active, onClick, children }: { active: boolean; onClick: () => void; children: React.ReactNode }) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className={`shrink-0 rounded-full border px-2.5 py-1 text-[11.5px] transition ${
+        active ? "border-ink/20 bg-ink/10 text-ink" : "border-line bg-surface text-ink/55 hover:text-ink/75"
+      }`}
+    >
+      {children}
+    </button>
   );
 }

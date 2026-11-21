@@ -63,12 +63,15 @@ export function applyChanges(
       change.duration_min <= MAX_DURATION_MIN
         ? change.duration_min
         : null;
-    const since = duration != null ? msg.date - duration * 60 : prev?.since ?? msg.date;
+    const explicit = duration != null;
+    const since = explicit ? msg.date - duration * 60 : prev?.since ?? msg.date;
+    const since_kind = explicit ? "explicit" : prev?.since_kind ?? "reported";
 
     circuits.set(change.circuit_id, {
       id: change.circuit_id,
       status: "out",
       since,
+      since_kind,
       last_mention_at: msg.date,
       source_message_id: msg.id,
     });
@@ -108,6 +111,7 @@ export function mergeOverrides(state: StatusPayload, overrides: Override[]): Sta
         id: o.circuit_id,
         status: "out",
         since: o.since ?? o.updated_at,
+        since_kind: "explicit",
         last_mention_at: o.updated_at,
         source_message_id: null,
       });

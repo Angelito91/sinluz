@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Clock, Monitor, Moon, Radio, Sun } from "lucide-react";
+import { Bell, Clock, Info, Monitor, Moon, Radio, Sun, X } from "lucide-react";
 import MapView from "./components/MapView";
 import CircuitList from "./components/CircuitList";
 import StatusBanner from "./components/StatusBanner";
@@ -7,8 +7,8 @@ import { useCatalog, useStatus } from "./hooks/useStatus";
 import { useNow } from "./hooks/useNow";
 import { useFavorites, useOnline } from "./hooks/useLocal";
 import { useTheme } from "./hooks/useTheme";
-import { ago, hhmm } from "./lib/time";
-import { buildRows, filterRows, sortRows } from "./lib/view";
+import { ago, elapsed, hhmm } from "./lib/time";
+import { buildRows, filterRows, sortRows, STATUS_COLOR, type Row } from "./lib/view";
 import { areaAt, summarizeAreas, type AreaFeature } from "@sinluz/shared/areas";
 import { useGeo } from "./hooks/useGeo";
 import { useLocate, type Locate } from "./hooks/useLocate";
@@ -30,6 +30,8 @@ function snapSheet(value: number): number {
   return best;
 }
 
+type Toast = { id: number; text: string; tone: "out" | "ok" | "info" };
+
 export default function App() {
   const { status, error, isLoading, isValidating } = useStatus();
   const catalog = useCatalog();
@@ -46,8 +48,12 @@ export default function App() {
   const [area, setArea] = useState<string | null>(null);
   const [sheetFrac, setSheetFrac] = useState(0.4);
   const [dragging, setDragging] = useState(false);
+  const [toasts, setToasts] = useState<Toast[]>([]);
   const containerRef = useRef<HTMLDivElement>(null);
   const dragRef = useRef<{ y: number; frac: number; moved: boolean } | null>(null);
+  const prevStatusRef = useRef<Map<string, string> | null>(null);
+  const toastId = useRef(0);
+  const initialCircuitRef = useRef<string | null>(new URLSearchParams(location.search).get("c"));
   const geo = useGeo();
   const locate = useLocate();
 
@@ -65,6 +71,31 @@ export default function App() {
     () => summarizeAreas(rows.map((r) => ({ municipio: r.circuit.municipio, status: r.status }))),
     [rows],
   );
+  const municipios = useMemo(
+    () => [...new Set(rows.map((r) => r.circuit.municipio))].sort((a, b) => a.localeCompare(b, "es")),
+    [rows],
+  );
+  const favRows = useMemo(() => rows.filter((r) => favorites.ids.includes(r.circuit.id)), [rows, favorites.ids]);
+
+  // Selección inicial desde la URL (?c=id) cuando el catálogo ya cargó.
+  useEffect(() => {
+    const id = initialCircuitRef.current;
+    if (!id || rows.length === 0) return;
+    const row = rows.find((r) => r.circuit.id === id);
+    if (row) {
+      setSelected(row.circuit.id);
+      setArea(row.circuit.municipio);
+    }
+    initialCircuitRef.current = null;
+  }, [rows]);
+
+  // Sincroniza el circuito seleccionado con la URL para poder compartir/enlazar.
+  useEffect(() => {
+    const url = new URL(location.href);
+    if (selected) url.searchParams.set("c", selected);
+    else url.searchParams.delete("c");
+    history.replaceState(null, "", url);
+  }, [selected]);
 
   // En qué municipio está el usuario: se calcula aquí, la posición no sale del dispositivo.
   const pos = locate.position;
@@ -76,6 +107,42 @@ export default function App() {
   useEffect(() => {
     if (here) setArea(here);
   }, [here]);
+
+  // Detecta cambios de estado entre actualizaciones y avisa (especialmente favoritos).
+  useEffect(() => {
+    if (!status || rows.length === 0) return;
+    const curr = new Map(rows.map((r) => [r.circuit.id, r.status]));
+    const prev = prevStatusRef.current;
+    prevStatusRef.current = curr;
+    if (!prev) return; // primera carga: no notificar
+
+    const next: Toast[] = [];
+    let other = 0;
+    for (const r of rows) {
+      const before = prev.get(r.circuit.id);
+      const after = r.status;
+      if (!before || before === after) continue;
+      if (favorites.ids.includes(r.circuit.id)) {
+        if (after === "out")
+          next.push({ id: ++toastId.current, text: `${r.circuit.name}: sin servicio`, tone: "out" });
+        else if (after === "ok")
+          next.push({ id: ++toastId.current, text: `${r.circuit.name}: con servicio`, tone: "ok" });
+        else if (after === "stale")
+          next.push({ id: ++toastId.current, text: `${r.circuit.name}: sin confirmar`, tone: "info" });
+      } else {
+        other++;
+      }
+    }
+    if (other > 0) next.push({ id: ++toastId.current, text: `${other} circuito${other === 1 ? "" : "s"} más cambiaron de estado`, tone: "info" });
+    if (next.length === 0) return;
+    setToasts((t) => [...next.slice(0, 4), ...t].slice(0, 4));
+  }, [status, rows, favorites.ids]);
+
+  useEffect(() => {
+    if (toasts.length === 0) return;
+    const timer = setTimeout(() => setToasts((t) => t.slice(0, -1)), 5500);
+    return () => clearTimeout(timer);
+  }, [toasts]);
 
   const pickArea = (name: string | null) => {
     setArea(name);
@@ -102,6 +169,8 @@ export default function App() {
   const deficit = status?.province.deficit_mw;
   const served = status?.province.served_mw;
   const total = rows.length || 1;
+  const lastChangesAt = status?.pipeline?.last_changes_at ?? null;
+  const lastChangesCount = status?.pipeline?.last_changes_count ?? null;
 
   const ThemeIcon = theme.theme === "system" ? Monitor : dark ? Moon : Sun;
   const themeLabel =
@@ -176,6 +245,14 @@ export default function App() {
                 {lastMessageAt ? <span className="text-ink/35"> · {hhmm(lastMessageAt)}</span> : null}
               </span>
             </div>
+            {lastChangesAt && lastChangesCount ? (
+              <div className="flex items-center gap-1.5 text-ink/40" title="Última ingesta que aplicó cambios">
+                <Bell className="h-3 w-3" />
+                <span className="tabular-nums">
+                  +{lastChangesCount} cambios {ago(lastChangesAt, now)}
+                </span>
+              </div>
+            ) : null}
           </div>
           <button
             type="button"
@@ -204,6 +281,7 @@ export default function App() {
             dark={dark}
           />
           <LocateNote locate={locate} here={here} loaded={!!geo} />
+          <Toasts items={toasts} onDismiss={(id) => setToasts((t) => t.filter((x) => x.id !== id))} />
         </div>
 
         <section
@@ -233,9 +311,14 @@ export default function App() {
                 <p className="mt-0.5 text-[24px] font-semibold leading-none tabular-nums">
                   {isLoading && !status ? "—" : affected}
                   <span className="ml-1.5 text-[13px] font-normal text-ink/50">
-                    {affected === 1 ? "circuito afectado" : "circuitos afectados"}
+                    de {rows.length} sin servicio
                   </span>
                 </p>
+                {unconfirmed > 0 && (
+                  <p className="mt-0.5 flex items-center gap-1 text-[11.5px] text-stale" title="Afectado según el último aviso, pero el canal no lo ha vuelto a mencionar en varias horas">
+                    <Info className="h-3 w-3" /> {unconfirmed} sin confirmar
+                  </p>
+                )}
               </div>
               {(deficit != null || served != null) && (
                 <div className="flex shrink-0 gap-1.5 pb-0.5">
@@ -263,8 +346,12 @@ export default function App() {
                     <i className="h-1.5 w-1.5 rounded-full bg-out" aria-hidden /> {affected} sin servicio
                   </span>
                   {unconfirmed > 0 && (
-                    <span className="inline-flex items-center gap-1">
+                    <span
+                      className="inline-flex items-center gap-1"
+                      title="Afectado según el último aviso, pero el canal no lo ha vuelto a mencionar en varias horas"
+                    >
                       <i className="h-1.5 w-1.5 rounded-full bg-stale" aria-hidden /> {unconfirmed} sin confirmar
+                      <Info className="h-3 w-3 text-stale/70" aria-hidden />
                     </span>
                   )}
                   <span className="inline-flex items-center gap-1">
@@ -274,6 +361,17 @@ export default function App() {
               </div>
             )}
           </div>
+
+          {favRows.length > 0 && (
+            <div className="mx-4 mb-2">
+              <p className="mb-1 text-[10.5px] font-medium uppercase tracking-wider text-ink/40">Mis circuitos</p>
+              <div className="space-y-1">
+                {favRows.map((r) => (
+                  <FavRow key={r.circuit.id} row={r} now={now} active={selected === r.circuit.id} onSelect={pickCircuit} />
+                ))}
+              </div>
+            </div>
+          )}
 
           {area && (
             <div className="mx-4 mb-2 rounded-xl bg-muted px-3 py-2 ring-1 ring-line/40">
@@ -334,12 +432,13 @@ export default function App() {
               hasFavs={favorites.ids.length > 0}
               onlyIssues={onlyIssues}
               onOnlyIssues={setOnlyIssues}
+              area={area}
+              onArea={pickArea}
+              municipios={municipios}
               emptyText={
-                query || onlyFavs || onlyIssues
+                query || onlyFavs || onlyIssues || (area && !rows.some((r) => r.circuit.municipio === area))
                   ? "Ningún circuito coincide con los filtros."
-                  : area
-                    ? `No hay circuitos de ${area} en el catálogo.`
-                    : "No hay circuitos disponibles."
+                  : "No hay circuitos disponibles."
               }
             />
           )}
@@ -363,6 +462,58 @@ export default function App() {
   );
 }
 
+function FavRow({ row, now, active, onSelect }: { row: Row; now: number; active: boolean; onSelect: (id: string) => void }) {
+  const sinceLabel = row.state.since_kind === "reported" ? "reportado" : "desde";
+  const text =
+    row.status === "out"
+      ? `Sin servicio · ${elapsed(row.state.since, now)} (${sinceLabel} ${hhmm(row.state.since)})`
+      : row.status === "stale"
+        ? "Sin confirmar"
+        : "Con servicio";
+  return (
+    <button
+      type="button"
+      onClick={() => onSelect(row.circuit.id)}
+      className={`flex w-full items-center gap-2.5 rounded-xl border px-3 py-2 text-left transition ${
+        active ? "border-ink/20 bg-muted" : "border-line bg-surface hover:bg-muted/60"
+      }`}
+    >
+      <span className="h-2.5 w-2.5 shrink-0 rounded-full" style={{ background: STATUS_COLOR[row.status] }} aria-hidden />
+      <span className="min-w-0 flex-1">
+        <span className="block truncate text-[13px] font-medium leading-tight">{row.circuit.name}</span>
+        <span className="block truncate text-[11px] text-ink/50">{text}</span>
+      </span>
+    </button>
+  );
+}
+
+function Toasts({ items, onDismiss }: { items: Toast[]; onDismiss: (id: number) => void }) {
+  if (items.length === 0) return null;
+  return (
+    <div className="pointer-events-none absolute inset-x-3 top-2 z-[1100] flex flex-col gap-1.5">
+      {items.map((t) => (
+        <div
+          key={t.id}
+          className={`pointer-events-auto flex items-center gap-2 rounded-xl border px-3 py-2 text-[12px] shadow-sm backdrop-blur ${
+            t.tone === "out"
+              ? "border-out/20 bg-surface/97 text-out"
+              : t.tone === "ok"
+                ? "border-ok/20 bg-surface/97 text-ok"
+                : "border-line bg-surface/97 text-ink/75"
+          }`}
+          role="status"
+        >
+          <Bell className="h-3.5 w-3.5 shrink-0" aria-hidden />
+          <span className="min-w-0 flex-1">{t.text}</span>
+          <button onClick={() => onDismiss(t.id)} aria-label="Cerrar aviso" className="text-ink/40 hover:text-ink/70">
+            <X className="h-3.5 w-3.5" />
+          </button>
+        </div>
+      ))}
+    </div>
+  );
+}
+
 /** Mensaje breve sobre el mapa cuando la localización no da un municipio. */
 function LocateNote({ locate, here, loaded }: { locate: Locate; here: string | null; loaded: boolean }) {
   let text: string | null = null;
@@ -371,7 +522,7 @@ function LocateNote({ locate, here, loaded }: { locate: Locate; here: string | n
   else if (locate.state === "ok" && loaded && !here) text = "Estás fuera de la provincia de Santiago de Cuba.";
   if (!text) return null;
   return (
-    <p className="pointer-events-none absolute inset-x-3 top-2 z-[1000] rounded-lg bg-surface/95 px-3 py-2 text-center text-[12px] text-ink/70 shadow-sm ring-1 ring-line backdrop-blur">
+    <p className="pointer-events-none absolute inset-x-3 top-12 z-[1000] rounded-lg bg-surface/95 px-3 py-2 text-center text-[12px] text-ink/70 shadow-sm ring-1 ring-line backdrop-blur">
       {text}
     </p>
   );

@@ -34,6 +34,8 @@ export const CircuitState = z.object({
   status: CircuitStatus,
   /** Inicio de la afectación (solo con `out`). */
   since: z.number().nullable(),
+  /** Cómo se determinó el inicio: hora explícita/duración vs primera vez reportado. */
+  since_kind: z.enum(["explicit", "reported"]).optional(),
   /** Última vez que el canal habló de este circuito. */
   last_mention_at: z.number().nullable(),
   source_message_id: z.number().nullable(),
@@ -46,6 +48,10 @@ export const PipelineHealth = z.object({
   backoff_until: z.number().nullable(),
   /** Última lectura correcta del canal por el servidor. */
   last_ok_at: z.number().nullable(),
+  /** Última ingesta correcta que aplicó cambios. */
+  last_changes_at: z.number().nullable().optional(),
+  /** Cantidad de cambios aplicados en esa ingesta. */
+  last_changes_count: z.number().nullable().optional(),
 });
 export type PipelineHealth = z.infer<typeof PipelineHealth>;
 

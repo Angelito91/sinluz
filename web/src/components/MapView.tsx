@@ -14,7 +14,7 @@ import {
 } from "react-leaflet";
 import L from "leaflet";
 import type { PathOptions } from "leaflet";
-import { Crosshair, Loader2, X } from "lucide-react";
+import { Check, Crosshair, Loader2, Share2, X } from "lucide-react";
 import "leaflet/dist/leaflet.css";
 import { STATUS_LABEL, type Row } from "../lib/view";
 import { ago, elapsed, hhmm } from "../lib/time";
@@ -321,9 +321,13 @@ function CircuitGeometry({
   );
 }
 
+function sinceLabel(row: Row): string {
+  return row.state.since_kind === "reported" ? "reportado" : "desde";
+}
+
 function statusText(row: Row, now: number): string {
   if (row.status === "out") {
-    const base = `sin servicio · ${elapsed(row.state.since, now)} (desde ${hhmm(row.state.since)})`;
+    const base = `sin servicio · ${elapsed(row.state.since, now)} (${sinceLabel(row)} ${hhmm(row.state.since)})`;
     if (row.state.last_mention_at) return `${base} · confirmado ${ago(row.state.last_mention_at, now)}`;
     return base;
   }
@@ -335,6 +339,21 @@ function statusText(row: Row, now: number): string {
   }
   if (row.state.last_mention_at) return `${STATUS_LABEL[row.status]} · aviso ${ago(row.state.last_mention_at, now)}`;
   return STATUS_LABEL[row.status];
+}
+
+function shareText(row: Row, now: number): string {
+  const parts = [`${row.circuit.name} · ${row.circuit.municipio}`];
+  if (row.status === "out") {
+    parts.push(`Sin servicio ${sinceLabel(row)} ${hhmm(row.state.since)} (${elapsed(row.state.since, now)})`);
+    if (row.state.last_mention_at) parts.push(`Confirmado ${ago(row.state.last_mention_at, now)}`);
+  } else if (row.status === "stale") {
+    parts.push("Sin confirmar");
+    if (row.state.last_mention_at) parts.push(`Último aviso ${ago(row.state.last_mention_at, now)}`);
+  } else {
+    parts.push("Con servicio (sin afectación reportada)");
+  }
+  parts.push("— SinLuz Santiago de Cuba");
+  return parts.join(". ");
 }
 
 function CircuitMarkers({
@@ -582,6 +601,7 @@ function SelectedCard({
   onClose: () => void;
   dark: boolean;
 }) {
+  const [copied, setCopied] = useState(false);
   const color = mapDot(row.status, dark);
   const confidence = CONFIDENCE[reference?.confidence ?? ""] ?? "aproximada";
   const meta =
@@ -590,6 +610,26 @@ function SelectedCard({
       : row.status === "stale"
         ? "text-stale font-medium"
         : "text-ink/55";
+  const staleHelp = "Afectado según el último aviso, pero el canal no lo ha vuelto a mencionar en varias horas.";
+
+  const doShare = async () => {
+    const text = shareText(row, now);
+    try {
+      if (navigator.share) {
+        await navigator.share({ title: row.circuit.name, text });
+        return;
+      }
+    } catch {
+      // cancelado o no soportado: fallback a copiar
+    }
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1800);
+    } catch {
+      // sin permisos de portapapeles
+    }
+  };
 
   return (
     <section
@@ -606,7 +646,15 @@ function SelectedCard({
         <div className="min-w-0 flex-1">
           <p className="text-[10px] uppercase tracking-wider text-ink/40">{row.circuit.municipio}</p>
           <p className="truncate text-[15px] font-semibold leading-tight">{row.circuit.name}</p>
-          <p className={`mt-0.5 text-[12px] ${meta}`}>{statusText(row, now)}</p>
+          <p className={`mt-0.5 text-[12px] ${meta}`} title={row.status === "stale" ? staleHelp : undefined}>
+            {statusText(row, now)}
+          </p>
+          {row.status === "stale" && (
+            <p className="mt-0.5 text-[10.5px] leading-snug text-stale/80">{staleHelp}</p>
+          )}
+          {row.circuit.notes && (
+            <p className="mt-1 text-[10.5px] leading-snug text-ink/45">{row.circuit.notes}</p>
+          )}
           <p className="mt-1 text-[10px] leading-snug text-ink/40">
             Ubicación {confidence} · no oficial ·{" "}
             <a
@@ -619,13 +667,23 @@ function SelectedCard({
             </a>
           </p>
         </div>
-        <button
-          onClick={onClose}
-          aria-label="Cerrar detalle del circuito"
-          className="rounded-full p-1.5 text-ink/40 transition hover:bg-muted hover:text-ink/70"
-        >
-          <X className="h-4 w-4" />
-        </button>
+        <div className="flex shrink-0 items-center gap-0.5">
+          <button
+            onClick={doShare}
+            aria-label="Compartir estado del circuito"
+            title={copied ? "Copiado" : "Compartir o copiar"}
+            className="rounded-full p-1.5 text-ink/40 transition hover:bg-muted hover:text-ink/70"
+          >
+            {copied ? <Check className="h-4 w-4 text-ok" /> : <Share2 className="h-4 w-4" />}
+          </button>
+          <button
+            onClick={onClose}
+            aria-label="Cerrar detalle del circuito"
+            className="rounded-full p-1.5 text-ink/40 transition hover:bg-muted hover:text-ink/70"
+          >
+            <X className="h-4 w-4" />
+          </button>
+        </div>
       </div>
     </section>
   );
