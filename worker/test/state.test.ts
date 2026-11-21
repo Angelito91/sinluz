@@ -6,8 +6,9 @@ const msg = (id: number, date: number, text = ""): Message => ({ id, date, text 
 
 const result = (
   cambios: LlmResult["cambios"],
-  metrics: LlmResult["metrics"] = null,
-): LlmResult => ({ cambios, metrics });
+  metricas: LlmResult["metricas"] = null,
+  confirmaciones: LlmResult["confirmaciones"] = [],
+): LlmResult => ({ cambios, confirmaciones, metricas });
 
 const T = 1_700_000_000;
 
@@ -16,7 +17,7 @@ describe("applyChanges", () => {
     const s = applyChanges(
       emptyState(),
       [msg(1, T)],
-      result([{ circuit_id: "sc-08", status: "out", source_message_id: 1, duration_min: null }]),
+      result([{ circuito: "sc-08", estado: "out", mensaje_id: 1, duracion_min: null }]),
       T + 10,
     );
 
@@ -38,7 +39,7 @@ describe("applyChanges", () => {
     const s = applyChanges(
       emptyState(),
       [msg(1, T)],
-      result([{ circuit_id: "sc-08", status: "out", source_message_id: 1, duration_min: 90 }]),
+      result([{ circuito: "sc-08", estado: "out", mensaje_id: 1, duracion_min: 90 }]),
       T,
     );
 
@@ -49,13 +50,13 @@ describe("applyChanges", () => {
     const first = applyChanges(
       emptyState(),
       [msg(1, T)],
-      result([{ circuit_id: "sc-08", status: "out", source_message_id: 1, duration_min: null }]),
+      result([{ circuito: "sc-08", estado: "out", mensaje_id: 1, duracion_min: null }]),
       T,
     );
     const second = applyChanges(
       first,
       [msg(2, T + 3600)],
-      result([{ circuit_id: "sc-08", status: "out", source_message_id: 2, duration_min: null }]),
+      result([{ circuito: "sc-08", estado: "out", mensaje_id: 2, duracion_min: null }]),
       T + 3600,
     );
 
@@ -68,7 +69,7 @@ describe("applyChanges", () => {
     const s = applyChanges(
       emptyState(),
       [msg(1, T)],
-      result([{ circuit_id: "sc-08", status: "out", source_message_id: 1, duration_min: 99_000 }]),
+      result([{ circuito: "sc-08", estado: "out", mensaje_id: 1, duracion_min: 99_000 }]),
       T,
     );
 
@@ -79,27 +80,27 @@ describe("applyChanges", () => {
     const first = applyChanges(
       emptyState(),
       [msg(1, T)],
-      result([{ circuit_id: "sc-08", status: "out", source_message_id: 1, duration_min: null }]),
+      result([{ circuito: "sc-08", estado: "out", mensaje_id: 1, duracion_min: null }]),
       T,
     );
     const second = applyChanges(
       first,
       [msg(2, T + 60)],
-      result([{ circuit_id: "sc-08", status: "ok", source_message_id: 2, duration_min: null }]),
+      result([{ circuito: "sc-08", estado: "ok", mensaje_id: 2, duracion_min: null }]),
       T + 60,
     );
 
     expect(second.circuits).toEqual([]);
   });
 
-  test("gana el cambio del mensaje más reciente", () => {
+  test("aplica eventos en orden cronológico (restablece y vuelve a afectar)", () => {
     const s = applyChanges(
       emptyState(),
       [msg(1, T), msg(2, T + 60), msg(3, T + 120)],
       result([
-        { circuit_id: "sc-08", status: "out", source_message_id: 1, duration_min: null },
-        { circuit_id: "sc-08", status: "ok", source_message_id: 2, duration_min: null },
-        { circuit_id: "sc-08", status: "out", source_message_id: 3, duration_min: 30 },
+        { circuito: "sc-08", estado: "out", mensaje_id: 1, duracion_min: null },
+        { circuito: "sc-08", estado: "ok", mensaje_id: 2, duracion_min: null },
+        { circuito: "sc-08", estado: "out", mensaje_id: 3, duracion_min: 30 },
       ]),
       T + 120,
     );
@@ -107,22 +108,69 @@ describe("applyChanges", () => {
     expect(s.circuits[0]).toMatchObject({ id: "sc-08", status: "out", since: T + 120 - 1800 });
   });
 
-  test("una confirmación posterior conserva la duración del mismo lote", () => {
-    const s = applyChanges(
+  test("una confirmación refresca la mención sin mover el inicio", () => {
+    const first = applyChanges(
       emptyState(),
-      [msg(1, T), msg(2, T + 3600)],
-      result([
-        { circuit_id: "sc-08", status: "out", source_message_id: 1, duration_min: 540 },
-        { circuit_id: "sc-08", status: "out", source_message_id: 2, duration_min: null },
-      ]),
+      [msg(1, T)],
+      result([{ circuito: "sc-08", estado: "out", mensaje_id: 1, duracion_min: 540 }]),
+      T,
+    );
+    const second = applyChanges(
+      first,
+      [msg(2, T + 3600)],
+      result([], null, [{ circuito: "sc-08", mensaje_id: 2, duracion_min: null }]),
       T + 3600,
     );
 
-    expect(s.circuits[0]).toMatchObject({
+    expect(second.circuits[0]).toMatchObject({
       id: "sc-08",
       since: T - 540 * 60,
       last_mention_at: T + 3600,
       source_message_id: 2,
+    });
+  });
+
+  test("una confirmación con duración explícita no rejuvenece un since mucho más antiguo", () => {
+    const first = applyChanges(
+      emptyState(),
+      [msg(1, T)],
+      result([{ circuito: "sc-08", estado: "out", mensaje_id: 1, duracion_min: 24 * 60 }]),
+      T,
+    );
+    const prevSince = first.circuits[0]!.since;
+    const second = applyChanges(
+      first,
+      [msg(2, T + 3600)],
+      result([], null, [{ circuito: "sc-08", mensaje_id: 2, duracion_min: 60 }]),
+      T + 3600,
+    );
+
+    expect(second.circuits[0]?.since).toBe(prevSince);
+    expect(second.circuits[0]?.last_mention_at).toBe(T + 3600);
+  });
+
+  test("restablece y vuelve a afectar en el mismo lote reinicia el since", () => {
+    const first = applyChanges(
+      emptyState(),
+      [msg(1, T - 7200)],
+      result([{ circuito: "sc-08", estado: "out", mensaje_id: 1, duracion_min: null }]),
+      T - 7200,
+    );
+    const second = applyChanges(
+      first,
+      [msg(2, T), msg(3, T + 600)],
+      result([
+        { circuito: "sc-08", estado: "ok", mensaje_id: 2, duracion_min: null },
+        { circuito: "sc-08", estado: "out", mensaje_id: 3, duracion_min: null },
+      ]),
+      T + 600,
+    );
+
+    expect(second.circuits[0]).toMatchObject({
+      id: "sc-08",
+      status: "out",
+      since: T + 600,
+      since_kind: "reported",
     });
   });
 
@@ -131,8 +179,8 @@ describe("applyChanges", () => {
       emptyState(),
       [msg(1, T)],
       result([
-        { circuit_id: "no-existe", status: "out", source_message_id: 1, duration_min: null },
-        { circuit_id: "sc-08", status: "out", source_message_id: 99, duration_min: null },
+        { circuito: "no-existe", estado: "out", mensaje_id: 1, duracion_min: null },
+        { circuito: "sc-08", estado: "out", mensaje_id: 99, duracion_min: null },
       ]),
       T,
     );
@@ -145,7 +193,7 @@ describe("applyChanges", () => {
     const first = applyChanges(
       emptyState(),
       [msg(1, T)],
-      result([], { deficit_mw: 100, served_mw: 40 }),
+      result([], { deficit_mw: 100, servido_mw: 40 }),
       T,
     );
     expect(first.province).toEqual({ deficit_mw: 100, served_mw: 40 });
@@ -153,7 +201,7 @@ describe("applyChanges", () => {
     const second = applyChanges(
       first,
       [msg(2, T + 60)],
-      result([], { deficit_mw: 1245, served_mw: null }),
+      result([], { deficit_mw: 1245, servido_mw: null }),
       T + 60,
     );
     expect(second.province).toEqual({ deficit_mw: 100, served_mw: 40 });
@@ -166,7 +214,7 @@ describe("applyChanges", () => {
     const s = applyChanges(
       emptyState(),
       [msg(999, T)],
-      result([{ circuit_id: "sc-08", status: "out", source_message_id: 999, duration_min: null }]),
+      result([{ circuito: "sc-08", estado: "out", mensaje_id: 999, duracion_min: null }]),
       T,
       false,
     );
@@ -180,7 +228,7 @@ describe("mergeOverrides", () => {
   const base = applyChanges(
     emptyState(),
     [msg(1, T)],
-    result([{ circuit_id: "sc-08", status: "out", source_message_id: 1, duration_min: null }]),
+    result([{ circuito: "sc-08", estado: "out", mensaje_id: 1, duracion_min: null }]),
     T,
   );
 

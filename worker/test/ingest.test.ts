@@ -60,8 +60,9 @@ describe("ingest", () => {
 
   test("aplica el lote y avanza el cursor al último mensaje", async () => {
     env.AI = ai({
-      cambios: [{ circuit_id: "sc-08", status: "out", source_message_id: 1, duration_min: null }],
-      metrics: { deficit_mw: 100, served_mw: 40 },
+      cambios: [{ circuito: "sc-08", estado: "out", mensaje_id: 1, duracion_min: null }],
+      confirmaciones: [],
+      metricas: { deficit_mw: 100, servido_mw: 40 },
     });
 
     const result = await ingest(env, "test");
@@ -76,8 +77,9 @@ describe("ingest", () => {
 
   test("un id inventado no cambia el estado pero el cursor sí avanza", async () => {
     env.AI = ai({
-      cambios: [{ circuit_id: "no-existe", status: "out", source_message_id: 1, duration_min: null }],
-      metrics: null,
+      cambios: [{ circuito: "no-existe", estado: "out", mensaje_id: 1, duracion_min: null }],
+      confirmaciones: [],
+      metricas: null,
     });
 
     await ingest(env, "test");
@@ -96,9 +98,10 @@ describe("ingest", () => {
           return {
             response: {
               cambios: [
-                { circuit_id: "sc-08", status: "out", source_message_id: 1, duration_min: null },
+                { circuito: "sc-08", estado: "out", mensaje_id: 1, duracion_min: null },
               ],
-              metrics: null,
+              confirmaciones: [],
+              metricas: null,
             },
           };
         }
@@ -127,7 +130,7 @@ describe("ingest", () => {
   });
 
   test("sin mensajes nuevos solo actualiza generated_at", async () => {
-    env.AI = ai({ cambios: [], metrics: null });
+    env.AI = ai({ cambios: [], confirmaciones: [], metricas: null });
     globalThis.fetch = (async () =>
       new Response(JSON.stringify({ messages: [] }), {
         headers: { "content-type": "application/json" },

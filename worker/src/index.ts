@@ -136,7 +136,7 @@ app.post("/api/v1/ingest", async (c) => {
 
   return c.json({
     ok: true,
-    applied: result.result.cambios.length,
+    applied: result.result.cambios.length + result.result.confirmaciones.length,
     affected: next.circuits.filter((x) => x.status === "out").length,
   });
 });

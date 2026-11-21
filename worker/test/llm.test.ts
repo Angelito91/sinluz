@@ -27,8 +27,9 @@ describe("decide", () => {
   test("acepta una respuesta válida", async () => {
     const r = await decide(
       fake({
-        cambios: [{ circuit_id: "sc-08", status: "ok", source_message_id: 10, duration_min: null }],
-        metrics: null,
+        cambios: [{ circuito: "sc-08", estado: "ok", mensaje_id: 10, duracion_min: null }],
+        confirmaciones: [],
+        metricas: null,
       }),
       "m",
       input,
@@ -36,14 +37,32 @@ describe("decide", () => {
     expect(r.ok).toBe(true);
     if (r.ok) {
       expect(r.result.cambios).toEqual([
-        { circuit_id: "sc-08", status: "ok", source_message_id: 10, duration_min: null },
+        { circuito: "sc-08", estado: "ok", mensaje_id: 10, duracion_min: null },
       ]);
+      expect(r.result.confirmaciones).toEqual([]);
+    }
+  });
+
+  test("acepta confirmaciones y metricas en español", async () => {
+    const r = await decide(
+      fake({
+        cambios: [],
+        confirmaciones: [{ circuito: "sc-08", mensaje_id: 10, duracion_min: 60 }],
+        metricas: { deficit_mw: 100, servido_mw: 40 },
+      }),
+      "m",
+      input,
+    );
+    expect(r.ok).toBe(true);
+    if (r.ok) {
+      expect(r.result.confirmaciones[0]).toMatchObject({ circuito: "sc-08", duracion_min: 60 });
+      expect(r.result.metricas).toEqual({ deficit_mw: 100, servido_mw: 40 });
     }
   });
 
   test("rechaza una respuesta que no cumple el esquema", async () => {
     expect((await decide(fake({ cambios: "nada" }), "m", input)).ok).toBe(false);
-    expect((await decide(fake({ cambios: [], metrics: { deficit_mw: "100" } }), "m", input)).ok).toBe(
+    expect((await decide(fake({ cambios: [], metricas: { deficit_mw: "100" } }), "m", input)).ok).toBe(
       false,
     );
     expect((await decide(fake(undefined), "m", input)).ok).toBe(false);
@@ -68,9 +87,10 @@ describe("decide", () => {
     const r = await decide(
       fake({
         cambios: [
-          { circuit_id: "sc-08", status: "out", source_message_id: 10, duration_min: 99_000 },
+          { circuito: "sc-08", estado: "out", mensaje_id: 10, duracion_min: 99_000 },
         ],
-        metrics: null,
+        confirmaciones: [],
+        metricas: null,
       }),
       "m",
       input,
@@ -83,7 +103,7 @@ describe("decide", () => {
     const spy: AiBinding = {
       run: async (_model, body) => {
         sent = body;
-        return { response: { cambios: [], metrics: null } };
+        return { response: { cambios: [], confirmaciones: [], metricas: null } };
       },
     };
 
@@ -93,11 +113,13 @@ describe("decide", () => {
     expect(sent.response_format.type).toBe("json_schema");
     expect(sent.max_tokens).toBe(4096);
 
-    const user = JSON.parse(sent.messages[1].content);
+    const user = JSON.parse(sent.messages[sent.messages.length - 1].content);
     expect(user.catalogo).toContain("sc-08");
     expect(user.estado_actual.afectados[0]).toMatchObject({ id: "sc-08", minutos_afectado: 167 });
+    expect(user.estado_actual.metricas).toEqual({ deficit_mw: null, servido_mw: null });
     expect(user.mensajes[0]).toMatchObject({ id: 10 });
     expect(sent.messages[0].content).toContain("REGLA DE ORO");
+    expect(sent.response_format.json_schema.required).toContain("confirmaciones");
   });
 
   test("limpia HTML y entidades antes de mandar los mensajes", async () => {
@@ -105,7 +127,7 @@ describe("decide", () => {
     const spy: AiBinding = {
       run: async (_model, body) => {
         sent = body;
-        return { response: { cambios: [], metrics: null } };
+        return { response: { cambios: [], confirmaciones: [], metricas: null } };
       },
     };
 
@@ -114,7 +136,7 @@ describe("decide", () => {
       messages: [{ id: 11, date: 1_699_999_100, text: "<b>Afectado</b><br>Circuito 8&nbsp;ya" }],
     });
 
-    const user = JSON.parse(sent.messages[1].content);
+    const user = JSON.parse(sent.messages[sent.messages.length - 1].content);
     expect(user.mensajes[0].texto).toBe("Afectado\nCircuito 8 ya");
   });
 });

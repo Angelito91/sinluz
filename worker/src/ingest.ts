@@ -109,7 +109,7 @@ export async function ingest(env: Env, source = "cron"): Promise<IngestResult> {
 
     current = applyChanges(current, batch, result.result, nowSec);
     processed += batch.length;
-    changes += result.result.cambios.length;
+    changes += result.result.cambios.length + result.result.confirmaciones.length;
   }
 
   // Un solo guardado: si un lote falla, el estado anterior y el cursor no se tocan.
