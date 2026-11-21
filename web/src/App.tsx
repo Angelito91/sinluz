@@ -1,14 +1,14 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Bell, Clock, Info, Monitor, Moon, Radio, Sun, X } from "lucide-react";
+import { Bell, Download, Info, Monitor, Moon, Share, Sun, X } from "lucide-react";
 import MapView from "./components/MapView";
 import CircuitList from "./components/CircuitList";
 import StatusBanner from "./components/StatusBanner";
 import { useCatalog, useStatus } from "./hooks/useStatus";
 import { useNow } from "./hooks/useNow";
-import { useFavorites, useOnline } from "./hooks/useLocal";
+import { useFavorites, useInstallPrompt, useOnline } from "./hooks/useLocal";
 import { useTheme } from "./hooks/useTheme";
-import { ago, elapsed, hhmm } from "./lib/time";
-import { buildRows, filterRows, sortRows, STATUS_COLOR, type Row } from "./lib/view";
+import { ago } from "./lib/time";
+import { buildRows, filterRows, sortRows } from "./lib/view";
 import { areaAt, summarizeAreas, type AreaFeature } from "@sinluz/shared/areas";
 import { useGeo } from "./hooks/useGeo";
 import { useLocate, type Locate } from "./hooks/useLocate";
@@ -39,6 +39,7 @@ export default function App() {
   const online = useOnline();
   const favorites = useFavorites();
   const theme = useTheme();
+  const install = useInstallPrompt();
   const dark = theme.resolved === "dark";
 
   const [query, setQuery] = useState("");
@@ -49,6 +50,7 @@ export default function App() {
   const [sheetFrac, setSheetFrac] = useState(0.4);
   const [dragging, setDragging] = useState(false);
   const [toasts, setToasts] = useState<Toast[]>([]);
+  const [showIosInstall, setShowIosInstall] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const dragRef = useRef<{ y: number; frac: number; moved: boolean } | null>(null);
   const prevStatusRef = useRef<Map<string, string> | null>(null);
@@ -75,7 +77,6 @@ export default function App() {
     () => [...new Set(rows.map((r) => r.circuit.municipio))].sort((a, b) => a.localeCompare(b, "es")),
     [rows],
   );
-  const favRows = useMemo(() => rows.filter((r) => favorites.ids.includes(r.circuit.id)), [rows, favorites.ids]);
 
   // Selección inicial desde la URL (?c=id) cuando el catálogo ya cargó.
   useEffect(() => {
@@ -158,6 +159,7 @@ export default function App() {
     const m = rows.find((r) => r.circuit.id === id)?.circuit.municipio;
     if (m) setArea(m);
   };
+
   const areaInfo = area ? areas.get(area) : null;
   const affected = rows.filter((r) => r.status === "out").length;
   const unconfirmed = rows.filter((r) => r.status === "stale").length;
@@ -169,8 +171,6 @@ export default function App() {
   const deficit = status?.province.deficit_mw;
   const served = status?.province.served_mw;
   const total = rows.length || 1;
-  const lastChangesAt = status?.pipeline?.last_changes_at ?? null;
-  const lastChangesCount = status?.pipeline?.last_changes_count ?? null;
 
   const ThemeIcon = theme.theme === "system" ? Monitor : dark ? Moon : Sun;
   const themeLabel =
@@ -216,50 +216,51 @@ export default function App() {
 
   const sheetExpanded = sheetFrac > 0.55;
 
+  const onInstall = async () => {
+    if (install.canPrompt) {
+      await install.install();
+      return;
+    }
+    if (install.ios) setShowIosInstall(true);
+  };
+
   return (
     <div ref={containerRef} className="mx-auto flex h-dvh w-full max-w-md flex-col overflow-hidden bg-paper text-ink">
       <header className="flex items-start justify-between gap-3 px-4 pb-2 pt-[max(0.75rem,env(safe-area-inset-top))]">
         <div className="min-w-0 pt-0.5">
           <h1 className="text-[19px] font-semibold leading-none tracking-tight">SinLuz</h1>
           <p className="mt-1 text-[11.5px] leading-none text-ink/45">Santiago de Cuba</p>
+          <p className="mt-1.5 text-[10.5px] leading-tight text-ink/45">
+            {status ? (
+              <>
+                <span className="tabular-nums">Actualizado {ago(status.generated_at, now)}</span>
+                <span className="text-ink/30"> · </span>
+                <span className="tabular-nums">Canal {ago(lastMessageAt, now)}</span>
+              </>
+            ) : (
+              "Actualizando…"
+            )}
+          </p>
         </div>
-        <div className="flex shrink-0 items-start gap-1.5">
-          <div className="flex flex-col items-end gap-1 pt-0.5 text-[10.5px] leading-tight text-ink/45">
-            <div className="flex items-center gap-1.5" title="Última lectura correcta de SinLuz">
-              <Clock className={`h-3 w-3 ${pipelineAgeMin <= 30 ? "text-emerald-500 dark:text-emerald-400" : "text-amber-600 dark:text-amber-400"}`} />
-              <span className="tabular-nums">
-                {status ? (
-                  <>
-                    Actualizado {ago(status.generated_at, now)}
-                    <span className="text-ink/35"> · {hhmm(status.generated_at)}</span>
-                  </>
-                ) : (
-                  "Actualizando…"
-                )}
-              </span>
-            </div>
-            <div className="flex items-center gap-1.5" title="Último mensaje publicado en el canal oficial">
-              <Radio className="h-3 w-3 text-ink/35" />
-              <span className="tabular-nums">
-                Canal {ago(lastMessageAt, now)}
-                {lastMessageAt ? <span className="text-ink/35"> · {hhmm(lastMessageAt)}</span> : null}
-              </span>
-            </div>
-            {lastChangesAt && lastChangesCount ? (
-              <div className="flex items-center gap-1.5 text-ink/40" title="Última ingesta que aplicó cambios">
-                <Bell className="h-3 w-3" />
-                <span className="tabular-nums">
-                  +{lastChangesCount} cambios {ago(lastChangesAt, now)}
-                </span>
-              </div>
-            ) : null}
-          </div>
+        <div className="flex shrink-0 items-center gap-1">
+          {install.canInstall && (
+            <button
+              type="button"
+              onClick={onInstall}
+              aria-label="Instalar la app"
+              title="Instalar la app"
+              className="flex h-8 items-center gap-1.5 rounded-full border border-line bg-surface px-2.5 text-[11.5px] font-medium text-ink/70 transition hover:bg-muted hover:text-ink"
+            >
+              <Download className="h-3.5 w-3.5" />
+              <span>Instalar</span>
+            </button>
+          )}
           <button
             type="button"
             onClick={theme.cycle}
             aria-label={themeLabel}
             title={themeLabel}
-            className="mt-0.5 flex h-8 w-8 items-center justify-center rounded-full text-ink/45 transition hover:bg-muted hover:text-ink/70"
+            className="flex h-8 w-8 items-center justify-center rounded-full text-ink/45 transition hover:bg-muted hover:text-ink/70"
           >
             <ThemeIcon className="h-4 w-4" />
           </button>
@@ -362,17 +363,6 @@ export default function App() {
             )}
           </div>
 
-          {favRows.length > 0 && (
-            <div className="mx-4 mb-2">
-              <p className="mb-1 text-[10.5px] font-medium uppercase tracking-wider text-ink/40">Mis circuitos</p>
-              <div className="space-y-1">
-                {favRows.map((r) => (
-                  <FavRow key={r.circuit.id} row={r} now={now} active={selected === r.circuit.id} onSelect={pickCircuit} />
-                ))}
-              </div>
-            </div>
-          )}
-
           {area && (
             <div className="mx-4 mb-2 rounded-xl bg-muted px-3 py-2 ring-1 ring-line/40">
               <div className="flex items-center justify-between gap-2">
@@ -402,17 +392,6 @@ export default function App() {
               )}
             </div>
           )}
-
-          <StatusBanner
-            online={online}
-            pipelineAgeMin={pipelineAgeMin}
-            channelAgeMin={channelAgeMin}
-            error={error?.message}
-            isValidating={isValidating}
-            lastError={status?.pipeline?.last_error ?? null}
-            backoffUntil={status?.pipeline?.backoff_until ?? null}
-            now={now}
-          />
 
           {isLoading && !status ? (
             <Skeleton />
@@ -458,32 +437,20 @@ export default function App() {
           </details>
         </section>
       </main>
-    </div>
-  );
-}
 
-function FavRow({ row, now, active, onSelect }: { row: Row; now: number; active: boolean; onSelect: (id: string) => void }) {
-  const sinceLabel = row.state.since_kind === "reported" ? "reportado" : "desde";
-  const text =
-    row.status === "out"
-      ? `Sin servicio · ${elapsed(row.state.since, now)} (${sinceLabel} ${hhmm(row.state.since)})`
-      : row.status === "stale"
-        ? "Sin confirmar"
-        : "Con servicio";
-  return (
-    <button
-      type="button"
-      onClick={() => onSelect(row.circuit.id)}
-      className={`flex w-full items-center gap-2.5 rounded-xl border px-3 py-2 text-left transition ${
-        active ? "border-ink/20 bg-muted" : "border-line bg-surface hover:bg-muted/60"
-      }`}
-    >
-      <span className="h-2.5 w-2.5 shrink-0 rounded-full" style={{ background: STATUS_COLOR[row.status] }} aria-hidden />
-      <span className="min-w-0 flex-1">
-        <span className="block truncate text-[13px] font-medium leading-tight">{row.circuit.name}</span>
-        <span className="block truncate text-[11px] text-ink/50">{text}</span>
-      </span>
-    </button>
+      <StatusBanner
+        online={online}
+        pipelineAgeMin={pipelineAgeMin}
+        channelAgeMin={channelAgeMin}
+        error={error?.message}
+        isValidating={isValidating}
+        lastError={status?.pipeline?.last_error ?? null}
+        backoffUntil={status?.pipeline?.backoff_until ?? null}
+        now={now}
+      />
+
+      {showIosInstall && <IosInstallHint onClose={() => setShowIosInstall(false)} />}
+    </div>
   );
 }
 
@@ -510,6 +477,42 @@ function Toasts({ items, onDismiss }: { items: Toast[]; onDismiss: (id: number) 
           </button>
         </div>
       ))}
+    </div>
+  );
+}
+
+function IosInstallHint({ onClose }: { onClose: () => void }) {
+  return (
+    <div className="pointer-events-none fixed inset-x-0 bottom-0 z-[1300] flex justify-center px-3 pb-[max(0.75rem,env(safe-area-inset-bottom))]">
+      <div
+        role="dialog"
+        aria-label="Cómo instalar la app"
+        className="pointer-events-auto w-full max-w-md rounded-2xl border border-line bg-surface/98 p-3 shadow-[0_12px_40px_rgba(0,0,0,0.18)] backdrop-blur-md dark:shadow-[0_12px_40px_rgba(0,0,0,0.5)]"
+      >
+        <div className="flex items-start gap-3">
+          <span className="mt-0.5 shrink-0 rounded-full bg-ink/5 p-1.5 text-ink/70">
+            <Download className="h-4 w-4" />
+          </span>
+          <div className="min-w-0 flex-1">
+            <p className="text-[13px] font-semibold leading-snug">Instalar SinLuz</p>
+            <p className="mt-1 flex items-start gap-1.5 text-[12px] leading-snug text-ink/70">
+              <Share className="mt-0.5 h-3.5 w-3.5 shrink-0" aria-hidden />
+              <span>
+                En Safari, toca <strong className="font-medium text-ink/85">Compartir</strong> y luego{" "}
+                <strong className="font-medium text-ink/85">“Añadir a pantalla de inicio”</strong>.
+              </span>
+            </p>
+          </div>
+          <button
+            type="button"
+            onClick={onClose}
+            aria-label="Cerrar"
+            className="shrink-0 rounded-full p-1.5 text-ink/45 transition hover:bg-muted hover:text-ink/75"
+          >
+            <X className="h-4 w-4" />
+          </button>
+        </div>
+      </div>
     </div>
   );
 }
