@@ -1,4 +1,4 @@
-import { AlertTriangle, RefreshCw, WifiOff } from "lucide-react";
+import { AlertTriangle, Info, RefreshCw, WifiOff } from "lucide-react";
 
 type Props = {
   online: boolean;
@@ -34,10 +34,17 @@ export default function StatusBanner({ online, pipelineAgeMin, channelAgeMin, er
       </Bar>
     );
   }
-  if (channelAgeMin != null && channelAgeMin > 360) {
+  if (channelAgeMin != null && channelAgeMin >= 360) {
     return (
       <Bar tone="warn" icon={<AlertTriangle className="h-3.5 w-3.5" />}>
         El canal lleva {Math.floor(channelAgeMin / 60)} h sin publicar. Los estados pueden no estar al día.
+      </Bar>
+    );
+  }
+  if (channelAgeMin != null && channelAgeMin >= 90) {
+    return (
+      <Bar tone="info" icon={<Info className="h-3.5 w-3.5" />}>
+        El canal no publica desde hace {age(channelAgeMin)}. SinLuz sigue consultando; puede haber cambios sin aviso.
       </Bar>
     );
   }
@@ -57,10 +64,11 @@ function Bar({
   icon,
 }: {
   children: React.ReactNode;
-  tone: "warn" | "bad" | "muted";
+  tone: "info" | "warn" | "bad" | "muted";
   icon: React.ReactNode;
 }) {
   const styles = {
+    info: "bg-sky-50 text-sky-900 border-sky-200/70 dark:bg-sky-500/12 dark:text-sky-200 dark:border-sky-400/20",
     warn: "bg-amber-50 text-amber-900 border-amber-200/70 dark:bg-amber-500/12 dark:text-amber-200 dark:border-amber-400/20",
     bad: "bg-red-50 text-red-900 border-red-200/70 dark:bg-red-500/12 dark:text-red-200 dark:border-red-400/20",
     muted: "bg-muted text-ink/60 border-transparent",

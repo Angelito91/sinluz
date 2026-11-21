@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Monitor, Moon, Radio, Sun } from "lucide-react";
+import { Clock, Monitor, Moon, Radio, Sun } from "lucide-react";
 import MapView from "./components/MapView";
 import CircuitList from "./components/CircuitList";
 import StatusBanner from "./components/StatusBanner";
@@ -7,7 +7,7 @@ import { useCatalog, useStatus } from "./hooks/useStatus";
 import { useNow } from "./hooks/useNow";
 import { useFavorites, useOnline } from "./hooks/useLocal";
 import { useTheme } from "./hooks/useTheme";
-import { ago } from "./lib/time";
+import { ago, hhmm } from "./lib/time";
 import { buildRows, filterRows, sortRows } from "./lib/view";
 import { areaAt, summarizeAreas, type AreaFeature } from "@sinluz/shared/areas";
 import { useGeo } from "./hooks/useGeo";
@@ -148,22 +148,40 @@ export default function App() {
 
   return (
     <div ref={containerRef} className="mx-auto flex h-dvh w-full max-w-md flex-col overflow-hidden bg-paper text-ink">
-      <header className="flex items-center justify-between px-4 pb-2 pt-[max(0.75rem,env(safe-area-inset-top))]">
-        <div>
+      <header className="flex items-start justify-between gap-3 px-4 pb-2 pt-[max(0.75rem,env(safe-area-inset-top))]">
+        <div className="min-w-0 pt-0.5">
           <h1 className="text-[19px] font-semibold leading-none tracking-tight">SinLuz</h1>
           <p className="mt-1 text-[11.5px] leading-none text-ink/45">Santiago de Cuba</p>
         </div>
-        <div className="flex items-center gap-2">
-          <div className="flex items-center gap-1.5 text-[11px] text-ink/45">
-            <Radio className={`h-3 w-3 ${pipelineAgeMin <= 30 ? "text-emerald-500 dark:text-emerald-400" : "text-amber-600 dark:text-amber-400"}`} />
-            <span className="tabular-nums">{ago(lastMessageAt, now)}</span>
+        <div className="flex shrink-0 items-start gap-1.5">
+          <div className="flex flex-col items-end gap-1 pt-0.5 text-[10.5px] leading-tight text-ink/45">
+            <div className="flex items-center gap-1.5" title="Última lectura correcta de SinLuz">
+              <Clock className={`h-3 w-3 ${pipelineAgeMin <= 30 ? "text-emerald-500 dark:text-emerald-400" : "text-amber-600 dark:text-amber-400"}`} />
+              <span className="tabular-nums">
+                {status ? (
+                  <>
+                    Actualizado {ago(status.generated_at, now)}
+                    <span className="text-ink/35"> · {hhmm(status.generated_at)}</span>
+                  </>
+                ) : (
+                  "Actualizando…"
+                )}
+              </span>
+            </div>
+            <div className="flex items-center gap-1.5" title="Último mensaje publicado en el canal oficial">
+              <Radio className="h-3 w-3 text-ink/35" />
+              <span className="tabular-nums">
+                Canal {ago(lastMessageAt, now)}
+                {lastMessageAt ? <span className="text-ink/35"> · {hhmm(lastMessageAt)}</span> : null}
+              </span>
+            </div>
           </div>
           <button
             type="button"
             onClick={theme.cycle}
             aria-label={themeLabel}
             title={themeLabel}
-            className="flex h-8 w-8 items-center justify-center rounded-full text-ink/45 transition hover:bg-muted hover:text-ink/70"
+            className="mt-0.5 flex h-8 w-8 items-center justify-center rounded-full text-ink/45 transition hover:bg-muted hover:text-ink/70"
           >
             <ThemeIcon className="h-4 w-4" />
           </button>
