@@ -333,7 +333,6 @@ for (const zone of mapped.zones) {
 const geojson = {
   type: "FeatureCollection",
   metadata: {
-    generated: new Date().toISOString(),
     note: "Punto de referencia, recorrido y zonas aproximadas. No es el área de servicio oficial.",
     sources: [
       "Trazado detallado: circuit-mapped.geojson (aportado el 2026-11-19)",

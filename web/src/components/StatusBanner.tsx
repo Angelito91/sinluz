@@ -67,7 +67,7 @@ function Bar({
   }[tone];
 
   return (
-    <div className={`flex items-center gap-2 border-b px-4 py-2 text-[12px] ${styles}`}>
+    <div role="status" className={`flex items-center gap-2 border-b px-4 py-2 text-[12px] ${styles}`}>
       {icon}
       <span className="min-w-0 flex-1">{children}</span>
     </div>

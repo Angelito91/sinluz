@@ -57,7 +57,7 @@ export const StatusPayload = z.object({
 export type StatusPayload = z.infer<typeof StatusPayload>;
 
 export const IngestBody = z.object({
-  text: z.string().min(1),
+  text: z.string().min(1).max(4000),
   posted_at: z.number().int().optional(),
   id: z.number().int().optional(),
 });
@@ -66,6 +66,6 @@ export type IngestBody = z.infer<typeof IngestBody>;
 export const OverrideBody = z.object({
   circuit_id: z.string().min(2),
   status: CircuitStatus,
-  since: z.number().int().nullable().optional(),
+  since: z.number().int().positive().nullable().optional(),
 });
 export type OverrideBody = z.infer<typeof OverrideBody>;

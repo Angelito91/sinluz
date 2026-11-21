@@ -22,6 +22,15 @@ const app = new Hono<{ Bindings: Env }>();
 
 app.use("/api/*", cors({ origin: "*", allowMethods: ["GET", "POST", "OPTIONS"] }));
 
+// Cabeceras de seguridad comunes. La API solo devuelve JSON.
+app.use("*", async (c, next) => {
+  await next();
+  c.header("x-content-type-options", "nosniff");
+  c.header("referrer-policy", "no-referrer");
+  c.header("x-frame-options", "DENY");
+  c.header("permissions-policy", "geolocation=(), microphone=(), camera=()");
+});
+
 const CACHE_STATUS = "public, max-age=30, stale-while-revalidate=60, stale-if-error=86400";
 
 app.get("/api/v1/status", async (c) => {

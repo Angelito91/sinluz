@@ -14,6 +14,7 @@ type Props = {
   onlyFavs: boolean;
   onOnlyFavs: (v: boolean) => void;
   hasFavs: boolean;
+  emptyText: string;
 };
 
 export default function CircuitList({
@@ -27,6 +28,7 @@ export default function CircuitList({
   onlyFavs,
   onOnlyFavs,
   hasFavs,
+  emptyText,
 }: Props) {
   return (
     <div className="flex min-h-0 flex-col">
@@ -68,9 +70,7 @@ export default function CircuitList({
 
       <ul className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-2 pb-6">
         {rows.length === 0 && (
-          <li className="px-3 py-10 text-center text-[13px] text-ink/45">
-            Ningún circuito coincide con la búsqueda.
-          </li>
+          <li className="px-3 py-10 text-center text-[13px] text-ink/55">{emptyText}</li>
         )}
 
         {rows.map(({ circuit, state, status }) => {

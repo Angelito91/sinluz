@@ -16,7 +16,7 @@ marcado con **†**.
 - Ingesta automática cada 5 min desde `https://tg.i-c-a.su/json/electricastgo?limit=30`.
 - Interpretación con Workers AI: el modelo lee estado actual + mensajes nuevos y devuelve los cambios, validados con Zod.
 - Catálogo de **45 circuitos** (14 líneas y 31 circuitos) en 9 municipios, con alias y ubicación aproximada.
-- Mapa con teselas de OpenStreetMap, municipios coloreados y circuitos
+- Mapa con teselas de OpenStreetMap en gris, contornos de municipios y circuitos
   ubicados de forma aproximada + lista + buscador + favoritos.
 - Tiempo sin luz al segundo, hora de La Habana.
 - PWA instalable y funcional offline con aviso de antigüedad.
@@ -443,11 +443,13 @@ con 0,2 rpm desde un solo consumidor.
 
 ## 14. Mapa por áreas y circuitos
 
-El mapa colorea los 9 municipios (polígonos reales de geoBoundaries) según sus
-circuitos: rojo si hay afectados (más intenso cuanto mayor la proporción), ámbar
-si solo hay «sin confirmar», verde si no hay afectaciones. El botón de ubicación
-pide la posición al navegador, resuelve el municipio con un punto-en-polígono
-(`shared/src/areas.ts`) y lo selecciona; la posición **nunca sale del dispositivo**.
+El mapa es deliberadamente mínimo: las teselas de OpenStreetMap van en gris y los
+municipios solo dibujan su contorno. Una máscara oculta todo lo que queda fuera
+de los municipios de la provincia, así que no se ven provincias vecinas ni el
+resto del país. El color se reserva para el estado de los circuitos. El botón de
+ubicación pide la posición al navegador, resuelve el municipio con un
+punto-en-polígono (`shared/src/areas.ts`) y lo selecciona; la posición **nunca
+sale del dispositivo**.
 
 Encima se dibujan los circuitos. La ubicación sale, en este orden:
 
@@ -459,8 +461,17 @@ Encima se dibujan los circuitos. La ubicación sale, en este orden:
 4. Centroide del municipio (o centro urbano de Santiago), con espiral solo para
    los circuitos sin ninguna referencia.
 
-A partir de zoom 10 aparecen los puntos; a partir de 11 se muestran también las
-zonas detalladas. Al seleccionar un circuito el mapa vuela a su referencia.
+Reglas de divulgación progresiva:
+
+- Hasta zoom 9 solo se ven los circuitos afectados o sin confirmar.
+- A partir de zoom 10 aparecen todos los puntos; los de ubicación por centroide
+  se dibujan huecos para no sugerir precisión.
+- A partir de zoom 11 se dibuja el recorrido del circuito seleccionado y a partir
+  de 12 sus zonas. Nunca se muestran todas las geometrías a la vez.
+- Al tocar un punto se abre una tarjeta con nombre, estado, antigüedad, municipio
+  y confianza de la ubicación. Al tocar el mapa se cierra sin perder el encuadre.
+- La leyenda y la atribución caben en una sola fila; el detalle legal está en
+  «Fuentes y límites», plegado por defecto.
 
 Límite: **nada de esto es el área de servicio oficial ni un trazado exacto**.
 La app dice en qué municipio estás, no qué circuito te alimenta. Eso lo elige el

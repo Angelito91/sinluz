@@ -23,6 +23,7 @@ export default function App() {
   const [onlyFavs, setOnlyFavs] = useState(false);
   const [selected, setSelected] = useState<string | null>(null);
   const [area, setArea] = useState<string | null>(null);
+  const [sheetOpen, setSheetOpen] = useState(false);
   const geo = useGeo();
   const locate = useLocate();
 
@@ -66,13 +67,7 @@ export default function App() {
     const m = rows.find((r) => r.circuit.id === id)?.circuit.municipio;
     if (m) setArea(m);
   };
-  const clearSelection = () => {
-    setSelected(null);
-    setArea(null);
-  };
-  const areaInfo = area ? areas.get(area) : null;
-
-  const affected = rows.filter((r) => r.status === "out");
+  const areaInfo = area ? areas.get(area) : null;  const affected = rows.filter((r) => r.status === "out");
   const unconfirmed = rows.filter((r) => r.status === "stale").length;
   // Antigüedades calculadas aquí con la hora actual: no vienen congeladas del servidor.
   const pipelineAgeMin = status ? Math.max(0, (now - status.generated_at) / 60) : 0;
@@ -97,7 +92,6 @@ export default function App() {
       <main className="flex min-h-0 flex-1 flex-col">
         <div className="relative z-0 min-h-0 flex-1">
           <MapView
-            areas={areas}
             area={area}
             onArea={pickArea}
             here={here}
@@ -105,17 +99,27 @@ export default function App() {
             rows={rows}
             selected={selected}
             onSelect={pickCircuit}
-            onClear={clearSelection}
+            onDeselect={() => setSelected(null)}
             now={now}
           />
           <LocateNote locate={locate} here={here} loaded={!!geo} />
         </div>
 
         <section
-          className="relative z-10 flex h-[56%] shrink-0 flex-col rounded-t-[20px] border-t border-black/5 bg-paper shadow-[0_-8px_30px_rgba(0,0,0,0.06)]"
+          className={`relative z-10 flex shrink-0 flex-col rounded-t-[20px] border-t border-black/5 bg-paper shadow-[0_-8px_30px_rgba(0,0,0,0.06)] transition-[height] duration-300 ease-out ${
+            sheetOpen ? "h-[56%]" : "h-[40%]"
+          }`}
           aria-label="Estado de los circuitos"
         >
-          <div className="mx-auto mt-2 h-1 w-9 shrink-0 rounded-full bg-black/12" aria-hidden />
+          <button
+            type="button"
+            onClick={() => setSheetOpen((v) => !v)}
+            aria-expanded={sheetOpen}
+            aria-label={sheetOpen ? "Contraer el panel" : "Expandir el panel"}
+            className="mx-auto mt-2 flex h-5 w-14 shrink-0 items-center justify-center rounded-full"
+          >
+            <span className="h-1 w-9 rounded-full bg-black/12" aria-hidden />
+          </button>
 
           <div className="px-4 pb-3 pt-2">
             <div className="flex items-end justify-between gap-3">
@@ -144,7 +148,7 @@ export default function App() {
             </div>
           </div>
 
-          {area && areaInfo && (
+          {area && (
             <div className="mx-4 mb-2 rounded-xl bg-black/[0.04] px-3 py-2">
               <div className="flex items-center justify-between gap-2">
                 <p className="text-[13px] font-semibold">
@@ -156,11 +160,13 @@ export default function App() {
                 </button>
               </div>
               <p className="mt-0.5 text-[12px] text-ink/60">
-                {areaInfo.out > 0
-                  ? `${areaInfo.out} de ${areaInfo.total} circuitos sin servicio`
-                  : areaInfo.stale > 0
-                    ? `${areaInfo.stale} sin confirmar · el resto con servicio`
-                    : `Sin afectaciones informadas en ${areaInfo.total} circuitos`}
+                {!areaInfo
+                  ? "No hay circuitos de este municipio en el catálogo."
+                  : areaInfo.out > 0
+                    ? `${areaInfo.out} de ${areaInfo.total} circuitos sin servicio`
+                    : areaInfo.stale > 0
+                      ? `${areaInfo.stale} sin confirmar · el resto con servicio`
+                      : `Sin afectaciones informadas en ${areaInfo.total} circuitos`}
               </p>
               {area === here && (
                 <p className="mt-1 text-[11px] leading-snug text-ink/45">
@@ -194,17 +200,29 @@ export default function App() {
               onlyFavs={onlyFavs}
               onOnlyFavs={setOnlyFavs}
               hasFavs={favorites.ids.length > 0}
+              emptyText={
+                query || onlyFavs
+                  ? "Ningún circuito coincide con la búsqueda."
+                  : area
+                    ? `No hay circuitos de ${area} en el catálogo.`
+                    : "No hay circuitos disponibles."
+              }
             />
           )}
 
-          <p className="shrink-0 border-t border-black/5 px-4 py-2 pb-[max(0.5rem,env(safe-area-inset-bottom))] text-[10px] leading-snug text-ink/35">
-            Fuente del estado: canal oficial de la Empresa Eléctrica de Santiago de Cuba. App no
-            oficial. El estado de cada circuito es el del último aviso del canal: «con servicio»
-            significa que no se ha informado ninguna afectación. Ubicación de circuitos{" "}
-            <strong className="font-medium text-ink/70">aproximada</strong>, basada en aportes
-            colaborativos y en el mapa de circuitos de elTOQUE; no es el área de servicio oficial.
-            Límites: geoBoundaries (CC BY 4.0) · Mapa: OpenStreetMap.
-          </p>
+          <details className="shrink-0 border-t border-black/5 px-4 py-2 pb-[max(0.5rem,env(safe-area-inset-bottom))] text-[10.5px] leading-snug text-ink/50">
+            <summary className="cursor-pointer list-none text-[11px] font-medium text-ink/60">
+              Fuentes y límites
+            </summary>
+            <p className="mt-1.5">
+              Fuente del estado: canal oficial de la Empresa Eléctrica de Santiago de Cuba. App no
+              oficial. El estado de cada circuito es el del último aviso del canal: «con servicio»
+              significa que no se ha informado ninguna afectación. Ubicación de circuitos{" "}
+              <strong className="font-medium text-ink/70">aproximada</strong>, basada en aportes
+              colaborativos y en el mapa de circuitos de elTOQUE; no es el área de servicio oficial.
+              Límites: geoBoundaries (CC BY 4.0) · Mapa: OpenStreetMap.
+            </p>
+          </details>
         </section>
       </main>
     </div>
