@@ -41,6 +41,7 @@ export default function App() {
 
   const [query, setQuery] = useState("");
   const [onlyFavs, setOnlyFavs] = useState(false);
+  const [onlyIssues, setOnlyIssues] = useState(false);
   const [selected, setSelected] = useState<string | null>(null);
   const [area, setArea] = useState<string | null>(null);
   const [sheetFrac, setSheetFrac] = useState(0.4);
@@ -57,8 +58,8 @@ export default function App() {
     [catalog, status, minute],
   );
   const visible = useMemo(
-    () => filterRows(rows, query, onlyFavs ? favorites.ids : undefined, area),
-    [rows, query, onlyFavs, favorites.ids, area],
+    () => filterRows(rows, query, onlyFavs ? favorites.ids : undefined, area, onlyIssues ? "issues" : "all"),
+    [rows, query, onlyFavs, favorites.ids, area, onlyIssues],
   );
   const areas = useMemo(
     () => summarizeAreas(rows.map((r) => ({ municipio: r.circuit.municipio, status: r.status }))),
@@ -310,6 +311,9 @@ export default function App() {
             channelAgeMin={channelAgeMin}
             error={error?.message}
             isValidating={isValidating}
+            lastError={status?.pipeline?.last_error ?? null}
+            backoffUntil={status?.pipeline?.backoff_until ?? null}
+            now={now}
           />
 
           {isLoading && !status ? (
@@ -328,9 +332,11 @@ export default function App() {
               onlyFavs={onlyFavs}
               onOnlyFavs={setOnlyFavs}
               hasFavs={favorites.ids.length > 0}
+              onlyIssues={onlyIssues}
+              onOnlyIssues={setOnlyIssues}
               emptyText={
-                query || onlyFavs
-                  ? "Ningún circuito coincide con la búsqueda."
+                query || onlyFavs || onlyIssues
+                  ? "Ningún circuito coincide con los filtros."
                   : area
                     ? `No hay circuitos de ${area} en el catálogo.`
                     : "No hay circuitos disponibles."

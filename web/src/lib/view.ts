@@ -36,19 +36,28 @@ export function sortRows(rows: Row[]): Row[] {
   );
 }
 
-export function filterRows(rows: Row[], query: string, favs?: string[], area?: string | null): Row[] {
+export type StatusFilter = "all" | "issues";
+
+export function filterRows(
+  rows: Row[],
+  query: string,
+  favs?: string[],
+  area?: string | null,
+  status: StatusFilter = "all",
+): Row[] {
   const q = query
     .normalize("NFD")
-    .replace(/[̀-ͯ]/g, "")
+    .replace(/[\u0300-\u036f]/g, "")
     .toLowerCase()
     .trim();
   return rows.filter((r) => {
     if (favs && !favs.includes(r.circuit.id)) return false;
     if (area && r.circuit.municipio !== area) return false;
+    if (status === "issues" && r.status === "ok") return false;
     if (!q) return true;
     const hay = `${r.circuit.name} ${r.circuit.municipio} ${r.circuit.id}`
       .normalize("NFD")
-      .replace(/[̀-ͯ]/g, "")
+      .replace(/[\u0300-\u036f]/g, "")
       .toLowerCase();
     return hay.includes(q);
   });

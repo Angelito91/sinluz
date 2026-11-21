@@ -1,4 +1,5 @@
-import { AlertTriangle, Info, RefreshCw, WifiOff } from "lucide-react";
+import { AlertTriangle, Clock, Info, RefreshCw, WifiOff } from "lucide-react";
+import { hhmm } from "../lib/time";
 
 type Props = {
   online: boolean;
@@ -8,11 +9,30 @@ type Props = {
   channelAgeMin: number | null;
   error?: string;
   isValidating: boolean;
+  /** Último error de la ingesta en el servidor (si lo hay). */
+  lastError?: string | null;
+  /** Segundos unix hasta los que la ingesta está en espera (backoff). */
+  backoffUntil?: number | null;
+  /** Hora actual en segundos unix. */
+  now: number;
 };
 
 const age = (min: number) => (min < 60 ? `${Math.round(min)} min` : `${Math.floor(min / 60)} h`);
 
-export default function StatusBanner({ online, pipelineAgeMin, channelAgeMin, error, isValidating }: Props) {
+export default function StatusBanner({
+  online,
+  pipelineAgeMin,
+  channelAgeMin,
+  error,
+  isValidating,
+  lastError,
+  backoffUntil,
+  now,
+}: Props) {
+  const backoffActive = !!(backoffUntil && backoffUntil > now);
+  const backoffInfo = backoffActive ? ` · reintento ~${hhmm(backoffUntil!)}` : "";
+  const detail = lastError ? ` (${lastError})` : "";
+
   if (!online) {
     return (
       <Bar tone="warn" icon={<WifiOff className="h-3.5 w-3.5" />}>
@@ -30,7 +50,17 @@ export default function StatusBanner({ online, pipelineAgeMin, channelAgeMin, er
   if (pipelineAgeMin > 30) {
     return (
       <Bar tone={pipelineAgeMin > 360 ? "bad" : "warn"} icon={<AlertTriangle className="h-3.5 w-3.5" />}>
-        No se pudo leer el canal desde hace {age(pipelineAgeMin)}. Los estados pueden haber cambiado.
+        No se pudo leer el canal desde hace {age(pipelineAgeMin)}
+        {detail}
+        {backoffInfo}. Los estados pueden haber cambiado.
+      </Bar>
+    );
+  }
+  if (backoffActive && lastError) {
+    return (
+      <Bar tone="info" icon={<Clock className="h-3.5 w-3.5" />}>
+        Lectura del canal en espera{detail}
+        {backoffInfo}. Se reintentará automáticamente.
       </Bar>
     );
   }
@@ -52,6 +82,13 @@ export default function StatusBanner({ online, pipelineAgeMin, channelAgeMin, er
     return (
       <Bar tone="muted" icon={<RefreshCw className="h-3.5 w-3.5 animate-spin" />}>
         Actualizando…
+      </Bar>
+    );
+  }
+  if (lastError) {
+    return (
+      <Bar tone="info" icon={<Info className="h-3.5 w-3.5" />}>
+        Último intento con aviso{detail}. Se volverá a intentar pronto.
       </Bar>
     );
   }

@@ -1,4 +1,4 @@
-import { Search, Star, X } from "lucide-react";
+import { AlertTriangle, Search, Star, X } from "lucide-react";
 import type { Row } from "../lib/view";
 import { STATUS_COLOR, STATUS_LABEL } from "../lib/view";
 import { ago, elapsed, hhmm } from "../lib/time";
@@ -14,6 +14,8 @@ type Props = {
   onlyFavs: boolean;
   onOnlyFavs: (v: boolean) => void;
   hasFavs: boolean;
+  onlyIssues: boolean;
+  onOnlyIssues: (v: boolean) => void;
   emptyText: string;
 };
 
@@ -28,12 +30,14 @@ export default function CircuitList({
   onlyFavs,
   onOnlyFavs,
   hasFavs,
+  onlyIssues,
+  onOnlyIssues,
   emptyText,
 }: Props) {
   return (
     <div className="flex min-h-0 flex-col">
       <div className="flex items-center gap-2 px-4 pb-2">
-        <div className="relative flex-1">
+        <div className="relative min-w-0 flex-1">
           <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-ink/35" />
           <input
             value={query}
@@ -52,18 +56,32 @@ export default function CircuitList({
             </button>
           )}
         </div>
+        <button
+          onClick={() => onOnlyIssues(!onlyIssues)}
+          aria-pressed={onlyIssues}
+          aria-label="Mostrar solo circuitos sin servicio o sin confirmar"
+          title="Solo sin servicio o sin confirmar"
+          className={`flex h-10 shrink-0 items-center gap-1.5 rounded-xl border px-2.5 text-[12.5px] transition ${
+            onlyIssues
+              ? "border-out/30 bg-out/10 text-out"
+              : "border-line bg-surface text-ink/60 hover:border-ink/20"
+          }`}
+        >
+          <AlertTriangle className="h-3.5 w-3.5" />
+          <span className="hidden min-[360px]:inline">Problemas</span>
+        </button>
         {hasFavs && (
           <button
             onClick={() => onOnlyFavs(!onlyFavs)}
             aria-pressed={onlyFavs}
-            className={`flex h-10 items-center gap-1.5 rounded-xl border px-3 text-[13px] transition ${
+            className={`flex h-10 shrink-0 items-center gap-1.5 rounded-xl border px-2.5 text-[12.5px] transition ${
               onlyFavs
                 ? "border-ink bg-ink text-paper"
                 : "border-line bg-surface text-ink/70 hover:border-ink/20"
             }`}
           >
             <Star className={`h-3.5 w-3.5 ${onlyFavs ? "fill-current" : ""}`} />
-            Mi circuito
+            <span className="hidden min-[360px]:inline">Mi circuito</span>
           </button>
         )}
       </div>
@@ -76,9 +94,11 @@ export default function CircuitList({
         {rows.map(({ circuit, state, status }) => {
           const fav = favorites.has(circuit.id);
           const active = selected === circuit.id;
+          const confirm =
+            state.last_mention_at != null ? ` · confirmado ${ago(state.last_mention_at, now)}` : "";
           const detail =
             status === "out"
-              ? `desde ${hhmm(state.since)}`
+              ? `desde ${hhmm(state.since)}${confirm}`
               : status === "stale"
                 ? `sin confirmar · último aviso ${ago(state.last_mention_at, now)}`
                 : state.last_mention_at

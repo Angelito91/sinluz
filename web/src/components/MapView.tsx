@@ -17,7 +17,7 @@ import type { PathOptions } from "leaflet";
 import { Crosshair, Loader2, X } from "lucide-react";
 import "leaflet/dist/leaflet.css";
 import { STATUS_LABEL, type Row } from "../lib/view";
-import { elapsed } from "../lib/time";
+import { ago, elapsed, hhmm } from "../lib/time";
 import type { Locate } from "../hooks/useLocate";
 import { useGeo, type Features } from "../hooks/useGeo";
 import { useCircuitGeo, type CircuitGeo, type CircuitReference } from "../hooks/useCircuitGeo";
@@ -322,8 +322,18 @@ function CircuitGeometry({
 }
 
 function statusText(row: Row, now: number): string {
-  if (row.status === "out") return `sin servicio · ${elapsed(row.state.since, now)}`;
-  if (row.status === "stale") return `sin confirmar · ${elapsed(row.state.since, now)}`;
+  if (row.status === "out") {
+    const base = `sin servicio · ${elapsed(row.state.since, now)} (desde ${hhmm(row.state.since)})`;
+    if (row.state.last_mention_at) return `${base} · confirmado ${ago(row.state.last_mention_at, now)}`;
+    return base;
+  }
+  if (row.status === "stale") {
+    if (row.state.last_mention_at) {
+      return `sin confirmar · último aviso ${ago(row.state.last_mention_at, now)} (${hhmm(row.state.last_mention_at)})`;
+    }
+    return "sin confirmar";
+  }
+  if (row.state.last_mention_at) return `${STATUS_LABEL[row.status]} · aviso ${ago(row.state.last_mention_at, now)}`;
   return STATUS_LABEL[row.status];
 }
 

@@ -34,9 +34,22 @@ app.use("*", async (c, next) => {
 const CACHE_STATUS = "public, max-age=30, stale-while-revalidate=60, stale-if-error=86400";
 
 app.get("/api/v1/status", async (c) => {
-  const payload = await getSnapshot(c.env);
+  const [payload, lastError, backoffUntil, lastOkAt] = await Promise.all([
+    getSnapshot(c.env),
+    getSetting(c.env, "last_error"),
+    getSetting(c.env, "backoff_until"),
+    getSetting(c.env, "last_ok_at"),
+  ]);
   c.header("cache-control", CACHE_STATUS);
-  return c.json(payload);
+  const backoffRaw = backoffUntil ? Number(backoffUntil) : null;
+  return c.json({
+    ...payload,
+    pipeline: {
+      last_error: lastError || null,
+      backoff_until: backoffRaw ? (backoffRaw > 1e12 ? Math.round(backoffRaw / 1000) : backoffRaw) : null,
+      last_ok_at: lastOkAt ? Number(lastOkAt) || null : null,
+    },
+  });
 });
 
 app.get("/api/v1/circuits", (c) => {

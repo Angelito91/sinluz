@@ -167,8 +167,13 @@ DURACIONES
 - "16 horas y 20 minutos" -> 980.
 - "9 horas" -> 540.
 - "45 minutos" -> 45.
-- Solo si el mensaje dice explícitamente cuánto lleva afectado el circuito.
-- Si no lo dice, duration_min = null.
+- Solo si el mensaje indica explícitamente cuánto lleva afectado o desde cuándo:
+  "lleva 3 horas", "hace 45 minutos", "12 horas y 30 minutos".
+- Si indica una hora de inicio explícita ("desde las 10:00", "afectado desde las 14:30"),
+  calcula duration_min como la diferencia entre la fecha/hora del mensaje y esa hora
+  de inicio (en minutos). Usa la fecha del mensaje como referencia; si la hora de inicio
+  parece posterior a la del mensaje, asume que fue el día anterior.
+- Si no hay inicio ni duración explícitos, duration_min = null. No inventes ni estimes.
 - Si el valor supera 10 080 minutos (7 días), usa null: probablemente no es una
   duración real.
 

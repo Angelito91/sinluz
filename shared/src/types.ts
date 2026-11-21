@@ -40,6 +40,15 @@ export const CircuitState = z.object({
 });
 export type CircuitState = z.infer<typeof CircuitState>;
 
+export const PipelineHealth = z.object({
+  last_error: z.string().nullable(),
+  /** Segundos unix hasta los que la ingesta está en cuarentena (0 o null = sin espera). */
+  backoff_until: z.number().nullable(),
+  /** Última lectura correcta del canal por el servidor. */
+  last_ok_at: z.number().nullable(),
+});
+export type PipelineHealth = z.infer<typeof PipelineHealth>;
+
 export const StatusPayload = z.object({
   /** Última ingesta correcta del canal (se actualiza aunque no haya mensajes nuevos). */
   generated_at: z.number(),
@@ -53,6 +62,8 @@ export const StatusPayload = z.object({
     served_mw: z.number().nullable(),
   }),
   circuits: z.array(CircuitState),
+  /** Estado operativo de la ingesta (opcional, para diagnóstico en la UI). */
+  pipeline: PipelineHealth.optional(),
 });
 export type StatusPayload = z.infer<typeof StatusPayload>;
 
