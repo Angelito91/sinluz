@@ -80,7 +80,7 @@ sinluz/
 ├── worker/
 │   ├── src/
 │   │   ├── index.ts             # Hono: rutas + handler scheduled
-│   │   ├── ingest.ts            # lotes de 15, backoff, alertas
+│   │   ├── ingest.ts            # lotes de 12, bisección, backoff, alertas
 │   │   ├── llm.ts               # prompt, esquema JSON y llamada a Workers AI
 │   │   ├── state.ts             # cambios validados → estado
 │   │   ├── store.ts             # D1: snapshot, overrides, settings
@@ -177,9 +177,14 @@ y el último id procesado. Los circuitos ausentes se sirven como `ok`. Es una
 decisión explícita: la app está en desarrollo y se acepta perder datos antes que
 mantener dos fuentes de verdad.
 
-**Sin replay.** El estado avanza por lotes de mensajes nuevos; si el modelo falla,
-no se guarda nada ni se mueve el cursor, y el cron reintenta. No hay forma de
-reconstruir el pasado, y no hace falta.
+Las correcciones `out` caducan a las `OVERRIDE_TTL_H` horas (6 por defecto; 0
+desactiva el TTL) para que una corrección vieja no tape un restablecimiento
+posterior. Las correcciones `ok` no caducan, pero se ignoran si el canal volvió a
+marcar ese circuito como afectado después de la corrección.
+
+**Sin replay de estado.** El estado avanza por lotes de mensajes nuevos y no se
+reconstruye el pasado. La evaluación del modelo sí tiene un modo replay con
+respuestas grabadas (ver `docs/eval.md`).
 
 **Todas las marcas de tiempo están en segundos unix** en el worker, la API y el
 frontend, igual que Telegram. Un solo tipo de unidad en todo el proyecto evita
@@ -191,7 +196,7 @@ la clase de bug más común de este tipo de app.
 
 ### 6.1 Contrato
 
-Cada ejecución del cron pide los mensajes nuevos, los parte en lotes de 15 y
+Cada ejecución del cron pide los mensajes nuevos, los parte en lotes de 12 y
 llama a Workers AI con tres cosas:
 
 1. El **estado actual**: solo circuitos afectados (`id`, nombre, municipio,
@@ -205,24 +210,27 @@ El modelo debe devolver solo esto:
 {
   "cambios": [
     {
-      "circuit_id": "sc-08",
-      "status": "out",
-      "source_message_id": 501,
-      "duration_min": 980
+      "circuito": "sc-08",
+      "estado": "out",
+      "mensaje_id": 501,
+      "duracion": { "horas": 16, "minutos": 20 }
     }
   ],
-  "metrics": { "deficit_mw": 100, "served_mw": 40 }
+  "metricas": { "deficit_mw": 100, "servido_mw": 40, "mensaje_id": 501 }
 }
 ```
 
-- `status` solo admite `out` u `ok`; no existe `none`: un circuito sin cambio se
+- `estado` solo admite `out` u `ok`; no existe `none`: un circuito sin cambio se
   omite.
-- `duration_min` es un entero o `null`, y solo se usa con `out`.
-- `metrics` es un objeto o `null`; `null` significa «no cambies las cifras».
-- `source_message_id` debe ser un mensaje del lote, no de una ejecución anterior.
+- `duracion` es `null` o `{ horas, minutos }`, y solo se usa con `out`. El
+  servidor calcula `duracion_min`; el modelo no hace aritmética.
+- `metricas` es un objeto o `null`; `null` significa «no cambies las cifras».
+- `mensaje_id` debe ser un mensaje del lote que mencione el circuito o las
+  cifras. No hay `confirmaciones`: volver a listar un afectado sigue siendo
+  `out`.
 
-El prompt completo vive en `worker/src/llm.ts` (`SYSTEM`). El esquema JSON se
-manda también como `response_format`, con `temperature: 0`.
+El prompt completo vive en `worker/src/llm.ts` (`SYSTEM_PROMPT`). El esquema JSON
+se manda también como `response_format`, con `temperature: 0`.
 
 ### 6.2 Reglas de decisión
 
@@ -230,9 +238,9 @@ manda también como `response_format`, con `temperature: 0`.
 |---|---|
 | «está afectado», «sin servicio», «disparado», «averiado» | `out` |
 | «se incorpora / se suma a la afectación» | `out` |
-| «Circuito con mayor tiempo de afectación» | `out` + `duration_min` si lo publica |
+| «Circuito con mayor tiempo de afectación» | `out` + `duracion` si lo publica |
 | «se restablece», «se encuentra con servicio» | `ok` |
-| «MW afectados», «MW servidos» | solo `metrics` |
+| «MW afectados», «MW servidos» | solo `metricas` |
 | teléfonos, publicidad, quejas, SEN, otra provincia | nada |
 
 Guardas duras:
@@ -241,10 +249,13 @@ Guardas duras:
    circuito no aparezca no lo restablece. Solo un `ok` explícito lo hace.
 2. Si dos circuitos encajan y el mensaje no permite decidir, el modelo no debe
    devolver ninguno de los dos.
-3. Un circuito que ya estaba afectado y solo se reitera puede omitirse; si el
-   mensaje publica una duración nueva, vuelve como `out` con esa duración.
+3. Un circuito que ya estaba afectado y se vuelve a listar sigue siendo `out`;
+   el servidor conserva el inicio anterior. Si el mensaje publica una duración
+   nueva, esa duración manda salvo que rejuvenezca demasiado el inicio.
 4. Solo se aceptan cifras provinciales plausibles (0–600 MW). El parte del SEN
    usa miles de MW y se descarta.
+5. Una cifra solo se acepta si el mensaje citado contiene «MW». Quejas,
+   transformadores y barriadas no son métricas.
 
 ### 6.3 Desambiguación
 
@@ -252,12 +263,17 @@ El modelo usa el catálogo, el municipio y el contexto del mensaje. Las pistas q
 el prompt le da:
 
 - «Circuito N» sin municipio = Santiago de Cuba (`sc-NN`).
-- «Circuito N de Palma» / «de Contramaestre» = `pal-NN` / `cta-NN`.
-- Un encabezado de municipio («Santiago:», «Palma:») aplica a los números que
-  aparecen debajo.
-- En las líneas, el número (4390, 5390, 5975…) es la identidad principal; el
-  municipio que lo acompaña puede estar mal escrito.
-- «ll Frente» = Línea II Frente; «lll Frente» = Línea III Frente.
+- «Circuito N de Palma» / «de Contramaestre» = `pa-palma-NN` / `ct-…`.
+- «Circuito 9» = `sc-09-si4074`; «9 seccionalizado» = `sc-09-si4615`.
+- «Circuito 7» y «7 seccionalizado» = `sc-07-sd3030`; «7 SD 4630» =
+  `sc-07-si4630`.
+- «17 seccionalizado» = `sc-17`; «11 seccionalizado» = `sc-11`.
+- «Línea 5335 (5617)» y «Línea 5335 SD 5617» = `gu-5335-5618`; el canal escribe
+  5617 donde la fuente dice 5618.
+- «San Juan» = `sc-5980-0015`; «Songo» = `sm-songo`; «ll Frente» =
+  `iif-5390-4260`.
+- En las líneas, el número/código es la identidad principal; el municipio que lo
+  acompaña puede estar mal escrito.
 - No se inventan ids: el servidor descarta cualquier id que no esté en el
   catálogo.
 
@@ -269,27 +285,35 @@ deduplicar `circuits.csv` al construirlo.
 
 El prompt ayuda, pero la garantía es del servidor. Después de Zod se comprueba:
 
-- `circuit_id` existe en el catálogo (`catalogIds`).
-- `source_message_id` pertenece al lote procesado.
-- `duration_min` fuera de 0–10 080 minutos (7 días) se trata como `null`; el
+- `circuito` existe en el catálogo (`catalogIds`).
+- `mensaje_id` pertenece al lote procesado.
+- `duracion_min` fuera de 0–43 200 minutos (30 días) se trata como `null`; el
   cambio de estado se conserva.
-- Un solo cambio por circuito; si aparece en varios mensajes, gana el más
-  reciente.
-- `deficit_mw` y `served_mw` están entre 0 y 600.
+- Los cambios se aplican en orden cronológico; un `ok` y luego un `out` del
+  mismo circuito en el mismo lote se respetan.
+- `deficit_mw` y `served_mw` están entre 0 y 600 y el mensaje citado contiene
+  «MW».
+- El guardia de menciones (`MENTION_GUARD`) descarta un cambio si el mensaje no
+  nombra el circuito. En `log` solo lo registra; en `enforce` lo bloquea. Un
+  `ok` masivo sin «toda la provincia»/«todos los circuitos» se bloquea siempre.
 
 El servidor calcula `since` con esta prioridad: duración publicada → inicio
 anterior → fecha del mensaje fuente. El modelo nunca hace aritmética de fechas.
 
 ### 6.5 Lotes, fallos y cursor
 
-- Lotes de **15 mensajes**, máximo **4 lotes** por ejecución; hasta 4 páginas
+- Lotes de **12 mensajes**, máximo **4 lotes** por ejecución; hasta 4 páginas
   (120 mensajes) para arrancar o tras una caída larga.
-- Si el modelo falla, devuelve algo inválido o se agota el tiempo: **no se guarda
-  el snapshot y no avanza `last_message_id`**. El cron de 5 min reintenta.
+- Lo ya interpretado se guarda aunque un lote posterior falle.
+- Un error transitorio (IA caída, cuota, timeout) detiene la ejecución sin mover
+  el cursor de los mensajes pendientes; el cron reintenta.
+- Una respuesta inválida se bisecciona hasta aislar el mensaje. Un singleton
+  inválido se descarta, se avanza el cursor y su id queda en el detalle de la
+  ingesta. Un mensaje determinista no congela la app.
+- Hay un tope de **12 llamadas reales a la IA** por ejecución, contando las
+  bisecciones.
 - Cuando no hay mensajes nuevos, solo se actualiza `generated_at` para que
   `/api/health` sepa que la lectura funcionó.
-
----
 
 ## 7. API
 
@@ -407,7 +431,7 @@ Secretos: `INGEST_TOKEN`, `ADMIN_TOKEN`, `ALERT_BOT_TOKEN` + `ALERT_CHAT_ID`
 
 Cron (`wrangler.toml`): `*/5 * * * *`. Una petición al bridge por ejecución,
 timeout de 20 s, backoff 5 → 10 → 20 → 40 min persistido en `settings`. La
-llamada al modelo va en lotes de 15 mensajes y un fallo no mueve el cursor.
+llamada al modelo va en lotes de 12 mensajes y un fallo transitorio no mueve el cursor.
 
 ---
 

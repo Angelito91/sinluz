@@ -9,20 +9,27 @@ let db: Database;
 let env: Env;
 const realFetch = globalThis.fetch;
 
+const telegram = (messages: { id: number; date: number; message: string }[]) => {
+  globalThis.fetch = (async () =>
+    new Response(JSON.stringify({ messages }), {
+      headers: { "content-type": "application/json" },
+    })) as unknown as typeof fetch;
+};
+
+const twoMessages = [
+  {
+    id: 2,
+    date: 200,
+    message: "Se restablece el servicio al circuito 8. 100 MW afectados y 40 MW con servicio",
+  },
+  { id: 1, date: 100, message: "Se afecta el servicio al circuito 8" },
+];
+
 beforeEach(() => {
   db = new Database(":memory:");
   db.exec(schema);
   env = makeEnv(db);
-  globalThis.fetch = (async () =>
-    new Response(
-      JSON.stringify({
-        messages: [
-          { id: 2, date: 200, message: "Se restablece el servicio al circuito 8" },
-          { id: 1, date: 100, message: "Se afecta el servicio al circuito 8" },
-        ],
-      }),
-      { headers: { "content-type": "application/json" } },
-    )) as unknown as typeof fetch;
+  telegram(twoMessages);
 });
 
 afterEach(() => {
@@ -33,7 +40,7 @@ afterEach(() => {
 const ai = (response: unknown): AiBinding => ({ run: async () => ({ response }) });
 
 describe("ingest", () => {
-  test("si el modelo falla no guarda estado ni avanza el cursor", async () => {
+  test("si el modelo falla de forma transitoria no guarda estado ni avanza el cursor", async () => {
     env.AI = {
       run: async () => {
         throw new Error("cuota diaria");
@@ -49,20 +56,21 @@ describe("ingest", () => {
     expect(state.circuits).toEqual([]);
   });
 
-  test("si la respuesta no cumple el esquema tampoco avanza el cursor", async () => {
+  test("una respuesta inválida se descarta mensaje a mensaje y el cursor avanza", async () => {
     env.AI = ai({ cambios: "nada" });
 
     const result = await ingest(env, "test");
 
-    expect(result.ok).toBe(false);
-    expect((await getStoredState(env)).source.last_message_id).toBe(null);
+    expect(result).toMatchObject({ ok: true, processed: 2, changes: 0, discarded: [1, 2] });
+    const state = await getStoredState(env);
+    expect(state.source.last_message_id).toBe(2);
+    expect(state.circuits).toEqual([]);
   });
 
   test("aplica el lote y avanza el cursor al último mensaje", async () => {
     env.AI = ai({
       cambios: [{ circuito: "sc-08", estado: "out", mensaje_id: 1, duracion_min: null }],
-      confirmaciones: [],
-      metricas: { deficit_mw: 100, servido_mw: 40 },
+      metricas: { deficit_mw: 100, servido_mw: 40, mensaje_id: 2 },
     });
 
     const result = await ingest(env, "test");
@@ -78,7 +86,6 @@ describe("ingest", () => {
   test("un id inventado no cambia el estado pero el cursor sí avanza", async () => {
     env.AI = ai({
       cambios: [{ circuito: "no-existe", estado: "out", mensaje_id: 1, duracion_min: null }],
-      confirmaciones: [],
       metricas: null,
     });
 
@@ -89,7 +96,7 @@ describe("ingest", () => {
     expect(state.source.last_message_id).toBe(2);
   });
 
-  test("si falla un lote posterior no se guarda nada de la ejecución", async () => {
+  test("un lote válido se guarda aunque el siguiente falle", async () => {
     let calls = 0;
     env.AI = {
       run: async () => {
@@ -100,7 +107,6 @@ describe("ingest", () => {
               cambios: [
                 { circuito: "sc-08", estado: "out", mensaje_id: 1, duracion_min: null },
               ],
-              confirmaciones: [],
               metricas: null,
             },
           };
@@ -108,33 +114,48 @@ describe("ingest", () => {
         throw new Error("timeout");
       },
     };
-    globalThis.fetch = (async () =>
-      new Response(
-        JSON.stringify({
-          messages: Array.from({ length: 16 }, (_, i) => ({
-            id: i + 1,
-            date: 100 + i,
-            message: "Se afecta el servicio al circuito 8",
-          })),
-        }),
-        { headers: { "content-type": "application/json" } },
-      )) as unknown as typeof fetch;
+    telegram(
+      Array.from({ length: 16 }, (_, i) => ({
+        id: i + 1,
+        date: 100 + i,
+        message: "Se afecta el servicio al circuito 8",
+      })),
+    );
 
     const result = await ingest(env, "test");
 
     expect(result.ok).toBe(false);
-    expect(calls).toBe(2);
+    expect(result.processed).toBe(12);
+    expect(result.detail).toContain("12 guardados");
+    expect(result.detail).toContain("4 pendientes");
     const state = await getStoredState(env);
-    expect(state.circuits).toEqual([]);
-    expect(state.source.last_message_id).toBe(null);
+    expect(state.source.last_message_id).toBe(12);
+    expect(state.circuits).toHaveLength(1);
+  });
+
+  test("aísla el mensaje inválido y procesa los demás", async () => {
+    env.AI = {
+      run: async (_model, body) => {
+        const content = JSON.stringify(body);
+        if (content.includes("mensaje roto")) return { response: { cambios: "nada" } };
+        return { response: { cambios: [], metricas: null } };
+      },
+    };
+    telegram([
+      { id: 1, date: 100, message: "Se afecta el circuito 8" },
+      { id: 2, date: 200, message: "mensaje roto" },
+      { id: 3, date: 300, message: "Se restablece el circuito 8" },
+    ]);
+
+    const result = await ingest(env, "test");
+
+    expect(result).toMatchObject({ ok: true, processed: 3, discarded: [2] });
+    expect((await getStoredState(env)).source.last_message_id).toBe(3);
   });
 
   test("sin mensajes nuevos solo actualiza generated_at", async () => {
-    env.AI = ai({ cambios: [], confirmaciones: [], metricas: null });
-    globalThis.fetch = (async () =>
-      new Response(JSON.stringify({ messages: [] }), {
-        headers: { "content-type": "application/json" },
-      })) as unknown as typeof fetch;
+    env.AI = ai({ cambios: [], metricas: null });
+    telegram([]);
 
     const before = await getStoredState(env);
     const result = await ingest(env, "test");

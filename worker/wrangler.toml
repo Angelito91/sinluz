@@ -21,6 +21,10 @@ INGEST_LIMIT = "30"
 LLM_MODEL = "@cf/mistralai/mistral-small-3.1-24b-instruct"
 # Interruptor de emergencia: "false" deja de interpretar sin quitar el binding [ai].
 # LLM_ENABLED = "false"
+# Horas que sobrevive una corrección manual de tipo "out" (0 desactiva el TTL).
+# OVERRIDE_TTL_H = "6"
+# Validación de menciones: "off", "log" o "enforce". Empieza en "log".
+# MENTION_GUARD = "log"
 
 [observability]
 enabled = true

@@ -1,0 +1,1468 @@
+{
+  "version": 1,
+  "notes": "Respuestas sintéticas derivadas de labels.json. Sirven para probar el arnés sin credenciales; no son una medición del modelo. Para grabar respuestas reales usa: bun run eval:live -- --save worker/test/fixtures/llm-replay.json",
+  "responses": {
+    "60187": {
+      "cambios": [
+        {
+          "circuito": "sc-17",
+          "estado": "out",
+          "mensaje_id": 60187,
+          "duracion": null
+        },
+        {
+          "circuito": "sc-25",
+          "estado": "out",
+          "mensaje_id": 60187,
+          "duracion": null
+        }
+      ],
+      "metricas": null
+    },
+    "60189": {
+      "cambios": [],
+      "metricas": {
+        "deficit_mw": 140,
+        "servido_mw": 30,
+        "mensaje_id": 60189
+      }
+    },
+    "60191": {
+      "cambios": [
+        {
+          "circuito": "ct-4390",
+          "estado": "out",
+          "mensaje_id": 60191,
+          "duracion": null
+        },
+        {
+          "circuito": "gu-5335-5618",
+          "estado": "out",
+          "mensaje_id": 60191,
+          "duracion": null
+        }
+      ],
+      "metricas": null
+    },
+    "60193": {
+      "cambios": [
+        {
+          "circuito": "sm-5390-md8005",
+          "estado": "ok",
+          "mensaje_id": 60193,
+          "duracion": null
+        },
+        {
+          "circuito": "sm-songo",
+          "estado": "ok",
+          "mensaje_id": 60193,
+          "duracion": null
+        }
+      ],
+      "metricas": null
+    },
+    "60200": {
+      "cambios": [
+        {
+          "circuito": "sc-20",
+          "estado": "out",
+          "mensaje_id": 60200,
+          "duracion": null
+        },
+        {
+          "circuito": "sc-13",
+          "estado": "out",
+          "mensaje_id": 60200,
+          "duracion": null
+        },
+        {
+          "circuito": "sc-08",
+          "estado": "out",
+          "mensaje_id": 60200,
+          "duracion": null
+        },
+        {
+          "circuito": "sc-01",
+          "estado": "out",
+          "mensaje_id": 60200,
+          "duracion": null
+        },
+        {
+          "circuito": "sc-09-si4074",
+          "estado": "out",
+          "mensaje_id": 60200,
+          "duracion": null
+        },
+        {
+          "circuito": "sc-14-si3010",
+          "estado": "out",
+          "mensaje_id": 60200,
+          "duracion": null
+        },
+        {
+          "circuito": "iif-5390-4260",
+          "estado": "out",
+          "mensaje_id": 60200,
+          "duracion": null
+        }
+      ],
+      "metricas": {
+        "deficit_mw": 130,
+        "servido_mw": 40,
+        "mensaje_id": 60200
+      }
+    },
+    "60203": {
+      "cambios": [
+        {
+          "circuito": "sc-02",
+          "estado": "ok",
+          "mensaje_id": 60203,
+          "duracion": null
+        },
+        {
+          "circuito": "sc-08",
+          "estado": "ok",
+          "mensaje_id": 60203,
+          "duracion": null
+        }
+      ],
+      "metricas": null
+    },
+    "60206": {
+      "cambios": [],
+      "metricas": {
+        "deficit_mw": 130,
+        "servido_mw": 40,
+        "mensaje_id": 60206
+      }
+    },
+    "60209": {
+      "cambios": [],
+      "metricas": null
+    },
+    "60210": {
+      "cambios": [
+        {
+          "circuito": "sc-14-si3010",
+          "estado": "ok",
+          "mensaje_id": 60210,
+          "duracion": null
+        },
+        {
+          "circuito": "sm-5390-md8005",
+          "estado": "ok",
+          "mensaje_id": 60210,
+          "duracion": null
+        },
+        {
+          "circuito": "sl-5395",
+          "estado": "ok",
+          "mensaje_id": 60210,
+          "duracion": null
+        },
+        {
+          "circuito": "sc-19",
+          "estado": "ok",
+          "mensaje_id": 60210,
+          "duracion": null
+        }
+      ],
+      "metricas": null
+    },
+    "60211": {
+      "cambios": [
+        {
+          "circuito": "sc-09-si4615",
+          "estado": "out",
+          "mensaje_id": 60211,
+          "duracion": null
+        }
+      ],
+      "metricas": null
+    },
+    "60214": {
+      "cambios": [
+        {
+          "circuito": "sc-5330",
+          "estado": "ok",
+          "mensaje_id": 60214,
+          "duracion": null
+        },
+        {
+          "circuito": "ct-contramaestre-01-02",
+          "estado": "ok",
+          "mensaje_id": 60214,
+          "duracion": null
+        },
+        {
+          "circuito": "sc-03",
+          "estado": "ok",
+          "mensaje_id": 60214,
+          "duracion": null
+        }
+      ],
+      "metricas": null
+    },
+    "60221": {
+      "cambios": [
+        {
+          "circuito": "sc-23",
+          "estado": "out",
+          "mensaje_id": 60221,
+          "duracion": null
+        },
+        {
+          "circuito": "sc-21",
+          "estado": "out",
+          "mensaje_id": 60221,
+          "duracion": null
+        },
+        {
+          "circuito": "sc-11",
+          "estado": "out",
+          "mensaje_id": 60221,
+          "duracion": null
+        },
+        {
+          "circuito": "sl-5395",
+          "estado": "out",
+          "mensaje_id": 60221,
+          "duracion": null
+        },
+        {
+          "circuito": "sc-03",
+          "estado": "out",
+          "mensaje_id": 60221,
+          "duracion": null
+        },
+        {
+          "circuito": "sc-02",
+          "estado": "out",
+          "mensaje_id": 60221,
+          "duracion": null
+        }
+      ],
+      "metricas": null
+    },
+    "60222": {
+      "cambios": [
+        {
+          "circuito": "sc-17",
+          "estado": "out",
+          "mensaje_id": 60222,
+          "duracion": null
+        },
+        {
+          "circuito": "pa-palma-02",
+          "estado": "out",
+          "mensaje_id": 60222,
+          "duracion": null
+        },
+        {
+          "circuito": "sc-5975",
+          "estado": "out",
+          "mensaje_id": 60222,
+          "duracion": null
+        },
+        {
+          "circuito": "sc-07-sd3030",
+          "estado": "out",
+          "mensaje_id": 60222,
+          "duracion": null
+        }
+      ],
+      "metricas": null
+    },
+    "60223": {
+      "cambios": [],
+      "metricas": {
+        "deficit_mw": 150,
+        "servido_mw": 35,
+        "mensaje_id": 60223
+      }
+    },
+    "60224": {
+      "cambios": [
+        {
+          "circuito": "ct-4435",
+          "estado": "out",
+          "mensaje_id": 60224,
+          "duracion": null
+        }
+      ],
+      "metricas": null
+    },
+    "60228": {
+      "cambios": [
+        {
+          "circuito": "gu-5335-5618",
+          "estado": "out",
+          "mensaje_id": 60228,
+          "duracion": null
+        },
+        {
+          "circuito": "sc-20",
+          "estado": "out",
+          "mensaje_id": 60228,
+          "duracion": null
+        },
+        {
+          "circuito": "sc-13",
+          "estado": "out",
+          "mensaje_id": 60228,
+          "duracion": null
+        },
+        {
+          "circuito": "sc-02",
+          "estado": "out",
+          "mensaje_id": 60228,
+          "duracion": null
+        },
+        {
+          "circuito": "sc-08",
+          "estado": "out",
+          "mensaje_id": 60228,
+          "duracion": null
+        },
+        {
+          "circuito": "ct-4385",
+          "estado": "out",
+          "mensaje_id": 60228,
+          "duracion": null
+        },
+        {
+          "circuito": "sc-01",
+          "estado": "out",
+          "mensaje_id": 60228,
+          "duracion": null
+        }
+      ],
+      "metricas": null
+    },
+    "60231": {
+      "cambios": [
+        {
+          "circuito": "sc-25",
+          "estado": "out",
+          "mensaje_id": 60231,
+          "duracion": null
+        },
+        {
+          "circuito": "sc-22",
+          "estado": "out",
+          "mensaje_id": 60231,
+          "duracion": null
+        },
+        {
+          "circuito": "ct-4390",
+          "estado": "out",
+          "mensaje_id": 60231,
+          "duracion": null
+        },
+        {
+          "circuito": "pa-palma-01",
+          "estado": "out",
+          "mensaje_id": 60231,
+          "duracion": null
+        }
+      ],
+      "metricas": null
+    },
+    "60232": {
+      "cambios": [],
+      "metricas": {
+        "deficit_mw": 100,
+        "servido_mw": 40,
+        "mensaje_id": 60232
+      }
+    },
+    "60235": {
+      "cambios": [
+        {
+          "circuito": "sc-02",
+          "estado": "ok",
+          "mensaje_id": 60235,
+          "duracion": null
+        },
+        {
+          "circuito": "sc-16",
+          "estado": "ok",
+          "mensaje_id": 60235,
+          "duracion": null
+        },
+        {
+          "circuito": "gu-5335-5618",
+          "estado": "ok",
+          "mensaje_id": 60235,
+          "duracion": null
+        },
+        {
+          "circuito": "pa-palma-02",
+          "estado": "ok",
+          "mensaje_id": 60235,
+          "duracion": null
+        },
+        {
+          "circuito": "sc-20",
+          "estado": "ok",
+          "mensaje_id": 60235,
+          "duracion": null
+        },
+        {
+          "circuito": "sc-14-si3010",
+          "estado": "ok",
+          "mensaje_id": 60235,
+          "duracion": null
+        }
+      ],
+      "metricas": null
+    },
+    "60236": {
+      "cambios": [
+        {
+          "circuito": "sc-10",
+          "estado": "out",
+          "mensaje_id": 60236,
+          "duracion": null
+        },
+        {
+          "circuito": "sc-15",
+          "estado": "out",
+          "mensaje_id": 60236,
+          "duracion": null
+        }
+      ],
+      "metricas": null
+    },
+    "60240": {
+      "cambios": [
+        {
+          "circuito": "sc-13",
+          "estado": "out",
+          "mensaje_id": 60240,
+          "duracion": null
+        },
+        {
+          "circuito": "sc-08",
+          "estado": "out",
+          "mensaje_id": 60240,
+          "duracion": null
+        },
+        {
+          "circuito": "ct-4385",
+          "estado": "out",
+          "mensaje_id": 60240,
+          "duracion": null
+        },
+        {
+          "circuito": "sc-01",
+          "estado": "out",
+          "mensaje_id": 60240,
+          "duracion": null
+        },
+        {
+          "circuito": "sc-09-si4074",
+          "estado": "out",
+          "mensaje_id": 60240,
+          "duracion": null
+        },
+        {
+          "circuito": "sc-26",
+          "estado": "out",
+          "mensaje_id": 60240,
+          "duracion": null
+        },
+        {
+          "circuito": "sc-19",
+          "estado": "out",
+          "mensaje_id": 60240,
+          "duracion": null
+        }
+      ],
+      "metricas": null
+    },
+    "60244": {
+      "cambios": [
+        {
+          "circuito": "sc-20",
+          "estado": "out",
+          "mensaje_id": 60244,
+          "duracion": null
+        },
+        {
+          "circuito": "sc-02",
+          "estado": "out",
+          "mensaje_id": 60244,
+          "duracion": null
+        },
+        {
+          "circuito": "pa-palma-04",
+          "estado": "out",
+          "mensaje_id": 60244,
+          "duracion": null
+        },
+        {
+          "circuito": "sc-16",
+          "estado": "out",
+          "mensaje_id": 60244,
+          "duracion": null
+        },
+        {
+          "circuito": "ct-4435",
+          "estado": "out",
+          "mensaje_id": 60244,
+          "duracion": null
+        }
+      ],
+      "metricas": null
+    },
+    "60250": {
+      "cambios": [
+        {
+          "circuito": "pa-palma-04",
+          "estado": "out",
+          "mensaje_id": 60250,
+          "duracion": null
+        },
+        {
+          "circuito": "sc-02",
+          "estado": "out",
+          "mensaje_id": 60250,
+          "duracion": null
+        },
+        {
+          "circuito": "sc-20",
+          "estado": "out",
+          "mensaje_id": 60250,
+          "duracion": null
+        },
+        {
+          "circuito": "sc-16",
+          "estado": "out",
+          "mensaje_id": 60250,
+          "duracion": null
+        },
+        {
+          "circuito": "ct-4435",
+          "estado": "out",
+          "mensaje_id": 60250,
+          "duracion": null
+        },
+        {
+          "circuito": "sc-13",
+          "estado": "out",
+          "mensaje_id": 60250,
+          "duracion": null
+        },
+        {
+          "circuito": "sc-17",
+          "estado": "out",
+          "mensaje_id": 60250,
+          "duracion": null
+        },
+        {
+          "circuito": "sc-11",
+          "estado": "out",
+          "mensaje_id": 60250,
+          "duracion": null
+        },
+        {
+          "circuito": "sc-19",
+          "estado": "out",
+          "mensaje_id": 60250,
+          "duracion": null
+        },
+        {
+          "circuito": "sc-26",
+          "estado": "out",
+          "mensaje_id": 60250,
+          "duracion": null
+        },
+        {
+          "circuito": "ct-4385",
+          "estado": "out",
+          "mensaje_id": 60250,
+          "duracion": null
+        }
+      ],
+      "metricas": null
+    },
+    "60254": {
+      "cambios": [],
+      "metricas": {
+        "deficit_mw": 82,
+        "servido_mw": 40,
+        "mensaje_id": 60254
+      }
+    },
+    "60258": {
+      "cambios": [
+        {
+          "circuito": "sc-5980-0015",
+          "estado": "out",
+          "mensaje_id": 60258,
+          "duracion": null
+        },
+        {
+          "circuito": "pa-palma-02",
+          "estado": "out",
+          "mensaje_id": 60258,
+          "duracion": null
+        }
+      ],
+      "metricas": null
+    },
+    "60261": {
+      "cambios": [],
+      "metricas": {
+        "deficit_mw": 102,
+        "servido_mw": 40,
+        "mensaje_id": 60261
+      }
+    },
+    "60265": {
+      "cambios": [
+        {
+          "circuito": "iif-5390-4260",
+          "estado": "out",
+          "mensaje_id": 60265,
+          "duracion": null
+        },
+        {
+          "circuito": "ct-4395-5175",
+          "estado": "out",
+          "mensaje_id": 60265,
+          "duracion": null
+        },
+        {
+          "circuito": "sl-5395",
+          "estado": "out",
+          "mensaje_id": 60265,
+          "duracion": null
+        },
+        {
+          "circuito": "pa-5385",
+          "estado": "out",
+          "mensaje_id": 60265,
+          "duracion": null
+        },
+        {
+          "circuito": "sc-07-sd3030",
+          "estado": "out",
+          "mensaje_id": 60265,
+          "duracion": null
+        },
+        {
+          "circuito": "sc-07-si4630",
+          "estado": "out",
+          "mensaje_id": 60265,
+          "duracion": null
+        },
+        {
+          "circuito": "ct-4435",
+          "estado": "out",
+          "mensaje_id": 60265,
+          "duracion": null
+        }
+      ],
+      "metricas": {
+        "deficit_mw": 95,
+        "servido_mw": 40,
+        "mensaje_id": 60265
+      }
+    },
+    "60270": {
+      "cambios": [],
+      "metricas": {
+        "deficit_mw": 107,
+        "servido_mw": 40,
+        "mensaje_id": 60270
+      }
+    },
+    "60283": {
+      "cambios": [],
+      "metricas": {
+        "deficit_mw": 106,
+        "servido_mw": 35,
+        "mensaje_id": 60283
+      }
+    },
+    "60301": {
+      "cambios": [
+        {
+          "circuito": "sc-09-si4074",
+          "estado": "out",
+          "mensaje_id": 60301,
+          "duracion": null
+        },
+        {
+          "circuito": "sc-12",
+          "estado": "out",
+          "mensaje_id": 60301,
+          "duracion": null
+        }
+      ],
+      "metricas": null
+    },
+    "60302": {
+      "cambios": [
+        {
+          "circuito": "sc-07-sd3030",
+          "estado": "ok",
+          "mensaje_id": 60302,
+          "duracion": null
+        },
+        {
+          "circuito": "ct-4390",
+          "estado": "ok",
+          "mensaje_id": 60302,
+          "duracion": null
+        },
+        {
+          "circuito": "ct-4395-5175",
+          "estado": "ok",
+          "mensaje_id": 60302,
+          "duracion": null
+        }
+      ],
+      "metricas": null
+    },
+    "60303": {
+      "cambios": [],
+      "metricas": {
+        "deficit_mw": 110,
+        "servido_mw": 40,
+        "mensaje_id": 60303
+      }
+    },
+    "60306": {
+      "cambios": [
+        {
+          "circuito": "sc-08",
+          "estado": "ok",
+          "mensaje_id": 60306,
+          "duracion": null
+        },
+        {
+          "circuito": "sc-11",
+          "estado": "ok",
+          "mensaje_id": 60306,
+          "duracion": null
+        },
+        {
+          "circuito": "sc-15",
+          "estado": "ok",
+          "mensaje_id": 60306,
+          "duracion": null
+        },
+        {
+          "circuito": "sc-13",
+          "estado": "ok",
+          "mensaje_id": 60306,
+          "duracion": null
+        },
+        {
+          "circuito": "pa-palma-04",
+          "estado": "ok",
+          "mensaje_id": 60306,
+          "duracion": null
+        },
+        {
+          "circuito": "sc-5980-0015",
+          "estado": "ok",
+          "mensaje_id": 60306,
+          "duracion": null
+        }
+      ],
+      "metricas": null
+    },
+    "60312": {
+      "cambios": [
+        {
+          "circuito": "sc-07-sd3030",
+          "estado": "out",
+          "mensaje_id": 60312,
+          "duracion": null
+        },
+        {
+          "circuito": "sc-13",
+          "estado": "out",
+          "mensaje_id": 60312,
+          "duracion": null
+        },
+        {
+          "circuito": "sc-20",
+          "estado": "out",
+          "mensaje_id": 60312,
+          "duracion": null
+        },
+        {
+          "circuito": "sc-22",
+          "estado": "out",
+          "mensaje_id": 60312,
+          "duracion": null
+        },
+        {
+          "circuito": "sc-5980-0015",
+          "estado": "out",
+          "mensaje_id": 60312,
+          "duracion": null
+        }
+      ],
+      "metricas": null
+    },
+    "60313": {
+      "cambios": [],
+      "metricas": {
+        "deficit_mw": 100,
+        "servido_mw": 40,
+        "mensaje_id": 60313
+      }
+    },
+    "60317": {
+      "cambios": [
+        {
+          "circuito": "sc-02",
+          "estado": "ok",
+          "mensaje_id": 60317,
+          "duracion": null
+        },
+        {
+          "circuito": "sc-08",
+          "estado": "ok",
+          "mensaje_id": 60317,
+          "duracion": null
+        },
+        {
+          "circuito": "sc-11",
+          "estado": "ok",
+          "mensaje_id": 60317,
+          "duracion": null
+        },
+        {
+          "circuito": "sc-13",
+          "estado": "ok",
+          "mensaje_id": 60317,
+          "duracion": null
+        },
+        {
+          "circuito": "sc-22",
+          "estado": "ok",
+          "mensaje_id": 60317,
+          "duracion": null
+        },
+        {
+          "circuito": "sc-25",
+          "estado": "ok",
+          "mensaje_id": 60317,
+          "duracion": null
+        },
+        {
+          "circuito": "pa-palma-01",
+          "estado": "ok",
+          "mensaje_id": 60317,
+          "duracion": null
+        },
+        {
+          "circuito": "pa-palma-04",
+          "estado": "ok",
+          "mensaje_id": 60317,
+          "duracion": null
+        },
+        {
+          "circuito": "ct-4390",
+          "estado": "ok",
+          "mensaje_id": 60317,
+          "duracion": null
+        },
+        {
+          "circuito": "gu-5335-5618",
+          "estado": "ok",
+          "mensaje_id": 60317,
+          "duracion": null
+        }
+      ],
+      "metricas": null
+    },
+    "60321": {
+      "cambios": [
+        {
+          "circuito": "sc-09-si4074",
+          "estado": "out",
+          "mensaje_id": 60321,
+          "duracion": null
+        },
+        {
+          "circuito": "sc-12",
+          "estado": "out",
+          "mensaje_id": 60321,
+          "duracion": null
+        },
+        {
+          "circuito": "sc-21",
+          "estado": "out",
+          "mensaje_id": 60321,
+          "duracion": null
+        },
+        {
+          "circuito": "sc-24",
+          "estado": "out",
+          "mensaje_id": 60321,
+          "duracion": null
+        },
+        {
+          "circuito": "sc-5975",
+          "estado": "out",
+          "mensaje_id": 60321,
+          "duracion": null
+        }
+      ],
+      "metricas": null
+    },
+    "60322": {
+      "cambios": [
+        {
+          "circuito": "sc-07-sd3030",
+          "estado": "ok",
+          "mensaje_id": 60322,
+          "duracion": null
+        },
+        {
+          "circuito": "sc-20",
+          "estado": "ok",
+          "mensaje_id": 60322,
+          "duracion": null
+        }
+      ],
+      "metricas": null
+    },
+    "60323": {
+      "cambios": [
+        {
+          "circuito": "sc-02",
+          "estado": "out",
+          "mensaje_id": 60323,
+          "duracion": null
+        },
+        {
+          "circuito": "sc-22",
+          "estado": "out",
+          "mensaje_id": 60323,
+          "duracion": null
+        },
+        {
+          "circuito": "sc-25",
+          "estado": "out",
+          "mensaje_id": 60323,
+          "duracion": null
+        },
+        {
+          "circuito": "pa-palma-01",
+          "estado": "out",
+          "mensaje_id": 60323,
+          "duracion": null
+        },
+        {
+          "circuito": "gu-5335-5618",
+          "estado": "out",
+          "mensaje_id": 60323,
+          "duracion": null
+        }
+      ],
+      "metricas": null
+    },
+    "60334": {
+      "cambios": [
+        {
+          "circuito": "sc-07-sd3030",
+          "estado": "out",
+          "mensaje_id": 60334,
+          "duracion": null
+        }
+      ],
+      "metricas": null
+    },
+    "60336": {
+      "cambios": [
+        {
+          "circuito": "sc-17",
+          "estado": "ok",
+          "mensaje_id": 60336,
+          "duracion": null
+        },
+        {
+          "circuito": "sc-19",
+          "estado": "ok",
+          "mensaje_id": 60336,
+          "duracion": null
+        }
+      ],
+      "metricas": null
+    },
+    "60337": {
+      "cambios": [
+        {
+          "circuito": "sc-16",
+          "estado": "out",
+          "mensaje_id": 60337,
+          "duracion": null
+        },
+        {
+          "circuito": "ct-4395-5175",
+          "estado": "out",
+          "mensaje_id": 60337,
+          "duracion": null
+        },
+        {
+          "circuito": "ct-4435",
+          "estado": "out",
+          "mensaje_id": 60337,
+          "duracion": null
+        },
+        {
+          "circuito": "sc-26",
+          "estado": "out",
+          "mensaje_id": 60337,
+          "duracion": null
+        },
+        {
+          "circuito": "sc-03",
+          "estado": "out",
+          "mensaje_id": 60337,
+          "duracion": null
+        },
+        {
+          "circuito": "sc-01",
+          "estado": "out",
+          "mensaje_id": 60337,
+          "duracion": null
+        }
+      ],
+      "metricas": {
+        "deficit_mw": 91,
+        "servido_mw": 50,
+        "mensaje_id": 60337
+      }
+    },
+    "60338": {
+      "cambios": [
+        {
+          "circuito": "pa-5385",
+          "estado": "out",
+          "mensaje_id": 60338,
+          "duracion": null
+        }
+      ],
+      "metricas": null
+    },
+    "60343": {
+      "cambios": [],
+      "metricas": {
+        "deficit_mw": 87,
+        "servido_mw": 50,
+        "mensaje_id": 60343
+      }
+    },
+    "60351": {
+      "cambios": [
+        {
+          "circuito": "sc-17",
+          "estado": "out",
+          "mensaje_id": 60351,
+          "duracion": null
+        },
+        {
+          "circuito": "sc-19",
+          "estado": "out",
+          "mensaje_id": 60351,
+          "duracion": null
+        },
+        {
+          "circuito": "slm-5380",
+          "estado": "out",
+          "mensaje_id": 60351,
+          "duracion": null
+        }
+      ],
+      "metricas": null
+    },
+    "60356": {
+      "cambios": [],
+      "metricas": {
+        "deficit_mw": 83,
+        "servido_mw": 50,
+        "mensaje_id": 60356
+      }
+    },
+    "60362": {
+      "cambios": [
+        {
+          "circuito": "sc-17",
+          "estado": "out",
+          "mensaje_id": 60362,
+          "duracion": null
+        }
+      ],
+      "metricas": null
+    },
+    "60367": {
+      "cambios": [
+        {
+          "circuito": "sc-09-si4074",
+          "estado": "ok",
+          "mensaje_id": 60367,
+          "duracion": null
+        }
+      ],
+      "metricas": null
+    },
+    "60372": {
+      "cambios": [],
+      "metricas": {
+        "deficit_mw": 124,
+        "servido_mw": 40,
+        "mensaje_id": 60372
+      }
+    },
+    "60373": {
+      "cambios": [
+        {
+          "circuito": "sc-09-si4074",
+          "estado": "out",
+          "mensaje_id": 60373,
+          "duracion": null
+        }
+      ],
+      "metricas": null
+    },
+    "60393": {
+      "cambios": [
+        {
+          "circuito": "sc-07-sd3030",
+          "estado": "out",
+          "mensaje_id": 60393,
+          "duracion": null
+        },
+        {
+          "circuito": "ct-contramaestre-01-02",
+          "estado": "out",
+          "mensaje_id": 60393,
+          "duracion": null
+        },
+        {
+          "circuito": "pa-5385",
+          "estado": "out",
+          "mensaje_id": 60393,
+          "duracion": null
+        },
+        {
+          "circuito": "ct-hospital-contramaestre",
+          "estado": "out",
+          "mensaje_id": 60393,
+          "duracion": null
+        },
+        {
+          "circuito": "sc-5980-0015",
+          "estado": "out",
+          "mensaje_id": 60393,
+          "duracion": null
+        }
+      ],
+      "metricas": {
+        "deficit_mw": 86,
+        "servido_mw": 45,
+        "mensaje_id": 60393
+      }
+    },
+    "60406": {
+      "cambios": [
+        {
+          "circuito": "sc-07-sd3030",
+          "estado": "ok",
+          "mensaje_id": 60406,
+          "duracion": null
+        },
+        {
+          "circuito": "sc-09-si4074",
+          "estado": "ok",
+          "mensaje_id": 60406,
+          "duracion": null
+        }
+      ],
+      "metricas": null
+    },
+    "60453": {
+      "cambios": [
+        {
+          "circuito": "sc-12",
+          "estado": "ok",
+          "mensaje_id": 60453,
+          "duracion": null
+        },
+        {
+          "circuito": "sc-14-si3010",
+          "estado": "ok",
+          "mensaje_id": 60453,
+          "duracion": null
+        },
+        {
+          "circuito": "sc-19",
+          "estado": "ok",
+          "mensaje_id": 60453,
+          "duracion": null
+        },
+        {
+          "circuito": "sc-5980-0015",
+          "estado": "ok",
+          "mensaje_id": 60453,
+          "duracion": null
+        }
+      ],
+      "metricas": null
+    },
+    "60461": {
+      "cambios": [
+        {
+          "circuito": "ct-contramaestre-01-02",
+          "estado": "out",
+          "mensaje_id": 60461,
+          "duracion": null
+        },
+        {
+          "circuito": "ct-hospital-contramaestre",
+          "estado": "out",
+          "mensaje_id": 60461,
+          "duracion": null
+        },
+        {
+          "circuito": "pa-5385",
+          "estado": "out",
+          "mensaje_id": 60461,
+          "duracion": null
+        },
+        {
+          "circuito": "sc-07-sd3030",
+          "estado": "out",
+          "mensaje_id": 60461,
+          "duracion": null
+        },
+        {
+          "circuito": "sc-09-si4615",
+          "estado": "out",
+          "mensaje_id": 60461,
+          "duracion": null
+        }
+      ],
+      "metricas": {
+        "deficit_mw": 85,
+        "servido_mw": 40,
+        "mensaje_id": 60461
+      }
+    },
+    "60462": {
+      "cambios": [
+        {
+          "circuito": "sc-02",
+          "estado": "out",
+          "mensaje_id": 60462,
+          "duracion": null
+        },
+        {
+          "circuito": "sc-13",
+          "estado": "out",
+          "mensaje_id": 60462,
+          "duracion": null
+        },
+        {
+          "circuito": "sc-17",
+          "estado": "out",
+          "mensaje_id": 60462,
+          "duracion": null
+        },
+        {
+          "circuito": "sc-23",
+          "estado": "out",
+          "mensaje_id": 60462,
+          "duracion": null
+        },
+        {
+          "circuito": "pa-palma-01",
+          "estado": "out",
+          "mensaje_id": 60462,
+          "duracion": null
+        },
+        {
+          "circuito": "pa-palma-04",
+          "estado": "out",
+          "mensaje_id": 60462,
+          "duracion": null
+        },
+        {
+          "circuito": "sl-5395",
+          "estado": "out",
+          "mensaje_id": 60462,
+          "duracion": null
+        },
+        {
+          "circuito": "ct-4385",
+          "estado": "out",
+          "mensaje_id": 60462,
+          "duracion": null
+        }
+      ],
+      "metricas": null
+    },
+    "60465": {
+      "cambios": [
+        {
+          "circuito": "sc-03",
+          "estado": "ok",
+          "mensaje_id": 60465,
+          "duracion": null
+        },
+        {
+          "circuito": "sc-08",
+          "estado": "ok",
+          "mensaje_id": 60465,
+          "duracion": null
+        },
+        {
+          "circuito": "sc-09-si4615",
+          "estado": "ok",
+          "mensaje_id": 60465,
+          "duracion": null
+        }
+      ],
+      "metricas": null
+    },
+    "60468": {
+      "cambios": [
+        {
+          "circuito": "sc-08",
+          "estado": "out",
+          "mensaje_id": 60468,
+          "duracion": null
+        },
+        {
+          "circuito": "sc-09-si4615",
+          "estado": "out",
+          "mensaje_id": 60468,
+          "duracion": null
+        }
+      ],
+      "metricas": null
+    },
+    "60479": {
+      "cambios": [
+        {
+          "circuito": "ct-contramaestre-01-02",
+          "estado": "out",
+          "mensaje_id": 60479,
+          "duracion": null
+        },
+        {
+          "circuito": "sc-26",
+          "estado": "out",
+          "mensaje_id": 60479,
+          "duracion": null
+        },
+        {
+          "circuito": "gu-5335-5618",
+          "estado": "out",
+          "mensaje_id": 60479,
+          "duracion": null
+        },
+        {
+          "circuito": "sc-5330",
+          "estado": "out",
+          "mensaje_id": 60479,
+          "duracion": null
+        },
+        {
+          "circuito": "sc-5980-0015",
+          "estado": "out",
+          "mensaje_id": 60479,
+          "duracion": null
+        }
+      ],
+      "metricas": null
+    },
+    "60483": {
+      "cambios": [
+        {
+          "circuito": "sm-songo",
+          "estado": "out",
+          "mensaje_id": 60483,
+          "duracion": null
+        },
+        {
+          "circuito": "iif-5390-4260",
+          "estado": "out",
+          "mensaje_id": 60483,
+          "duracion": null
+        },
+        {
+          "circuito": "sc-07-sd3030",
+          "estado": "out",
+          "mensaje_id": 60483,
+          "duracion": null
+        },
+        {
+          "circuito": "sl-5395",
+          "estado": "out",
+          "mensaje_id": 60483,
+          "duracion": null
+        },
+        {
+          "circuito": "pa-palma-02",
+          "estado": "out",
+          "mensaje_id": 60483,
+          "duracion": null
+        },
+        {
+          "circuito": "sc-12",
+          "estado": "out",
+          "mensaje_id": 60483,
+          "duracion": null
+        },
+        {
+          "circuito": "sc-24",
+          "estado": "out",
+          "mensaje_id": 60483,
+          "duracion": null
+        }
+      ],
+      "metricas": null
+    },
+    "60487": {
+      "cambios": [
+        {
+          "circuito": "slm-5380",
+          "estado": "out",
+          "mensaje_id": 60487,
+          "duracion": null
+        },
+        {
+          "circuito": "sc-11",
+          "estado": "out",
+          "mensaje_id": 60487,
+          "duracion": null
+        },
+        {
+          "circuito": "sc-14-si3010",
+          "estado": "out",
+          "mensaje_id": 60487,
+          "duracion": null
+        },
+        {
+          "circuito": "pa-palma-04",
+          "estado": "out",
+          "mensaje_id": 60487,
+          "duracion": null
+        }
+      ],
+      "metricas": null
+    }
+  }
+}

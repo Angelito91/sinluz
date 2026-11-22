@@ -21,7 +21,7 @@ Coste de infraestructura: 0 €.
 |---|---|
 | Catálogo (45 circuitos, 9 municipios) | listo |
 | Intérprete LLM (Workers AI + Zod) | listo · sin reglas ni alias matching |
-| Tests (`bun test`) | 40 pass |
+| Tests (`bun test`) | 71 pass |
 | Worker + D1 + cron | listo · probado en local con datos en vivo |
 | Frontend (mapa por municipios + «dónde estoy» + lista + favoritos + offline) | listo |
 | Deploy (Worker + Pages) | **en producción** |
@@ -62,24 +62,28 @@ PWA React 19  ·  mapa GeoJSON  ·  offline con Workbox
 No hay parser determinista ni emparejador de alias. El único intérprete es un
 modelo de Workers AI: recibe el estado actual (solo circuitos afectados), el
 catálogo y un lote de mensajes nuevos, y devuelve **solo** un JSON con
-`cambios[]` y `metrics`. El servidor lo valida con Zod y vuelve a filtrar ids,
+`cambios[]` y `metricas`. El servidor lo valida con Zod y vuelve a filtrar ids,
 mensajes y cifras.
 
 1. **Nada se deduce por omisión.** Que un circuito no aparezca en una lista no lo
    restablece: solo un `ok` explícito lo saca de la afectación.
 2. **Sin historial.** Solo se guarda el estado presente y el último id procesado;
    no hay `raw_messages` ni decisiones por mensaje.
-3. **El servidor calcula el tiempo.** El modelo devuelve `source_message_id` y,
-   si el canal lo publica, `duration_min`. El `since` se deriva en el worker.
+3. **El servidor calcula el tiempo.** El modelo devuelve `mensaje_id` y, si el
+   canal lo publica, `duracion: { horas, minutos }`. El worker calcula
+   `duracion_min` y el `since`.
 4. **Cifras plausibles.** Las métricas provinciales se aceptan entre 0 y 600 MW;
-   el parte nacional del SEN se ignora.
-5. **Si el modelo falla, no se toca nada.** No se guarda snapshot ni avanza el
-   cursor, y el cron reintenta en la siguiente ejecución.
+   el parte nacional del SEN se ignora. La cifra debe venir de un mensaje que
+   mencione «MW».
+5. **Un fallo no congela la app.** Lo ya interpretado se guarda; una respuesta
+   inválida se bisecciona y, si un mensaje suelto sigue fallando, se descarta
+   dejando su id en el registro. Un fallo transitorio no mueve el cursor.
 
 Detalle completo en [`docs/mvp.md`](docs/mvp.md). Catálogo, cobertura y origen
 de las ubicaciones en [`docs/circuitos.md`](docs/circuitos.md). Guía para quien
 mantiene los datos en [`docs/guia-datos.md`](docs/guia-datos.md). Cómo probar lo
-desplegado en [`docs/probar.md`](docs/probar.md).
+desplegado en [`docs/probar.md`](docs/probar.md). Evaluación del corpus
+etiquetado en [`docs/eval.md`](docs/eval.md).
 
 ---
 
@@ -126,7 +130,7 @@ curl http://127.0.0.1:8787/api/health
 ## Comandos
 
 ```bash
-bun test                 # 47 tests: contrato del LLM, máquina de estados y D1
+bun test                 # 71 tests: LLM, estado, ingesta, overrides y D1
 bun run typecheck        # worker, scripts y web (tsc --noEmit)
 bun run build            # sync + typecheck + build de la PWA
 bun run preview          # sirve el build en 4173 (con proxy /api → 8787)
@@ -135,6 +139,9 @@ bun run data:check       # circuits.csv → circuits.json (valida el catálogo)
 bun run fixtures         # vuelve a descargar mensajes reales del canal
 bun run geojson          # regenera el GeoJSON de los 9 municipios
 bun run sync             # copia los datos generados a web/public
+
+bun run eval:replay      # evalúa el corpus etiquetado sin credenciales
+bun run eval:live        # evalúa el modelo real (CLOUDFLARE_* en el entorno)
 ```
 
 ---
@@ -153,7 +160,9 @@ POST /api/v1/refresh          Bearer INGEST_TOKEN · fuerza una ingesta
 ```
 
 Las correcciones manuales se guardan en su propia tabla y se aplican al leer el
-estado, así que una ingesta no las borra.
+estado, así que una ingesta no las borra. Las de tipo `out` caducan a las
+`OVERRIDE_TTL_H` horas (6 por defecto); las de tipo `ok` se ignoran si el canal
+volvió a afectar el circuito después.
 
 `GET /api/v1/status` se sirve con
 `Cache-Control: public, max-age=30, stale-while-revalidate=60, stale-if-error=86400`,
@@ -215,7 +224,7 @@ sinluz/
 ├── worker/
 │   ├── src/
 │   │   ├── index.ts             Hono: rutas + cron
-│   │   ├── ingest.ts            lotes de 15, backoff 5→40 min
+│   │   ├── ingest.ts            lotes de 12, bisección y backoff 5→40 min
 │   │   ├── llm.ts               prompt, esquema y llamada a Workers AI
 │   │   ├── state.ts             cambios validados → estado
 │   │   ├── store.ts             D1: snapshot, overrides y settings
@@ -223,7 +232,7 @@ sinluz/
 │   ├── data/circuits.csv        ← lo edita la analista
 │   ├── data/municipios.geojson  9 municipios, 21 KB
 │   ├── scripts/                 catálogo, GeoJSON y fixtures
-│   └── test/                    47 tests + corpus real de referencia
+│   └── test/                    71 tests + corpus real y etiquetas de referencia
 ├── web/src/                     App, MapView, CircuitList, hooks
 └── docs/                        MVP y guía de datos
 ```

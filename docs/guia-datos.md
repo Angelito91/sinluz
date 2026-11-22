@@ -58,13 +58,13 @@ municipio mal escrito, un `id` repetido o un alias duplicado.
 
 ```csv
 id,kind,name,municipio,aliases,radius_m,lat,lon,notes
-sc-12,circuito,Circuito 12,Santiago de Cuba,Circuito 12|12|Cto 12,1400,,,
-line-4395,linea,Línea 4395-Contramaestre,Contramaestre,Línea 4395 Contramaestre|4395|Línea 4395 SD 5175 Contramaestre,4500,,,SD 5175 es el seccionalizado asociado
+sc-12,circuito,Circuito 12,Santiago de Cuba,circuito 12|12|Cto 12,1400,,,
+ct-4395-5175,linea,Linea 4395-5175,Contramaestre,Línea 4395 Contramaestre|4395|Línea 4395 SD 5175 Contramaestre,4500,,,SD 5175 es el seccionalizado asociado
 ```
 
 | Columna | Regla | Ejemplo |
 |---|---|---|
-| `id` | Corto, único, inmutable. Prefijo del municipio/nombre + número. **Nunca lo cambies después.** | `sc-12`, `cta-02`, `line-5390` |
+| `id` | Corto, único, inmutable. Prefijo del municipio/nombre + número. **Nunca lo cambies después.** | `sc-12`, `ct-contramaestre-01-02`, `gu-5335-5618` |
 | `kind` | `circuito` (numerado, de ciudad) o `linea` (intermunicipal, con nombre) | `linea` |
 | `name` | Nombre completo y legible. Es lo que verá el usuario. | `Línea 4395-Contramaestre` |
 | `municipio` | Uno exacto de los 9 de la lista del apartado 4. | `Contramaestre` |
@@ -132,6 +132,7 @@ Después, si quieres comprobar el resultado con mensajes reales:
 
 ```bash
 bun run fixtures       # descarga mensajes recientes del canal
+bun run eval:replay    # evalúa el corpus etiquetado sin credenciales
 ```
 
 Los mensajes se guardan en `worker/test/fixtures/messages.json` como corpus de
@@ -147,14 +148,19 @@ rango o `id` repetido, con **fila y columna**.
 
 | Caso real en el canal | Qué espera el sistema | Tu decisión |
 |---|---|---|
-| `Línea 4395Contramaestre(5175)` | `line-4395`; `(5175)` es el seccionalizado | ninguno |
-| `4395` y `4435` | son **líneas distintas** | no las unas nunca |
-| `ll Frente` / `II Frente` | Línea II Frente | ninguno |
-| `Baire-lll Frente` | Línea III Frente | ninguno |
-| `LI 5395-San Luis` | Línea 5395 | añade `LI …` si aparece otra variante |
-| `1 y 2 de Contramaestre` | dos circuitos | ninguno |
+| `Línea 4395Contramaestre(5175)` | `ct-4395-5175`; `(5175)` es el seccionalizado | ninguno |
+| `4395` y `4435` | son **líneas distintas** (`ct-4395-5175` y `ct-4435`) | no las unas nunca |
+| `ll Frente` / `II Frente` | `iif-5390-4260` | ninguno |
+| `Baire-lll Frente` | no está en el catálogo | si se repite, añade la línea III Frente con un id nuevo |
+| `LI 5395-San Luis` | `sl-5395` | añade `LI …` si aparece otra variante |
+| `1 y 2 de Contramaestre` | **un solo** id, `ct-contramaestre-01-02` | ninguno |
 | `Circuito 1` / `12` / `24` | circuitos de Santiago (`sc-01`, `sc-12`, `sc-24`) | ninguno |
-| `Línea 5385-Palma` / `Línea 5385 San Luis` | un solo circuito | ya está anotado en `notes` |
+| `Circuito 9` / `9 seccionalizado` | `sc-09-si4074` / `sc-09-si4615` | ya está anotado en `notes` |
+| `Circuito 7` / `7 seccionalizado` | `sc-07-sd3030`; `7 SD 4630` es `sc-07-si4630` | ninguno |
+| `17 seccionalizado` / `11 seccionalizado` | `sc-17` / `sc-11` | ninguno |
+| `Línea 5335 (5617)` | `gu-5335-5618`; el canal escribe 5617 | ya está anotado en `notes` |
+| `San Juan` / `Songo` | `sc-5980-0015` / `sm-songo` | ninguno |
+| `Línea 5385-Palma` / `Línea 5385 San Luis` | un solo circuito, `pa-5385` | ya está anotado en `notes` |
 
 El modelo **no adivina**: si dos circuitos encajan y el mensaje no permite
 decidir, omite el cambio. Si ves un error en producción, corrige con
@@ -194,6 +200,7 @@ bun run data:check      # valida el CSV y regenera circuits.json
 bun run sync            # copia los datos a web/public
 bun run test            # tests del worker
 bun run fixtures        # descarga mensajes recientes del canal
+bun run eval:replay     # evaluación del corpus etiquetado
 ```
 
 Si algo falla, copia el texto **completo** del error. El mensaje suele decir

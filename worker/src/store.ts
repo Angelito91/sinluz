@@ -11,6 +11,10 @@ export type Env = {
   /** Interruptor de emergencia: "false" apaga la IA sin borrar el binding. */
   LLM_ENABLED?: string;
   LLM_MODEL?: string;
+  /** Horas que sobrevive una corrección manual de tipo `out`. */
+  OVERRIDE_TTL_H?: string;
+  /** `off` | `log` | `enforce`: validación de menciones del mensaje. */
+  MENTION_GUARD?: string;
   INGEST_TOKEN?: string;
   ADMIN_TOKEN?: string;
   ALERT_BOT_TOKEN?: string;
@@ -39,7 +43,6 @@ function parseState(raw: string | null): StatusPayload {
   }
 }
 
-/** Estado crudo que interpretó la IA, sin correcciones manuales. */
 export async function getStoredState(env: Env): Promise<StatusPayload> {
   const row = await env.DB.prepare("SELECT payload FROM state_snapshot WHERE id = 1").first<{
     payload: string;
@@ -47,10 +50,19 @@ export async function getStoredState(env: Env): Promise<StatusPayload> {
   return parseState(row?.payload ?? null);
 }
 
-/** Estado que sirve la API: estado crudo + correcciones manuales. */
 export async function getSnapshot(env: Env): Promise<StatusPayload> {
   const [state, overrides] = await Promise.all([getStoredState(env), listOverrides(env)]);
-  return mergeOverrides(state, overrides);
+  return mergeOverrides(
+    state,
+    overrides,
+    Math.floor(Date.now() / 1000),
+    overrideTtlSeconds(env),
+  );
+}
+
+export function overrideTtlSeconds(env: Env): number {
+  const hours = Number(env.OVERRIDE_TTL_H ?? 6);
+  return Number.isFinite(hours) && hours > 0 ? hours * 3600 : 0;
 }
 
 export async function saveState(env: Env, state: StatusPayload): Promise<StatusPayload> {
@@ -67,7 +79,6 @@ export async function saveState(env: Env, state: StatusPayload): Promise<StatusP
   return payload;
 }
 
-/** Ingesta correcta sin mensajes nuevos: solo se anota que el canal se consultó. */
 export async function touchState(env: Env, now: number): Promise<StatusPayload> {
   const state = await getStoredState(env);
   return saveState(env, { ...state, generated_at: now });
@@ -140,6 +151,12 @@ export async function setCircuitOverride(
   since: number | null,
 ): Promise<StatusPayload> {
   const now = Math.floor(Date.now() / 1000);
+  const ttl = overrideTtlSeconds(env);
+  if (ttl > 0) {
+    await env.DB.prepare("DELETE FROM circuit_overrides WHERE status = 'out' AND updated_at < ?")
+      .bind(now - ttl)
+      .run();
+  }
   await env.DB.prepare(
     `INSERT INTO circuit_overrides (circuit_id, status, since, updated_at) VALUES (?, ?, ?, ?)
      ON CONFLICT(circuit_id) DO UPDATE SET

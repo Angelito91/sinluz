@@ -134,7 +134,17 @@
       "Línea 5618",
       "línea 5618",
       "5618-Guamá",
-      "5335-Guamá"
+      "5335-Guamá",
+      "Línea 5335-5617",
+      "5335-5617",
+      "Línea 5617",
+      "línea 5617",
+      "5617",
+      "5617-Guamá",
+      "Línea 5335 SD 5617",
+      "5335 SD 5617",
+      "Línea 5335-Guamá seccionalizado",
+      "5335-Guamá seccionalizado"
     ],
     "anchor": [
       19.97312,
@@ -142,7 +152,8 @@
     ],
     "radius_m": 4500,
     "geo_confidence": "approximate",
-    "geo_source": "elTOQUE"
+    "geo_source": "elTOQUE",
+    "notes": "El canal escribe 5617 donde la fuente dice 5618; se aceptan ambas formas."
   },
   {
     "id": "iif-5390-4260",
@@ -154,7 +165,8 @@
       "línea 5390-4260",
       "5390-4260",
       "Línea 5390 Ramal 4260",
-      "II Frente"
+      "II Frente",
+      "ll Frente"
     ],
     "anchor": [
       20.4412,
@@ -302,7 +314,12 @@
       "circuito SD 3030",
       "circuito 7 SD 3030",
       "circuito 7-sd 3030",
-      "7 seccionalizado"
+      "circuito 7",
+      "circuito 7 de Santiago",
+      "7 seccionalizado",
+      "7 seccionalizado SD 2052",
+      "SD 2052",
+      "SD 3030-SD 2052"
     ],
     "anchor": [
       20.01917,
@@ -311,7 +328,7 @@
     "radius_m": 1400,
     "geo_confidence": "reported",
     "geo_source": "elTOQUE",
-    "notes": "Mismo recorrido que 7-SI4630/7-SD3030, identificador repetido en la fuente"
+    "notes": "Mismo recorrido que 7-SI4630/7-SD3030, identificador repetido en la fuente. El canal llama 7 seccionalizado a SD 3030; SD 2052 aparece como su código asociado."
   },
   {
     "id": "sc-07-si4630",
@@ -354,6 +371,9 @@
     "name": "Circuito 9-SI4074",
     "municipio": "Santiago de Cuba",
     "aliases": [
+      "circuito 9",
+      "circuito 9 de Santiago",
+      "9 de Santiago",
       "circuito 9 - SI 4074",
       "circuito SI 4074",
       "9 si 4074"
@@ -364,7 +384,8 @@
     ],
     "radius_m": 1400,
     "geo_confidence": "mapped",
-    "geo_source": "trazado detallado"
+    "geo_source": "trazado detallado",
+    "notes": "El canal usa «circuito 9» para esta variante y reserva «9 seccionalizado» para SI 4615."
   },
   {
     "id": "sc-09-si4615",
@@ -408,7 +429,8 @@
     "municipio": "Santiago de Cuba",
     "aliases": [
       "circuito 11",
-      "circuito 11 de Santiago"
+      "circuito 11 de Santiago",
+      "11 seccionalizado"
     ],
     "anchor": [
       19.99088,
@@ -416,7 +438,8 @@
     ],
     "radius_m": 1400,
     "geo_confidence": "mapped",
-    "geo_source": "trazado detallado"
+    "geo_source": "trazado detallado",
+    "notes": "El canal usa «11 seccionalizado» sin un código propio."
   },
   {
     "id": "sc-12",
@@ -511,7 +534,8 @@
     "municipio": "Santiago de Cuba",
     "aliases": [
       "circuito 17",
-      "circuito 17 de Santiago"
+      "circuito 17 de Santiago",
+      "17 seccionalizado"
     ],
     "anchor": [
       20.05563,
@@ -519,7 +543,8 @@
     ],
     "radius_m": 1400,
     "geo_confidence": "mapped",
-    "geo_source": "trazado detallado"
+    "geo_source": "trazado detallado",
+    "notes": "El canal usa «17 seccionalizado» sin un código propio."
   },
   {
     "id": "sc-18",
@@ -683,7 +708,9 @@
       "Línea 5330",
       "línea 5330",
       "5330",
-      "5330-Cristo"
+      "5330-Cristo",
+      "Cristo",
+      "El Cristo"
     ],
     "anchor": [
       20.12106,
@@ -741,7 +768,8 @@
     "aliases": [
       "Línea 5980 San Juan",
       "línea 5980 San Juan",
-      "Circuito San Juan"
+      "Circuito San Juan",
+      "San Juan"
     ],
     "anchor": [
       20.02507,
@@ -818,7 +846,8 @@
     "aliases": [
       "Songo y la Maya",
       "La Maya y Songo",
-      "Songo La Maya"
+      "Songo La Maya",
+      "Songo"
     ],
     "anchor": [
       20.17609,

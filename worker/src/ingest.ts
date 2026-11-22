@@ -1,4 +1,6 @@
-import { DEFAULT_MODEL, decide, type Message } from "./llm";
+import type { StatusPayload } from "@sinluz/shared";
+import { DEFAULT_MODEL, decide, type LlmResult, type Message } from "./llm";
+import { filterLlmResult, guardMode } from "./mentions";
 import {
   getSetting,
   getSnapshot,
@@ -14,12 +16,10 @@ import { applyChanges } from "./state";
 
 const MIN = 60_000;
 const MAX_BACKOFF_MIN = 40;
-/** 1 página normal + hasta 3 anteriores si entre dos ingestas se publicó más de lo que cabe. */
 const MAX_PAGES = 4;
-/** Mensajes por llamada al modelo. */
 const BATCH_SIZE = 12;
-/** Tope de llamadas al modelo por ejecución. */
 const MAX_BATCHES = 4;
+const MAX_AI_CALLS = 12;
 
 type TelegramMessage = { id: number; date: number; message?: string };
 
@@ -29,14 +29,15 @@ export type IngestResult = {
   processed: number;
   changes: number;
   detail: string;
+  discarded?: number[];
+  dropped?: number;
+  logged?: number;
 };
+
+const EMPTY_RESULT: LlmResult = { cambios: [], metricas: null };
 
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
-/**
- * Ingesta incremental: el estado vive en una sola fila y avanza por lotes.
- * Si el modelo falla, no se guarda nada y el próximo cron reintenta.
- */
 export async function ingest(env: Env, source = "cron"): Promise<IngestResult> {
   const now = Date.now();
   const nowSec = Math.floor(now / 1000);
@@ -91,39 +92,161 @@ export async function ingest(env: Env, source = "cron"): Promise<IngestResult> {
   let current = state;
   let processed = 0;
   let changes = 0;
+  let dropped = 0;
+  let logged = 0;
+  const discarded: number[] = [];
+  let failure: { kind: "transient" | "invalid"; message: string } | null = null;
+  const budget = { remaining: MAX_AI_CALLS };
   const batches = chunk(messages, BATCH_SIZE).slice(0, MAX_BATCHES);
 
   for (const batch of batches) {
-    const result = await decide(env.AI!, env.LLM_MODEL || DEFAULT_MODEL, {
-      now: nowSec,
-      state: current,
-      messages: batch,
-    });
+    if (budget.remaining <= 0) break;
 
-    if (!result.ok) {
-      await setSetting(env, "last_error", result.error);
-      await logIngest(env, source, false, `IA: ${result.error}`);
-      await checkAlerts(env);
-      return { ok: false, processed: 0, changes: 0, detail: `IA: ${result.error}` };
+    const outcome = await processBatch(env, current, batch, nowSec, budget);
+    current = outcome.state;
+    processed += outcome.processed;
+    changes += outcome.changes;
+    dropped += outcome.dropped;
+    logged += outcome.logged;
+    discarded.push(...outcome.discarded);
+
+    if (outcome.error) {
+      failure = outcome.error;
+      break;
     }
-
-    current = applyChanges(current, batch, result.result, nowSec);
-    processed += batch.length;
-    changes += result.result.cambios.length + result.result.confirmaciones.length;
+    if (outcome.processed < batch.length) break;
   }
 
-  // Un solo guardado: si un lote falla, el estado anterior y el cursor no se tocan.
-  await saveState(env, current);
-
   const pending = messages.length - processed;
-  const detail = `${processed} mensajes · ${changes} cambios${pending > 0 ? ` · ${pending} pendientes` : ""}`;
+
+  if (processed > 0) await saveState(env, current);
+
+  if (failure) {
+    const detail = `IA: ${failure.message}${processed > 0 ? ` · ${processed} guardados` : ""}${
+      pending > 0 ? ` · ${pending} pendientes` : ""
+    }${discarded.length > 0 ? ` · ${discarded.length} descartados (${discarded.join(",")})` : ""}`;
+    await setSetting(env, "last_error", detail);
+    if (processed > 0) await setSetting(env, "last_ok_at", String(nowSec));
+    await logIngest(env, source, false, detail);
+    await checkAlerts(env);
+    return {
+      ok: false,
+      processed,
+      changes,
+      detail,
+      discarded,
+      dropped,
+      logged,
+    };
+  }
+
+  const detail = `${processed} mensajes · ${changes} cambios${
+    discarded.length > 0 ? ` · ${discarded.length} descartados (${discarded.join(",")})` : ""
+  }${dropped > 0 ? ` · ${dropped} bloqueados` : ""}${logged > 0 ? ` · ${logged} sin mención` : ""}${
+    pending > 0 ? ` · ${pending} pendientes` : ""
+  }`;
+
   await setSetting(env, "backoff_until", "0");
   await setSetting(env, "last_ok_at", String(nowSec));
   await setSetting(env, "last_error", "");
   await logIngest(env, source, true, detail);
   await checkAlerts(env);
 
-  return { ok: true, processed, changes, detail };
+  return {
+    ok: true,
+    processed,
+    changes,
+    detail,
+    discarded,
+    dropped,
+    logged,
+  };
+}
+
+type BatchOutcome = {
+  state: StatusPayload;
+  processed: number;
+  changes: number;
+  dropped: number;
+  logged: number;
+  discarded: number[];
+  error?: { kind: "transient" | "invalid"; message: string };
+};
+
+async function processBatch(
+  env: Env,
+  state: StatusPayload,
+  batch: Message[],
+  now: number,
+  budget: { remaining: number },
+): Promise<BatchOutcome> {
+  if (batch.length === 0) {
+    return { state, processed: 0, changes: 0, dropped: 0, logged: 0, discarded: [] };
+  }
+  if (budget.remaining <= 0) {
+    return { state, processed: 0, changes: 0, dropped: 0, logged: 0, discarded: [] };
+  }
+
+  budget.remaining -= 1;
+  const decision = await decide(env.AI!, env.LLM_MODEL || DEFAULT_MODEL, {
+    now,
+    state,
+    messages: batch,
+  });
+
+  if (!decision.ok) {
+    if (decision.kind === "transient") {
+      return {
+        state,
+        processed: 0,
+        changes: 0,
+        dropped: 0,
+        logged: 0,
+        discarded: [],
+        error: { kind: "transient", message: decision.error },
+      };
+    }
+
+    if (batch.length === 1) {
+      const next = applyChanges(state, batch, EMPTY_RESULT, now);
+      return {
+        state: next,
+        processed: 1,
+        changes: 0,
+        dropped: 0,
+        logged: 0,
+        discarded: [batch[0]!.id],
+      };
+    }
+
+    const mid = Math.floor(batch.length / 2);
+    const left = await processBatch(env, state, batch.slice(0, mid), now, budget);
+    if (left.error) return left;
+
+    const right = await processBatch(env, left.state, batch.slice(mid), now, budget);
+    const combined: BatchOutcome = {
+      state: right.state,
+      processed: left.processed + right.processed,
+      changes: left.changes + right.changes,
+      dropped: left.dropped + right.dropped,
+      logged: left.logged + right.logged,
+      discarded: [...left.discarded, ...right.discarded],
+      ...(right.error ? { error: right.error } : {}),
+    };
+    return combined;
+  }
+
+  const guarded = filterLlmResult(batch, decision.result, guardMode(env.MENTION_GUARD));
+  const next = applyChanges(state, batch, guarded.result, now);
+
+  return {
+    state: next,
+    processed: batch.length,
+    changes: guarded.result.cambios.length,
+    dropped: guarded.dropped.length,
+    logged: guarded.logged.length,
+    discarded: [],
+  };
 }
 
 function chunk<T>(items: T[], size: number): T[][] {
@@ -132,27 +255,17 @@ function chunk<T>(items: T[], size: number): T[][] {
   return out;
 }
 
-/** Pide páginas hasta cubrir el último id procesado (o hasta MAX_PAGES). */
 async function fetchNew(env: Env, lastId: number | null): Promise<Message[]> {
-  const limit = Number(env.INGEST_LIMIT ?? 30);
   const all: TelegramMessage[] = [];
 
   for (let page = 1; page <= MAX_PAGES; page++) {
-    let pageMessages: TelegramMessage[];
-    try {
-      pageMessages = await fetchPage(env, page, limit);
-    } catch (err) {
-      // Un fallo en una página anterior no debe tirar lo ya leído: procesamos
-      // lo que tengamos y el próximo cron continúa desde el último id guardado.
-      if (page === 1) throw err;
-      break;
-    }
-    if (pageMessages.length === 0) break;
-    all.push(...pageMessages);
+    const batch = await fetchPage(env, page, Number(env.INGEST_LIMIT || 30));
+    if (batch.length === 0) break;
+    all.push(...batch);
 
-    const min = Math.min(...pageMessages.map((m) => m.id));
-    const covered = lastId == null ? pageMessages.length < limit : min <= lastId + 1;
-    if (covered || pageMessages.length < limit) break;
+    const min = Math.min(...batch.map((m) => m.id));
+    const covered = lastId == null ? batch.length < Number(env.INGEST_LIMIT || 30) : min <= lastId + 1;
+    if (covered || batch.length < Number(env.INGEST_LIMIT || 30)) break;
     await sleep(2000); // el bridge admite 15 peticiones/min
   }
 
@@ -166,15 +279,12 @@ async function fetchNew(env: Env, lastId: number | null): Promise<Message[]> {
   return [...unique.values()].sort((a, b) => a.id - b.id || a.date - b.date);
 }
 
-/** Intentos ante 429/5xx antes de rendirse; los esperas son 5 s y 15 s. */
 const FETCH_ATTEMPTS = 3;
 const RETRY_WAIT_MS = [5_000, 15_000];
 
 async function fetchPage(env: Env, page: number, limit: number): Promise<TelegramMessage[]> {
   const url = `${env.INGEST_URL}?limit=${limit}${page > 1 ? `&page=${page}` : ""}`;
 
-  // El bridge limita por IP y devuelve 429 con frecuencia. Reintentamos con
-  // espera creciente: un 429 puntual no debe perder toda la ingesta.
   for (let attempt = 0; ; attempt++) {
     const res = await fetch(url, {
       headers: {
@@ -210,11 +320,6 @@ async function countRecentFailures(env: Env): Promise<number> {
   return row?.n ?? 0;
 }
 
-/**
- * Avisa al admin por Telegram:
- *  - no se puede leer el canal desde hace más de 1 h
- *  - el canal lleva más de 6 h sin publicar (solo si la lectura funciona)
- */
 async function checkAlerts(env: Env): Promise<void> {
   if (!env.ALERT_BOT_TOKEN || !env.ALERT_CHAT_ID) return;
 
@@ -239,7 +344,6 @@ async function checkAlerts(env: Env): Promise<void> {
   }
 }
 
-/** Un mismo aviso no se repite antes de 6 h. */
 async function alertOnce(env: Env, key: string, text: string): Promise<void> {
   const last = await getSetting(env, key);
   if (last && Date.now() - Number(last) < 6 * 60 * MIN) return;
@@ -253,6 +357,6 @@ async function alertOnce(env: Env, key: string, text: string): Promise<void> {
       signal: AbortSignal.timeout(10_000),
     });
   } catch {
-    // una alerta fallida no debe romper la ingesta
+    // la alerta no debe romper la ingesta
   }
 }

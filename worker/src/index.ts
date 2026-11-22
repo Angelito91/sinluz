@@ -16,6 +16,7 @@ import {
   type Env,
 } from "./store";
 import { DEFAULT_MODEL, decide, type Message } from "./llm";
+import { filterLlmResult, guardMode } from "./mentions";
 import { applyChanges } from "./state";
 import { ingest } from "./ingest";
 
@@ -23,7 +24,6 @@ const app = new Hono<{ Bindings: Env }>();
 
 app.use("/api/*", cors({ origin: "*", allowMethods: ["GET", "POST", "OPTIONS"] }));
 
-// Cabeceras de seguridad comunes. La API solo devuelve JSON.
 app.use("*", async (c, next) => {
   await next();
   c.header("x-content-type-options", "nosniff");
@@ -68,7 +68,6 @@ app.get("/api/health", async (c) => {
     getSetting(c.env, "last_error"),
   ]);
 
-  // Las antigüedades se calculan ahora, no al guardar: así no se congelan si la ingesta falla.
   const nowSec = Math.floor(Date.now() / 1000);
   const pipelineAge = snapshot.generated_at > 0 ? Math.round((nowSec - snapshot.generated_at) / 60) : null;
   const lastMessageAt = snapshot.source.last_message_at;
@@ -108,7 +107,6 @@ function authorized(c: { req: { header: (k: string) => string | undefined } }, t
   return header === `Bearer ${token}`;
 }
 
-/** Ingesta manual: interpreta un mensaje real o de emergencia sin tocar el cursor del canal. */
 app.post("/api/v1/ingest", async (c) => {
   if (!authorized(c, c.env.INGEST_TOKEN)) return c.json({ error: "no autorizado" }, 401);
   if (!llmEnabled(c.env)) return c.json({ error: "IA no disponible" }, 503);
@@ -131,12 +129,14 @@ app.post("/api/v1/ingest", async (c) => {
   });
   if (!result.ok) return c.json({ error: result.error }, 502);
 
-  const next = applyChanges(state, [msg], result.result, now, false);
+  const guarded = filterLlmResult([msg], result.result, guardMode(c.env.MENTION_GUARD));
+  const next = applyChanges(state, [msg], guarded.result, now, false);
   await saveState(c.env, next);
 
   return c.json({
     ok: true,
-    applied: result.result.cambios.length + result.result.confirmaciones.length,
+    applied: guarded.result.cambios.length,
+    dropped: guarded.dropped.length,
     affected: next.circuits.filter((x) => x.status === "out").length,
   });
 });
@@ -170,7 +170,6 @@ app.delete("/api/v1/admin/override/:circuit", async (c) => {
   return c.json({ ok: true, affected: payload.circuits.filter((x) => x.status === "out").length });
 });
 
-/** Ejecuta la ingesta a mano desde el navegador/curl, sin esperar al cron. */
 app.post("/api/v1/refresh", async (c) => {
   if (!authorized(c, c.env.INGEST_TOKEN)) return c.json({ error: "no autorizado" }, 401);
   const result = await ingest(c.env, "manual");

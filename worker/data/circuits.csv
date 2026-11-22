@@ -3,19 +3,19 @@ sl-5395,linea,Linea 5395,San Luis,Línea 5395|línea 5395|5395|5395-San Luis,140
 sc-01,circuito,Circuito 1,Santiago de Cuba,circuito 1 de Santiago,1400,,,
 sc-02,circuito,Circuito 2,Santiago de Cuba,circuito 2 de Santiago,1400,,,
 sc-03,circuito,Circuito 3,Santiago de Cuba,circuito 3|circuito 3 de Santiago,1400,,,
-sc-07-sd3030,circuito,Circuito 7-SD3030,Santiago de Cuba,circuito SD3030|circuito SD 3030|circuito 7 SD 3030|circuito 7-sd 3030|7 seccionalizado,1400,,,"Mismo recorrido que 7-SI4630/7-SD3030, identificador repetido en la fuente"
+sc-07-sd3030,circuito,Circuito 7-SD3030,Santiago de Cuba,circuito SD3030|circuito SD 3030|circuito 7 SD 3030|circuito 7-sd 3030|circuito 7|circuito 7 de Santiago|7 seccionalizado|7 seccionalizado SD 2052|SD 2052|SD 3030-SD 2052,1400,,,"Mismo recorrido que 7-SI4630/7-SD3030, identificador repetido en la fuente. El canal llama 7 seccionalizado a SD 3030; SD 2052 aparece como su código asociado."
 sc-07-si4630,circuito,Circuito 7-SI4630,Santiago de Cuba,circuito SI 4630|circuito 7 SD 4630,1400,,,"su alias circuito SD 4630 viene del canal, no de la fuente"
 sc-08,circuito,Circuito 8,Santiago de Cuba,circuito 8|circuito 8 de Santiago,1400,,,
-sc-09-si4074,circuito,Circuito 9-SI4074,Santiago de Cuba,circuito 9 - SI 4074|circuito SI 4074|9 si 4074,1400,,,
+sc-09-si4074,circuito,Circuito 9-SI4074,Santiago de Cuba,circuito 9|circuito 9 de Santiago|9 de Santiago|circuito 9 - SI 4074|circuito SI 4074|9 si 4074,1400,,,"El canal usa «circuito 9» para esta variante y reserva «9 seccionalizado» para SI 4615."
 sc-09-si4615,circuito,Circuito 9-SI4615,Santiago de Cuba,circuito 9 - SI 4615|circuito SI 4615|9 seccionalizado,1400,,,
 sc-10,circuito,Circuito 10,Santiago de Cuba,circuito 10|circuito 10 de Santiago,1400,,,
-sc-11,circuito,Circuito 11,Santiago de Cuba,circuito 11|circuito 11 de Santiago,1400,,,
+sc-11,circuito,Circuito 11,Santiago de Cuba,circuito 11|circuito 11 de Santiago|11 seccionalizado,1400,,,"El canal usa «11 seccionalizado» sin un código propio."
 sc-12,circuito,Circuito 12,Santiago de Cuba,circuito 12|circuito 12 de Santiago,1400,,,
 sc-13,circuito,Circuito 13,Santiago de Cuba,circuito 13|circuito 13 de Santiago,1400,,,
 sc-14-si3010,circuito,Circuito 14-SI3010,Santiago de Cuba,circuito 14|circuito 14 de Santiago|14 SI 3010,1400,,,
 sc-15,circuito,Circuito 15,Santiago de Cuba,circuito 15|circuito 15 de Santiago,1400,,,
 sc-16,circuito,Circuito 16,Santiago de Cuba,circuito 16|circuito 16 de Santiago,1400,,,
-sc-17,circuito,Circuito 17,Santiago de Cuba,circuito 17|circuito 17 de Santiago,1400,,,
+sc-17,circuito,Circuito 17,Santiago de Cuba,circuito 17|circuito 17 de Santiago|17 seccionalizado,1400,,,"El canal usa «17 seccionalizado» sin un código propio."
 sc-18,circuito,Circuito 18,Santiago de Cuba,circuito 18|circuito 18 de Santiago,1400,,,
 sc-19,circuito,Circuito 19,Santiago de Cuba,circuito 19|circuito 19 de Santiago,1400,,,
 sc-20,circuito,Circuito 20,Santiago de Cuba,circuito 20|circuito 20 de Santiago,1400,,,
@@ -25,10 +25,10 @@ sc-23,circuito,Circuito 23,Santiago de Cuba,circuito 23|circuito 23 de Santiago,
 sc-24,circuito,Circuito 24,Santiago de Cuba,circuito 24|circuito 24 de Santiago,1400,,,
 sc-25,circuito,Circuito 25,Santiago de Cuba,circuito 25|circuito 25 de Santiago,1400,,,
 sc-26,circuito,Circuito 26,Santiago de Cuba,circuito 26|circuito 26 de Santiago,1400,,,
-sc-5330,linea,Linea 5330,Santiago de Cuba,Línea 5330|línea 5330|5330|5330-Cristo,1400,,,"Nombrado como línea por el canal; en la fuente aparece como circuito de la ciudad."
+sc-5330,linea,Linea 5330,Santiago de Cuba,Línea 5330|línea 5330|5330|5330-Cristo|Cristo|El Cristo,1400,,,"Nombrado como línea por el canal; en la fuente aparece como circuito de la ciudad."
 sc-5975,linea,Linea 5975,Santiago de Cuba,Línea 5975|línea 5975|5975|5975-Baconao,1400,,,"Nombrado como línea por el canal; en la fuente aparece como circuito de la ciudad."
 sc-5980,linea,Linea 5980,Santiago de Cuba,Línea 5980|línea 5980|5980,1400,,,"Nombrado como línea por el canal; en la fuente aparece como circuito de la ciudad."
-sc-5980-0015,linea,Linea 5980-0015 San Juan-2016,Santiago de Cuba,Línea 5980 San Juan|línea 5980 San Juan|Circuito San Juan,1400,,,
+sc-5980-0015,linea,Linea 5980-0015 San Juan-2016,Santiago de Cuba,Línea 5980 San Juan|línea 5980 San Juan|Circuito San Juan|San Juan,1400,,,
 ct-4385,linea,Linea 4385,Contramaestre,Linea 4385 de Contramaestre|4385 Contramaestre|línea 4385|4385-Contramaestre|4385,2200,,,"Nombrado como línea por el canal; en la fuente aparece como circuito de la ciudad."
 ct-4390,linea,Linea 4390,Contramaestre,Linea 4390 de Contramaestre|4390-Contramaestre|línea 4390|4390,2200,,,
 ct-4435,linea,Linea 4435,Contramaestre,Linea 4435 de Contramaestre|4435-Contramaestre|línea 4435|4435|,2200,,,
@@ -41,6 +41,6 @@ pa-palma-02,circuito,Circuito Palma 2,Palma Soriano,Circuito 2 de Palma|circuito
 pa-palma-04,circuito,Circuito Palma 4,Palma Soriano,Circuito 4 de Palma|circuito 4 de Palma|4 de Palma|4 Palma,2200,,,
 slm-5380,linea,Linea 5380,San Luis,Línea 5380|línea 5380|5380|5380-Mella|5380-San Luis,4500,,,"contiene tambien a Mella"
 sm-5390-md8005,linea,Linea 5390-MD8005,Songo - La Maya,Línea 5390-MD8005|línea 5390-MD8005|5390-MD8005|Línea 5390 La Maya,4500,,,
-sm-songo,circuito,Circuito Songo,Songo - La Maya,Songo y la Maya|La Maya y Songo|Songo La Maya,4500,,,
-iif-5390-4260,linea,Linea 5390-4260,Segundo Frente,Línea 5390-4260|línea 5390-4260|5390-4260|Línea 5390 Ramal 4260|II Frente,4500,,,
-gu-5335-5618,linea,Linea 5335-5618,Guamá,Línea 5335-5618|línea 5335-5618|5335-5618|Línea 5335|línea 5335|Línea 5618|línea 5618|5618-Guamá|5335-Guamá,4500,,,
+sm-songo,circuito,Circuito Songo,Songo - La Maya,Songo y la Maya|La Maya y Songo|Songo La Maya|Songo,4500,,,
+iif-5390-4260,linea,Linea 5390-4260,Segundo Frente,Línea 5390-4260|línea 5390-4260|5390-4260|Línea 5390 Ramal 4260|II Frente|ll Frente,4500,,,
+gu-5335-5618,linea,Linea 5335-5618,Guamá,Línea 5335-5618|línea 5335-5618|5335-5618|Línea 5335|línea 5335|Línea 5618|línea 5618|5618-Guamá|5335-Guamá|Línea 5335-5617|5335-5617|Línea 5617|línea 5617|5617|5617-Guamá|Línea 5335 SD 5617|5335 SD 5617|Línea 5335-Guamá seccionalizado|5335-Guamá seccionalizado,4500,,,"El canal escribe 5617 donde la fuente dice 5618; se aceptan ambas formas."
